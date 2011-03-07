@@ -541,8 +541,8 @@ begin
         p0_burst_cnt <= (others => '0');
         p0_cmd_en    <= '0';
       else
-        if (p0_burst_cnt = c_P0_BURST_LENGTH) or
-          (p0_burst_cnt /= 0 and wb0_stb_f_edge = '1' and p0_cmd_full = '0') then
+        if (((p0_burst_cnt = c_P0_BURST_LENGTH) or
+          (p0_burst_cnt /= 0 and wb0_stb_f_edge = '1')) and p0_cmd_full = '0') then
           p0_cmd_en <= '1';
           if wb0_cyc_i = '1' and wb0_stb_i = '1' then
             p0_burst_cnt <= to_unsigned(1, p0_burst_cnt'length);
@@ -660,8 +660,8 @@ begin
         p1_burst_cnt <= (others => '0');
         p1_cmd_en    <= '0';
       else
-        if (p1_burst_cnt = c_P1_BURST_LENGTH) or
-          (p1_burst_cnt /= 0 and wb1_stb_f_edge = '1' and p1_cmd_full = '0') then
+        if (((p1_burst_cnt = c_P1_BURST_LENGTH) or
+          (p1_burst_cnt /= 0 and wb1_stb_f_edge = '1')) and p1_cmd_full = '0') then
           p1_cmd_en <= '1';
           if wb1_cyc_i = '1' and wb1_stb_i = '1' then
             p1_burst_cnt <= to_unsigned(1, p1_burst_cnt'length);
