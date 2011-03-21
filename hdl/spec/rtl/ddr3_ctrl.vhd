@@ -140,7 +140,7 @@ entity ddr3_ctrl is
     --! Wishbone bus write enable
     wb0_we_i    : in  std_logic;
     --! Wishbone bus address
-    wb0_addr_i  : in  std_logic_vector(29 downto 0);
+    wb0_addr_i  : in  std_logic_vector(27 downto 0);
     --! Wishbone bus data input
     wb0_data_i  : in  std_logic_vector(g_P0_DATA_PORT_SIZE - 1 downto 0);
     --! Wishbone bus data output
@@ -164,7 +164,7 @@ entity ddr3_ctrl is
     --! Wishbone bus write enable
     wb1_we_i    : in  std_logic;
     --! Wishbone bus address
-    wb1_addr_i  : in  std_logic_vector(29 downto 0);
+    wb1_addr_i  : in  std_logic_vector(27 downto 0);
     --! Wishbone bus data input
     wb1_data_i  : in  std_logic_vector(g_P0_DATA_PORT_SIZE - 1 downto 0);
     --! Wishbone bus data output
@@ -525,7 +525,7 @@ begin
       else
         if (p0_burst_cnt = 0 and wb0_cyc_i = '1' and wb0_stb_i = '1') or
           (p0_burst_cnt = c_P0_BURST_LENGTH) then
-          p0_cmd_byte_addr <= wb0_addr_i;
+          p0_cmd_byte_addr <= wb0_addr_i & "00";  -- wb0_addr_i is a 32-bit word address
           p0_cmd_instr     <= "00" & not(wb0_we_i);
         end if;
         p0_cmd_bl <= std_logic_vector(p0_burst_cnt - 1);
@@ -644,7 +644,7 @@ begin
       else
         if (p1_burst_cnt = 0 and wb1_cyc_i = '1' and wb1_stb_i = '1') or
           (p1_burst_cnt = c_P1_BURST_LENGTH) then
-          p1_cmd_byte_addr <= wb1_addr_i;
+          p1_cmd_byte_addr <= wb1_addr_i & "00";  -- wb1_addr_i is a 32-bit word address
           p1_cmd_instr     <= "00" & not(wb1_we_i);
         end if;
         p1_cmd_bl <= std_logic_vector(p1_burst_cnt - 1);
