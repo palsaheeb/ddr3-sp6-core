@@ -302,8 +302,7 @@ architecture rtl of ddr3_ctrl is
   ------------------------------------------------------------------------------
   -- Signals declaration
   ------------------------------------------------------------------------------
-  --signal wb0_fsm_state      : t_wb_fsm_states := WB_IDLE;
-  --signal wb0_fsm_next_state : t_wb_fsm_states := WB_IDLE;
+  signal rst0_n           : std_logic;
   signal wb0_stb_d        : std_logic;
   signal wb0_stb_f_edge   : std_logic;
   signal p0_burst_cnt     : unsigned(5 downto 0);
@@ -332,8 +331,7 @@ architecture rtl of ddr3_ctrl is
   signal p0_rd_overflow   : std_logic;
   signal p0_rd_error      : std_logic;
 
-  --signal wb1_fsm_state      : t_wb_fsm_states := WB_IDLE;
-  --signal wb1_fsm_next_state : t_wb_fsm_states := WB_IDLE;
+  signal rst1_n           : std_logic;
   signal wb1_stb_d        : std_logic;
   signal wb1_stb_f_edge   : std_logic;
   signal p1_burst_cnt     : unsigned(5 downto 0);
@@ -471,6 +469,16 @@ begin
   -- Port 0 to wishbone interface
   ------------------------------------------------------------------------------
 
+  -- Reset sync to wb0_clk_i
+  p_rst0_sync : process (rst_n_i, wb0_clk_i)
+  begin
+    if rst_n_i = '0' then
+      rst0_n <= '0';
+    elsif rising_edge(wb0_clk_i) then
+      rst0_n <= '1';
+    end if;
+  end process p_rst0_sync;
+
   -- Clocking
   p0_cmd_clk <= wb0_clk_i;
   p0_wr_clk  <= wb0_clk_i;
@@ -480,72 +488,80 @@ begin
   p0_wr_mask <= "0000";
 
   -- Strobe falling edge detection
-  p_wb0_stb_f_edge : process (wb0_clk_i, rst_n_i)
+  p_wb0_stb_f_edge : process (wb0_clk_i)
   begin
-    if (rst_n_i = '0') then
-      wb0_stb_d <= '0';
-    elsif rising_edge(wb0_clk_i) then
-      wb0_stb_d <= wb0_stb_i;
+    if rising_edge(wb0_clk_i) then
+      if (rst0_n = '0') then
+        wb0_stb_d <= '0';
+      else
+        wb0_stb_d <= wb0_stb_i;
+      end if;
     end if;
   end process p_wb0_stb_f_edge;
 
   wb0_stb_f_edge <= not(wb0_stb_i) and wb0_stb_d;
 
   -- Address and data inputs
-  p_p0_inputs : process (wb0_clk_i, rst_n_i)
+  p_p0_inputs : process (wb0_clk_i)
   begin
-    if (rst_n_i = '0') then
-      p0_wr_data <= (others => '0');
-      p0_wr_en   <= '0';
-    elsif (rising_edge(wb0_clk_i)) then
-      p0_wr_data <= wb0_data_i;
-      if (wb0_stb_i = '1') and (wb0_cyc_i = '1') then
-        if wb0_we_i = '1' then
-          p0_wr_en <= '1';
+    if (rising_edge(wb0_clk_i)) then
+      if (rst0_n = '0') then
+        p0_wr_data <= (others => '0');
+        p0_wr_en   <= '0';
+      else
+        p0_wr_data <= wb0_data_i;
+        if (wb0_stb_i = '1') and (wb0_cyc_i = '1') then
+          if wb0_we_i = '1' then
+            p0_wr_en <= '1';
+          else
+            p0_wr_en <= '0';
+          end if;
         else
           p0_wr_en <= '0';
         end if;
-      else
-        p0_wr_en <= '0';
       end if;
     end if;
   end process p_p0_inputs;
 
   -- Command parameters (burst length and address) registration
-  p_p0_cmd : process (wb0_clk_i, rst_n_i)
+  p_p0_cmd : process (wb0_clk_i)
   begin
-    if (rst_n_i = '0') then
-      p0_cmd_byte_addr <= (others => '0');
-      p0_cmd_instr     <= "000";
-    elsif (rising_edge(wb0_clk_i)) then
-      if (p0_burst_cnt = 0 and wb0_cyc_i = '1' and wb0_stb_i = '1') or
-        (p0_burst_cnt = c_P0_BURST_LENGTH) then
-        p0_cmd_byte_addr <= wb0_addr_i & "00";  -- wb0_addr_i is a 32-bit word address
-        p0_cmd_instr     <= "00" & not(wb0_we_i);
+    if (rising_edge(wb0_clk_i)) then
+      if (rst0_n = '0') then
+        p0_cmd_byte_addr <= (others => '0');
+        p0_cmd_instr     <= "000";
+      else
+        if (p0_burst_cnt = 0 and wb0_cyc_i = '1' and wb0_stb_i = '1') or
+          (p0_burst_cnt = c_P0_BURST_LENGTH) then
+          p0_cmd_byte_addr <= wb0_addr_i & "00";  -- wb0_addr_i is a 32-bit word address
+          p0_cmd_instr     <= "00" & not(wb0_we_i);
+        end if;
+        p0_cmd_bl <= std_logic_vector(p0_burst_cnt - 1);
       end if;
-      p0_cmd_bl <= std_logic_vector(p0_burst_cnt - 1);
     end if;
   end process p_p0_cmd;
 
   -- Burst counter and command enable signal generation
-  p_p0_burst_cnt : process (wb0_clk_i, rst_n_i)
+  p_p0_burst_cnt : process (wb0_clk_i)
   begin
-    if rst_n_i = '0' then
-      p0_burst_cnt <= (others => '0');
-      p0_cmd_en    <= '0';
-    elsif rising_edge(wb0_clk_i) then
-      if (((p0_burst_cnt = c_P0_BURST_LENGTH) or
-           (p0_burst_cnt /= 0 and wb0_stb_f_edge = '1')) and p0_cmd_full = '0') then
-        p0_cmd_en <= '1';
-        if wb0_cyc_i = '1' and wb0_stb_i = '1' then
-          p0_burst_cnt <= to_unsigned(1, p0_burst_cnt'length);
-        else
-          p0_burst_cnt <= to_unsigned(0, p0_burst_cnt'length);
-        end if;
+    if rising_edge(wb0_clk_i) then
+      if rst0_n = '0' then
+        p0_burst_cnt <= (others => '0');
+        p0_cmd_en    <= '0';
       else
-        p0_cmd_en <= '0';
-        if wb0_cyc_i = '1' and wb0_stb_i = '1' then
-          p0_burst_cnt <= p0_burst_cnt + 1;
+        if (((p0_burst_cnt = c_P0_BURST_LENGTH) or
+             (p0_burst_cnt /= 0 and wb0_stb_f_edge = '1')) and p0_cmd_full = '0') then
+          p0_cmd_en <= '1';
+          if wb0_cyc_i = '1' and wb0_stb_i = '1' then
+            p0_burst_cnt <= to_unsigned(1, p0_burst_cnt'length);
+          else
+            p0_burst_cnt <= to_unsigned(0, p0_burst_cnt'length);
+          end if;
+        else
+          p0_cmd_en <= '0';
+          if wb0_cyc_i = '1' and wb0_stb_i = '1' then
+            p0_burst_cnt <= p0_burst_cnt + 1;
+          end if;
         end if;
       end if;
     end if;
@@ -555,15 +571,12 @@ begin
   p0_rd_en <= not(p0_rd_empty);
 
   -- Data output and ack
-  p_p0_outputs : process (wb0_clk_i, rst_n_i)
+  p_p0_outputs : process (wb0_clk_i)
   begin
-    if (rst_n_i = '0') then
-      wb0_ack_o  <= '0';
-      wb0_data_o <= (others => '0');
-    elsif (rising_edge(wb0_clk_i)) then
-      -- Generates ack signal
-      if (p0_rd_en = '1') or (p0_wr_en = '1') then
-        wb0_ack_o <= '1';
+    if (rising_edge(wb0_clk_i)) then
+      if (rst0_n = '0') then
+        wb0_ack_o  <= '0';
+        wb0_data_o <= (others => '0');
       else
         wb0_ack_o <= '0';
       end if;
@@ -580,6 +593,16 @@ begin
   -- Port 1 to wishbone interface
   ------------------------------------------------------------------------------
 
+  -- Reset sync to wb1_clk_i
+  p_rst1_sync : process (rst_n_i, wb1_clk_i)
+  begin
+    if rst_n_i = '0' then
+      rst1_n <= '0';
+    elsif rising_edge(wb1_clk_i) then
+      rst1_n <= '1';
+    end if;
+  end process p_rst1_sync;
+
   -- Clocking
   p1_cmd_clk <= wb1_clk_i;
   p1_wr_clk  <= wb1_clk_i;
@@ -589,72 +612,80 @@ begin
   p1_wr_mask <= "0000";
 
   -- Strobe falling edge detection
-  p_wb1_stb_f_edge : process (wb1_clk_i, rst_n_i)
+  p_wb1_stb_f_edge : process (wb1_clk_i)
   begin
-    if (rst_n_i = '0') then
-      wb1_stb_d <= '0';
-    elsif rising_edge(wb1_clk_i) then
-      wb1_stb_d <= wb1_stb_i;
+    if rising_edge(wb1_clk_i) then
+      if (rst1_n = '0') then
+        wb1_stb_d <= '0';
+      else
+        wb1_stb_d <= wb1_stb_i;
+      end if;
     end if;
   end process p_wb1_stb_f_edge;
 
   wb1_stb_f_edge <= not(wb1_stb_i) and wb1_stb_d;
 
   -- Address and data inputs
-  p_p1_inputs : process (wb1_clk_i, rst_n_i)
+  p_p1_inputs : process (wb1_clk_i)
   begin
-    if (rst_n_i = '0') then
-      p1_wr_data <= (others => '0');
-      p1_wr_en   <= '0';
-    elsif (rising_edge(wb1_clk_i)) then
-      p1_wr_data <= wb1_data_i;
-      if (wb1_stb_i = '1') and (wb1_cyc_i = '1') then
-        if wb1_we_i = '1' then
-          p1_wr_en <= '1';
+    if (rising_edge(wb1_clk_i)) then
+      if (rst1_n = '0') then
+        p1_wr_data <= (others => '0');
+        p1_wr_en   <= '0';
+      else
+        p1_wr_data <= wb1_data_i;
+        if (wb1_stb_i = '1') and (wb1_cyc_i = '1') then
+          if wb1_we_i = '1' then
+            p1_wr_en <= '1';
+          else
+            p1_wr_en <= '0';
+          end if;
         else
           p1_wr_en <= '0';
         end if;
-      else
-        p1_wr_en <= '0';
       end if;
     end if;
   end process p_p1_inputs;
 
   -- Command parameters (burst length and address) registration
-  p_p1_cmd : process (wb1_clk_i, rst_n_i)
+  p_p1_cmd : process (wb1_clk_i)
   begin
-    if (rst_n_i = '0') then
-      p1_cmd_byte_addr <= (others => '0');
-      p1_cmd_instr     <= "000";
-    elsif (rising_edge(wb1_clk_i)) then
-      if (p1_burst_cnt = 0 and wb1_cyc_i = '1' and wb1_stb_i = '1') or
-        (p1_burst_cnt = c_P1_BURST_LENGTH) then
-        p1_cmd_byte_addr <= wb1_addr_i & "00";  -- wb1_addr_i is a 32-bit word address
-        p1_cmd_instr     <= "00" & not(wb1_we_i);
+    if (rising_edge(wb1_clk_i)) then
+      if (rst1_n = '0') then
+        p1_cmd_byte_addr <= (others => '0');
+        p1_cmd_instr     <= "000";
+      else
+        if (p1_burst_cnt = 0 and wb1_cyc_i = '1' and wb1_stb_i = '1') or
+          (p1_burst_cnt = c_P1_BURST_LENGTH) then
+          p1_cmd_byte_addr <= wb1_addr_i & "00";  -- wb1_addr_i is a 32-bit word address
+          p1_cmd_instr     <= "00" & not(wb1_we_i);
+        end if;
+        p1_cmd_bl <= std_logic_vector(p1_burst_cnt - 1);
       end if;
-      p1_cmd_bl <= std_logic_vector(p1_burst_cnt - 1);
     end if;
   end process p_p1_cmd;
 
   -- Burst counter and command enable signal generation
-  p_p1_burst_cnt : process (wb1_clk_i, rst_n_i)
+  p_p1_burst_cnt : process (wb1_clk_i)
   begin
-    if rst_n_i = '0' then
-      p1_burst_cnt <= (others => '0');
-      p1_cmd_en    <= '0';
-    elsif rising_edge(wb1_clk_i) then
-      if (((p1_burst_cnt = c_P1_BURST_LENGTH) or
-           (p1_burst_cnt /= 0 and wb1_stb_f_edge = '1')) and p1_cmd_full = '0') then
-        p1_cmd_en <= '1';
-        if wb1_cyc_i = '1' and wb1_stb_i = '1' then
-          p1_burst_cnt <= to_unsigned(1, p1_burst_cnt'length);
-        else
-          p1_burst_cnt <= to_unsigned(0, p1_burst_cnt'length);
-        end if;
+    if rising_edge(wb1_clk_i) then
+      if rst1_n = '0' then
+        p1_burst_cnt <= (others => '0');
+        p1_cmd_en    <= '0';
       else
-        p1_cmd_en <= '0';
-        if wb1_cyc_i = '1' and wb1_stb_i = '1' then
-          p1_burst_cnt <= p1_burst_cnt + 1;
+        if (((p1_burst_cnt = c_P1_BURST_LENGTH) or
+             (p1_burst_cnt /= 0 and wb1_stb_f_edge = '1')) and p1_cmd_full = '0') then
+          p1_cmd_en <= '1';
+          if wb1_cyc_i = '1' and wb1_stb_i = '1' then
+            p1_burst_cnt <= to_unsigned(1, p1_burst_cnt'length);
+          else
+            p1_burst_cnt <= to_unsigned(0, p1_burst_cnt'length);
+          end if;
+        else
+          p1_cmd_en <= '0';
+          if wb1_cyc_i = '1' and wb1_stb_i = '1' then
+            p1_burst_cnt <= p1_burst_cnt + 1;
+          end if;
         end if;
       end if;
     end if;
@@ -664,15 +695,12 @@ begin
   p1_rd_en <= not(p1_rd_empty);
 
   -- Data output and ack
-  p_p1_outputs : process (wb1_clk_i, rst_n_i)
+  p_p1_outputs : process (wb1_clk_i)
   begin
-    if (rst_n_i = '0') then
-      wb1_ack_o  <= '0';
-      wb1_data_o <= (others => '0');
-    elsif (rising_edge(wb1_clk_i)) then
-      -- Generates ack signal
-      if (p1_rd_en = '1') or (p1_wr_en = '1') then
-        wb1_ack_o <= '1';
+    if (rising_edge(wb1_clk_i)) then
+      if (rst1_n = '0') then
+        wb1_ack_o  <= '0';
+        wb1_data_o <= (others => '0');
       else
         wb1_ack_o <= '0';
       end if;
