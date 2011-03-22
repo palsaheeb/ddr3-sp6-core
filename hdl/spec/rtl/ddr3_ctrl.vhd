@@ -578,10 +578,15 @@ begin
         wb0_ack_o  <= '0';
         wb0_data_o <= (others => '0');
       else
-        wb0_ack_o <= '0';
+        -- Generates ack signal
+        if (p0_rd_en = '1') or (p0_wr_en = '1') then
+          wb0_ack_o <= '1';
+        else
+          wb0_ack_o <= '0';
+        end if;
+        -- Registered data output
+        wb0_data_o <= p0_rd_data;
       end if;
-      -- Registered data output
-      wb0_data_o <= p0_rd_data;
     end if;
   end process p_p0_outputs;
 
@@ -702,10 +707,15 @@ begin
         wb1_ack_o  <= '0';
         wb1_data_o <= (others => '0');
       else
-        wb1_ack_o <= '0';
+        -- Generates ack signal
+        if (p1_rd_en = '1') or (p1_wr_en = '1') then
+          wb1_ack_o <= '1';
+        else
+          wb1_ack_o <= '0';
+        end if;
+        -- Registered data output
+        wb1_data_o <= p1_rd_data;
       end if;
-      -- Registered data output
-      wb1_data_o <= p1_rd_data;
     end if;
   end process p_p1_outputs;
 
