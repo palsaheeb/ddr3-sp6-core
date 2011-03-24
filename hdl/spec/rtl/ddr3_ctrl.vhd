@@ -293,6 +293,8 @@ architecture rtl of ddr3_ctrl is
   constant c_P0_BURST_LENGTH : integer := 32;
   constant c_P1_BURST_LENGTH : integer := 32;
 
+  constant c_FIFO_ALMOST_FULL : std_logic_vector(6 downto 0) := std_logic_vector(to_unsigned(57, 7));
+
   ------------------------------------------------------------------------------
   -- Types declaration
   ------------------------------------------------------------------------------
@@ -303,8 +305,9 @@ architecture rtl of ddr3_ctrl is
   -- Signals declaration
   ------------------------------------------------------------------------------
   signal rst0_n           : std_logic;
-  signal wb0_stb_d        : std_logic;
-  signal wb0_stb_f_edge   : std_logic;
+  signal wb0_cyc_d        : std_logic;
+  signal wb0_cyc_f_edge   : std_logic;
+  signal wb0_cyc_r_edge   : std_logic;
   signal p0_burst_cnt     : unsigned(5 downto 0);
   signal p0_cmd_clk       : std_logic;
   signal p0_cmd_en        : std_logic;
@@ -332,8 +335,9 @@ architecture rtl of ddr3_ctrl is
   signal p0_rd_error      : std_logic;
 
   signal rst1_n           : std_logic;
-  signal wb1_stb_d        : std_logic;
-  signal wb1_stb_f_edge   : std_logic;
+  signal wb1_cyc_d        : std_logic;
+  signal wb1_cyc_f_edge   : std_logic;
+  signal wb1_cyc_r_edge   : std_logic;
   signal p1_burst_cnt     : unsigned(5 downto 0);
   signal p1_cmd_clk       : std_logic;
   signal p1_cmd_en        : std_logic;
@@ -487,19 +491,20 @@ begin
   -- Constant input
   p0_wr_mask <= "0000";
 
-  -- Strobe falling edge detection
-  p_wb0_stb_f_edge : process (wb0_clk_i)
+  -- Cycle rising and falling edge detection
+  p_wb0_cyc_f_edge : process (wb0_clk_i)
   begin
     if rising_edge(wb0_clk_i) then
       if (rst0_n = '0') then
-        wb0_stb_d <= '0';
+        wb0_cyc_d <= '0';
       else
-        wb0_stb_d <= wb0_stb_i;
+        wb0_cyc_d <= wb0_cyc_i;
       end if;
     end if;
-  end process p_wb0_stb_f_edge;
+  end process p_wb0_cyc_f_edge;
 
-  wb0_stb_f_edge <= not(wb0_stb_i) and wb0_stb_d;
+  wb0_cyc_f_edge <= not(wb0_cyc_i) and wb0_cyc_d;
+  wb0_cyc_r_edge <= wb0_cyc_i and not(wb0_cyc_d);
 
   -- Address and data inputs
   p_p0_inputs : process (wb0_clk_i)
@@ -530,9 +535,10 @@ begin
       if (rst0_n = '0') then
         p0_cmd_byte_addr <= (others => '0');
         p0_cmd_instr     <= "000";
+        p0_cmd_bl        <= (others => '0');
       else
-        if (p0_burst_cnt = 0 and wb0_cyc_i = '1' and wb0_stb_i = '1') or
-          (p0_burst_cnt = c_P0_BURST_LENGTH) then
+        if (p0_burst_cnt = 0 and wb0_cyc_r_edge = '1' and wb0_stb_i = '1') or
+          (p0_cmd_en = '1') then
           p0_cmd_byte_addr <= wb0_addr_i & "00";  -- wb0_addr_i is a 32-bit word address
           p0_cmd_instr     <= "00" & not(wb0_we_i);
         end if;
@@ -550,7 +556,7 @@ begin
         p0_cmd_en    <= '0';
       else
         if (((p0_burst_cnt = c_P0_BURST_LENGTH) or
-             (p0_burst_cnt /= 0 and wb0_stb_f_edge = '1')) and p0_cmd_full = '0') then
+             (p0_burst_cnt /= 0 and wb0_cyc_f_edge = '1')) and p0_cmd_full = '0') then
           p0_cmd_en <= '1';
           if wb0_cyc_i = '1' and wb0_stb_i = '1' then
             p0_burst_cnt <= to_unsigned(1, p0_burst_cnt'length);
@@ -591,7 +597,24 @@ begin
   end process p_p0_outputs;
 
   -- Stall signal output
-  wb0_stall_o <= p0_cmd_full or p0_wr_full or p0_rd_full;
+  p_p0_stall : process (wb0_clk_i)
+  begin
+    if rising_edge(wb0_clk_i) then
+      if rst0_n = '0' then
+        wb0_stall_o <= '0';
+      else
+        if ((p0_wr_count > c_FIFO_ALMOST_FULL) or
+            (p0_wr_full = '1') or
+            (p0_rd_count > c_FIFO_ALMOST_FULL) or
+            (p0_rd_full = '1')) then
+          wb0_stall_o <= '1';
+        else
+          wb0_stall_o <= '0';
+        end if;
+      end if;
+    end if;
+  end process p_p0_stall;
+  --wb0_stall_o <= p0_cmd_full or p0_wr_full or p0_rd_full;
 
 
   ------------------------------------------------------------------------------
@@ -616,19 +639,20 @@ begin
   -- Constant input
   p1_wr_mask <= "0000";
 
-  -- Strobe falling edge detection
-  p_wb1_stb_f_edge : process (wb1_clk_i)
+  -- Cycle rising and falling edge detection
+  p_wb1_cyc_edge : process (wb1_clk_i)
   begin
     if rising_edge(wb1_clk_i) then
       if (rst1_n = '0') then
-        wb1_stb_d <= '0';
+        wb1_cyc_d <= '0';
       else
-        wb1_stb_d <= wb1_stb_i;
+        wb1_cyc_d <= wb1_cyc_i;
       end if;
     end if;
-  end process p_wb1_stb_f_edge;
+  end process p_wb1_cyc_edge;
 
-  wb1_stb_f_edge <= not(wb1_stb_i) and wb1_stb_d;
+  wb1_cyc_f_edge <= not(wb1_cyc_i) and wb1_cyc_d;
+  wb1_cyc_r_edge <= wb1_cyc_i and not(wb1_cyc_d);
 
   -- Address and data inputs
   p_p1_inputs : process (wb1_clk_i)
@@ -659,9 +683,10 @@ begin
       if (rst1_n = '0') then
         p1_cmd_byte_addr <= (others => '0');
         p1_cmd_instr     <= "000";
+        p1_cmd_bl        <= (others => '0');
       else
-        if (p1_burst_cnt = 0 and wb1_cyc_i = '1' and wb1_stb_i = '1') or
-          (p1_burst_cnt = c_P1_BURST_LENGTH) then
+        if (p1_burst_cnt = 0 and wb1_cyc_r_edge = '1' and wb1_stb_i = '1') or
+          (p1_cmd_en = '1') then
           p1_cmd_byte_addr <= wb1_addr_i & "00";  -- wb1_addr_i is a 32-bit word address
           p1_cmd_instr     <= "00" & not(wb1_we_i);
         end if;
@@ -679,7 +704,7 @@ begin
         p1_cmd_en    <= '0';
       else
         if (((p1_burst_cnt = c_P1_BURST_LENGTH) or
-             (p1_burst_cnt /= 0 and wb1_stb_f_edge = '1')) and p1_cmd_full = '0') then
+             (p1_burst_cnt /= 0 and wb1_cyc_f_edge = '1')) and p1_cmd_full = '0') then
           p1_cmd_en <= '1';
           if wb1_cyc_i = '1' and wb1_stb_i = '1' then
             p1_burst_cnt <= to_unsigned(1, p1_burst_cnt'length);
@@ -720,7 +745,24 @@ begin
   end process p_p1_outputs;
 
   -- Stall signal output
-  wb1_stall_o <= p1_cmd_full or p1_wr_full or p1_rd_full;
+  p_p1_stall : process (wb1_clk_i)
+  begin
+    if rising_edge(wb1_clk_i) then
+      if rst1_n = '0' then
+        wb1_stall_o <= '0';
+      else
+        if ((p1_wr_count > c_FIFO_ALMOST_FULL) or
+            (p1_wr_full = '1') or
+            (p1_rd_count > c_FIFO_ALMOST_FULL) or
+            (p1_rd_full = '1')) then
+          wb1_stall_o <= '1';
+        else
+          wb1_stall_o <= '0';
+        end if;
+      end if;
+    end if;
+  end process p_p1_stall;
+  --wb1_stall_o <= p1_cmd_full or p1_wr_full or p1_rd_full;
 
 
 end architecture rtl;
