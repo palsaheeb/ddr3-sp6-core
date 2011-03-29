@@ -140,7 +140,7 @@ entity ddr3_ctrl is
     --! Wishbone bus write enable
     wb0_we_i    : in  std_logic;
     --! Wishbone bus address
-    wb0_addr_i  : in  std_logic_vector(27 downto 0);
+    wb0_addr_i  : in  std_logic_vector(26 downto 0);
     --! Wishbone bus data input
     wb0_data_i  : in  std_logic_vector(g_P0_DATA_PORT_SIZE - 1 downto 0);
     --! Wishbone bus data output
@@ -156,7 +156,7 @@ entity ddr3_ctrl is
     --! Wishbone bus clock
     wb1_clk_i   : in  std_logic;
     --! Wishbone bus byte select
-    wb1_sel_i   : in  std_logic_vector(g_P0_MASK_SIZE - 1 downto 0);
+    wb1_sel_i   : in  std_logic_vector(g_P1_MASK_SIZE - 1 downto 0);
     --! Wishbone bus cycle select
     wb1_cyc_i   : in  std_logic;
     --! Wishbone bus cycle strobe
@@ -166,9 +166,9 @@ entity ddr3_ctrl is
     --! Wishbone bus address
     wb1_addr_i  : in  std_logic_vector(27 downto 0);
     --! Wishbone bus data input
-    wb1_data_i  : in  std_logic_vector(g_P0_DATA_PORT_SIZE - 1 downto 0);
+    wb1_data_i  : in  std_logic_vector(g_P1_DATA_PORT_SIZE - 1 downto 0);
     --! Wishbone bus data output
-    wb1_data_o  : out std_logic_vector(g_P0_DATA_PORT_SIZE - 1 downto 0);
+    wb1_data_o  : out std_logic_vector(g_P1_DATA_PORT_SIZE - 1 downto 0);
     --! Wishbone bus acknowledge
     wb1_ack_o   : out std_logic;
     --! Wishbone bus stall (for pipelined mode)
@@ -189,7 +189,7 @@ architecture rtl of ddr3_ctrl is
   ------------------------------------------------------------------------------
 
   --! DDR controller component generated from Xilinx CoreGen
-  component ddr_controller_bank3
+  component ddr_controller_bank3_64b
     generic
       (
         C3_P0_MASK_SIZE       : integer := 4;
@@ -285,7 +285,7 @@ architecture rtl of ddr3_ctrl is
         c3_p1_rd_overflow   : out   std_logic;
         c3_p1_rd_error      : out   std_logic
         );
-  end component ddr_controller_bank3;
+  end component ddr_controller_bank3_64b;
 
   ------------------------------------------------------------------------------
   -- Constants declaration
@@ -310,6 +310,8 @@ architecture rtl of ddr3_ctrl is
   signal wb0_cyc_r_edge   : std_logic;
   signal wb0_stb_d        : std_logic;
   signal wb0_stb_f_edge   : std_logic;
+  signal wb0_we_d         : std_logic;
+  signal wb0_we_f_edge    : std_logic;
   signal p0_burst_cnt     : unsigned(5 downto 0);
   signal p0_cmd_clk       : std_logic;
   signal p0_cmd_en        : std_logic;
@@ -342,6 +344,8 @@ architecture rtl of ddr3_ctrl is
   signal wb1_cyc_r_edge   : std_logic;
   signal wb1_stb_d        : std_logic;
   signal wb1_stb_f_edge   : std_logic;
+  signal wb1_we_d         : std_logic;
+  signal wb1_we_f_edge    : std_logic;
   signal p1_burst_cnt     : unsigned(5 downto 0);
   signal p1_cmd_clk       : std_logic;
   signal p1_cmd_en        : std_logic;
@@ -373,7 +377,7 @@ architecture rtl of ddr3_ctrl is
 --==============================================================================
 begin
 
-  cmp_ddr_controller : ddr_controller_bank3
+  cmp_ddr_controller : ddr_controller_bank3_64b
     generic map (
       C3_P0_MASK_SIZE       => g_P0_MASK_SIZE,
       C3_P0_DATA_PORT_SIZE  => g_P0_DATA_PORT_SIZE,
@@ -493,18 +497,20 @@ begin
   p0_rd_clk  <= wb0_clk_i;
 
   -- Constant input
-  p0_wr_mask <= "0000";
+  p0_wr_mask <= "00000000";
 
-  -- Cycle and strobe rising and falling edge detection
+  -- Cycle, we and strobe rising and falling edge detection
   p_wb0_cyc_f_edge : process (wb0_clk_i)
   begin
     if rising_edge(wb0_clk_i) then
       if (rst0_n = '0') then
         wb0_cyc_d <= '0';
         wb0_stb_d <= '0';
+        wb0_we_d  <= '0';
       else
         wb0_cyc_d <= wb0_cyc_i;
         wb0_stb_d <= wb0_stb_i;
+        wb0_we_d  <= wb0_we_i;
       end if;
     end if;
   end process p_wb0_cyc_f_edge;
@@ -512,6 +518,7 @@ begin
   wb0_cyc_f_edge <= not(wb0_cyc_i) and wb0_cyc_d;
   wb0_cyc_r_edge <= wb0_cyc_i and not(wb0_cyc_d);
   wb0_stb_f_edge <= not(wb0_stb_i) and wb0_stb_d;
+  wb0_we_f_edge  <= not(wb0_we_i) and wb0_we_d;
 
   -- Address and data inputs
   p_p0_inputs : process (wb0_clk_i)
@@ -546,7 +553,7 @@ begin
       else
         if (p0_burst_cnt = 0 and wb0_cyc_r_edge = '1' and wb0_stb_i = '1') or
           (p0_cmd_en = '1') then
-          p0_cmd_byte_addr <= wb0_addr_i & "00";  -- wb0_addr_i is a 32-bit word address
+          p0_cmd_byte_addr <= wb0_addr_i & "000";  -- wb0_addr_i is a 64-bit word address
           p0_cmd_instr     <= "00" & not(wb0_we_i);
         end if;
         p0_cmd_bl <= std_logic_vector(p0_burst_cnt);
@@ -562,7 +569,7 @@ begin
         p0_cmd_en <= '0';
       else
         if (((p0_burst_cnt = c_P0_BURST_LENGTH) or
-             (wb0_cyc_f_edge = '1' and p0_wr_en = '1') or
+             (wb0_we_f_edge = '1') or
              (wb0_stb_f_edge = '1' and p0_rd_en = '1')) and p0_cmd_full = '0') then
           p0_cmd_en <= '1';
         else
@@ -579,8 +586,8 @@ begin
       if (rst0_n = '0') then
         p0_burst_cnt <= (others => '0');
       else
-        if (((p0_burst_cnt = c_P0_BURST_LENGTH) or
-             (wb0_cyc_f_edge = '1')) and p0_cmd_full = '0') then
+        if ((p0_burst_cnt = c_P0_BURST_LENGTH) or
+            (wb0_cyc_f_edge = '1')) then
           p0_burst_cnt <= to_unsigned(0, p0_burst_cnt'length);
         elsif wb0_cyc_i = '1' and wb0_stb_i = '1' then
           p0_burst_cnt <= p0_burst_cnt + 1;
@@ -662,9 +669,11 @@ begin
       if (rst1_n = '0') then
         wb1_cyc_d <= '0';
         wb1_stb_d <= '0';
+        wb1_we_d  <= '0';
       else
         wb1_cyc_d <= wb1_cyc_i;
         wb1_stb_d <= wb1_stb_i;
+        wb1_we_d  <= wb1_we_i;
       end if;
     end if;
   end process p_wb1_cyc_edge;
@@ -672,6 +681,7 @@ begin
   wb1_cyc_f_edge <= not(wb1_cyc_i) and wb1_cyc_d;
   wb1_cyc_r_edge <= wb1_cyc_i and not(wb1_cyc_d);
   wb1_stb_f_edge <= not(wb1_stb_i) and wb1_stb_d;
+  wb1_we_f_edge  <= not(wb1_we_i) and wb1_we_d;
 
   -- Address and data inputs
   p_p1_inputs : process (wb1_clk_i)
@@ -722,7 +732,7 @@ begin
         p1_cmd_en <= '0';
       else
         if (((p1_burst_cnt = c_P1_BURST_LENGTH) or
-             (wb1_cyc_f_edge = '1' and p1_wr_en = '1') or
+             (wb1_we_f_edge = '1') or
              (wb1_stb_f_edge = '1' and p1_rd_en = '1')) and p1_cmd_full = '0') then
           p1_cmd_en <= '1';
         else
@@ -739,8 +749,8 @@ begin
       if rst1_n = '0' then
         p1_burst_cnt <= (others => '0');
       else
-        if (((p1_burst_cnt = c_P1_BURST_LENGTH) or
-             (wb1_cyc_f_edge = '1')) and p1_cmd_full = '0') then
+        if ((p1_burst_cnt = c_P1_BURST_LENGTH) or
+            (wb1_cyc_f_edge = '1')) then
           p1_burst_cnt <= to_unsigned(0, p1_burst_cnt'length);
         elsif wb1_cyc_i = '1' and wb1_stb_i = '1' then
           p1_burst_cnt <= p1_burst_cnt + 1;
