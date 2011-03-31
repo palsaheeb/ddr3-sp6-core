@@ -312,6 +312,7 @@ architecture rtl of ddr3_ctrl is
   signal wb0_stb_f_edge   : std_logic;
   signal wb0_we_d         : std_logic;
   signal wb0_we_f_edge    : std_logic;
+  signal wb0_addr_d       : std_logic_vector(26 downto 0);
   signal p0_burst_cnt     : unsigned(5 downto 0);
   signal p0_cmd_clk       : std_logic;
   signal p0_cmd_en        : std_logic;
@@ -346,6 +347,7 @@ architecture rtl of ddr3_ctrl is
   signal wb1_stb_f_edge   : std_logic;
   signal wb1_we_d         : std_logic;
   signal wb1_we_f_edge    : std_logic;
+  signal wb1_addr_d       : std_logic_vector(27 downto 0);
   signal p1_burst_cnt     : unsigned(5 downto 0);
   signal p1_cmd_clk       : std_logic;
   signal p1_cmd_en        : std_logic;
@@ -528,16 +530,12 @@ begin
         p0_wr_data <= (others => '0');
         p0_wr_en   <= '0';
       else
-        p0_wr_data <= wb0_data_i;
-        if (wb0_stb_i = '1') and (wb0_cyc_i = '1') then
-          if wb0_we_i = '1' then
-            p0_wr_en <= '1';
-          else
-            p0_wr_en <= '0';
-          end if;
+        if (wb0_stb_i = '1') and (wb0_cyc_i = '1') and (wb0_we_i = '1') then
+          p0_wr_en <= '1';
         else
           p0_wr_en <= '0';
         end if;
+        p0_wr_data <= wb0_data_i;
       end if;
     end if;
   end process p_p0_inputs;
@@ -550,13 +548,15 @@ begin
         p0_cmd_byte_addr <= (others => '0');
         p0_cmd_instr     <= "000";
         p0_cmd_bl        <= (others => '0');
+        wb0_addr_d       <= (others => '0');
       else
-        if (p0_burst_cnt = 0 and wb0_cyc_r_edge = '1' and wb0_stb_i = '1') or
-          (p0_cmd_en = '1') then
-          p0_cmd_byte_addr <= wb0_addr_i & "000";  -- wb0_addr_i is a 64-bit word address
+        wb0_addr_d <= wb0_addr_i;
+        if ((p0_burst_cnt = 0 and wb0_cyc_r_edge = '1' and wb0_stb_i = '1') or
+            (p0_burst_cnt = to_unsigned(1, p0_burst_cnt'length))) then
+          p0_cmd_byte_addr <= wb0_addr_d & "000";  -- wb0_addr_i is a 64-bit word address
           p0_cmd_instr     <= "00" & not(wb0_we_i);
         end if;
-        p0_cmd_bl <= std_logic_vector(p0_burst_cnt);
+        p0_cmd_bl <= std_logic_vector(p0_burst_cnt - 1);
       end if;
     end if;
   end process p_p0_cmd;
@@ -570,8 +570,8 @@ begin
       else
         if (((p0_burst_cnt = c_P0_BURST_LENGTH) or
              (wb0_we_f_edge = '1') or
-             (wb0_stb_f_edge = '1' and p0_rd_en = '1')) and p0_cmd_full = '0') then
-          p0_cmd_en <= '1';
+             (wb0_stb_f_edge = '1' and p0_rd_en = '1')) and p0_cmd_full = '0') and (p0_cmd_en = '0') then
+          p0_cmd_en <= '1';             -- might have problem if burst_cnt = BURST_LENGTH for more than 2 clk cycles
         else
           p0_cmd_en <= '0';
         end if;
@@ -586,11 +586,14 @@ begin
       if (rst0_n = '0') then
         p0_burst_cnt <= (others => '0');
       else
-        if ((p0_burst_cnt = c_P0_BURST_LENGTH) or
-            (wb0_cyc_f_edge = '1')) then
+        if (wb0_cyc_f_edge = '1') then
           p0_burst_cnt <= to_unsigned(0, p0_burst_cnt'length);
-        elsif wb0_cyc_i = '1' and wb0_stb_i = '1' then
-          p0_burst_cnt <= p0_burst_cnt + 1;
+        elsif (wb0_stb_i = '1' and wb0_cyc_i = '1') then
+          if (p0_burst_cnt = c_P0_BURST_LENGTH) then
+            p0_burst_cnt <= to_unsigned(1, p0_burst_cnt'length);
+          else
+            p0_burst_cnt <= p0_burst_cnt + 1;
+          end if;
         end if;
       end if;
     end if;
@@ -691,16 +694,12 @@ begin
         p1_wr_data <= (others => '0');
         p1_wr_en   <= '0';
       else
-        p1_wr_data <= wb1_data_i;
-        if (wb1_stb_i = '1') and (wb1_cyc_i = '1') then
-          if wb1_we_i = '1' then
-            p1_wr_en <= '1';
-          else
-            p1_wr_en <= '0';
-          end if;
+        if (wb1_stb_i = '1') and (wb1_cyc_i = '1') and (wb1_we_i = '1') then
+          p1_wr_en <= '1';
         else
           p1_wr_en <= '0';
         end if;
+        p1_wr_data <= wb1_data_i;
       end if;
     end if;
   end process p_p1_inputs;
@@ -713,13 +712,15 @@ begin
         p1_cmd_byte_addr <= (others => '0');
         p1_cmd_instr     <= "000";
         p1_cmd_bl        <= (others => '0');
+        wb1_addr_d       <= (others => '0');
       else
-        if (p1_burst_cnt = 0 and wb1_cyc_r_edge = '1' and wb1_stb_i = '1') or
-          (p1_cmd_en = '1') then
-          p1_cmd_byte_addr <= wb1_addr_i & "00";  -- wb1_addr_i is a 32-bit word address
+        wb1_addr_d <= wb1_addr_i;
+        if ((p1_burst_cnt = 0 and wb1_cyc_r_edge = '1' and wb1_stb_i = '1') or
+            (p1_burst_cnt = to_unsigned(1, p1_burst_cnt'length))) then
+          p1_cmd_byte_addr <= wb1_addr_d & "00";  -- wb1_addr_i is a 32-bit word address
           p1_cmd_instr     <= "00" & not(wb1_we_i);
         end if;
-        p1_cmd_bl <= std_logic_vector(p1_burst_cnt);
+        p1_cmd_bl <= std_logic_vector(p1_burst_cnt - 1);
       end if;
     end if;
   end process p_p1_cmd;
@@ -733,8 +734,8 @@ begin
       else
         if (((p1_burst_cnt = c_P1_BURST_LENGTH) or
              (wb1_we_f_edge = '1') or
-             (wb1_stb_f_edge = '1' and p1_rd_en = '1')) and p1_cmd_full = '0') then
-          p1_cmd_en <= '1';
+             (wb1_stb_f_edge = '1' and p1_rd_en = '1')) and p1_cmd_full = '0') and (p1_cmd_en = '0') then
+          p1_cmd_en <= '1';             -- might have problem if burst_cnt = BURST_LENGTH for more than 2 clk cycles
         else
           p1_cmd_en <= '0';
         end if;
@@ -749,11 +750,14 @@ begin
       if rst1_n = '0' then
         p1_burst_cnt <= (others => '0');
       else
-        if ((p1_burst_cnt = c_P1_BURST_LENGTH) or
-            (wb1_cyc_f_edge = '1')) then
+        if (wb1_cyc_f_edge = '1') then
           p1_burst_cnt <= to_unsigned(0, p1_burst_cnt'length);
-        elsif wb1_cyc_i = '1' and wb1_stb_i = '1' then
-          p1_burst_cnt <= p1_burst_cnt + 1;
+        elsif (wb1_stb_i = '1' and wb1_cyc_i = '1') then
+          if (p1_burst_cnt = c_P1_BURST_LENGTH) then
+            p1_burst_cnt <= to_unsigned(1, p1_burst_cnt'length);
+          else
+            p1_burst_cnt <= p1_burst_cnt + 1;
+          end if;
         end if;
       end if;
     end if;
