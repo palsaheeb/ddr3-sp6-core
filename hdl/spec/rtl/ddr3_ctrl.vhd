@@ -316,6 +316,8 @@ architecture rtl of ddr3_ctrl is
   signal p0_burst_cnt     : unsigned(5 downto 0);
   signal p0_cmd_clk       : std_logic;
   signal p0_cmd_en        : std_logic;
+  signal p0_cmd_en_d      : std_logic;
+  signal p0_cmd_en_r_edge : std_logic;
   signal p0_cmd_instr     : std_logic_vector(2 downto 0);
   signal p0_cmd_bl        : std_logic_vector(5 downto 0);
   signal p0_cmd_byte_addr : std_logic_vector(29 downto 0);
@@ -351,6 +353,8 @@ architecture rtl of ddr3_ctrl is
   signal p1_burst_cnt     : unsigned(5 downto 0);
   signal p1_cmd_clk       : std_logic;
   signal p1_cmd_en        : std_logic;
+  signal p1_cmd_en_d      : std_logic;
+  signal p1_cmd_en_r_edge : std_logic;
   signal p1_cmd_instr     : std_logic_vector(2 downto 0);
   signal p1_cmd_bl        : std_logic_vector(5 downto 0);
   signal p1_cmd_byte_addr : std_logic_vector(29 downto 0);
@@ -566,11 +570,13 @@ begin
   begin
     if rising_edge(wb0_clk_i) then
       if (rst0_n = '0') then
-        p0_cmd_en <= '0';
+        p0_cmd_en   <= '0';
+        p0_cmd_en_d <= '0';
       else
+        p0_cmd_en_d <= p0_cmd_en;
         if (((p0_burst_cnt = c_P0_BURST_LENGTH) or
              (wb0_we_f_edge = '1') or
-             (wb0_stb_f_edge = '1' and p0_rd_en = '1')) and p0_cmd_full = '0') and (p0_cmd_en = '0') then
+             (wb0_stb_f_edge = '1' and p0_rd_en = '1')) and p0_cmd_full = '0') and (p0_cmd_en = '0')then
           p0_cmd_en <= '1';             -- might have problem if burst_cnt = BURST_LENGTH for more than 2 clk cycles
         else
           p0_cmd_en <= '0';
@@ -578,6 +584,9 @@ begin
       end if;
     end if;
   end process p_p0_cmd_en;
+
+  -- Command enable rising edge detection
+  p0_cmd_en_r_edge <= p0_cmd_en and not(p0_cmd_en_d);
 
   -- Burst counter
   p_p0_burst_cnt : process (wb0_clk_i)
@@ -594,6 +603,8 @@ begin
           else
             p0_burst_cnt <= p0_burst_cnt + 1;
           end if;
+        elsif (p0_burst_cnt = c_P0_BURST_LENGTH) then
+          p0_burst_cnt <= to_unsigned(0, p0_burst_cnt'length);
         end if;
       end if;
     end if;
@@ -730,8 +741,10 @@ begin
   begin
     if rising_edge(wb1_clk_i) then
       if (rst1_n = '0') then
-        p1_cmd_en <= '0';
+        p1_cmd_en   <= '0';
+        p1_cmd_en_d <= '0';
       else
+        p1_cmd_en_d <= p1_cmd_en;
         if (((p1_burst_cnt = c_P1_BURST_LENGTH) or
              (wb1_we_f_edge = '1') or
              (wb1_stb_f_edge = '1' and p1_rd_en = '1')) and p1_cmd_full = '0') and (p1_cmd_en = '0') then
@@ -742,6 +755,9 @@ begin
       end if;
     end if;
   end process p_p1_cmd_en;
+
+  -- Command enable rising edge detection
+  p1_cmd_en_r_edge <= p1_cmd_en and not(p1_cmd_en_d);
 
   -- Burst counter
   p_p1_burst_cnt : process (wb1_clk_i)
@@ -758,6 +774,8 @@ begin
           else
             p1_burst_cnt <= p1_burst_cnt + 1;
           end if;
+        elsif (p1_burst_cnt = c_P1_BURST_LENGTH) then
+          p1_burst_cnt <= to_unsigned(0, p1_burst_cnt'length);
         end if;
       end if;
     end if;
