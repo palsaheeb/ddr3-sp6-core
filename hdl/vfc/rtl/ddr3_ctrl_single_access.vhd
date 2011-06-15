@@ -296,12 +296,12 @@ architecture rtl of ddr3_ctrl is
   ------------------------------------------------------------------------------
   -- Types declaration
   ------------------------------------------------------------------------------
-  --type t_wb_fsm_states is (WB_IDLE, WB_WRITE, WB_READ_REQ, WB_READ_WAIT,
-  --                         WB_READ_ACK, WB_READ_REQ_ACK);
+  type t_wb_fsm_states is (WB_IDLE, WB_WRITE, WB_READ, WB_READ_WAIT, WB_READ_ACK);
 
   ------------------------------------------------------------------------------
   -- Signals declaration
   ------------------------------------------------------------------------------
+  signal wb0_fsm_state    : t_wb_fsm_states := WB_IDLE;
   signal rst0_n           : std_logic;
   signal wb0_cyc_d        : std_logic;
   signal wb0_cyc_f_edge   : std_logic;
@@ -339,6 +339,7 @@ architecture rtl of ddr3_ctrl is
   signal p0_rd_overflow   : std_logic;
   signal p0_rd_error      : std_logic;
 
+  signal wb1_fsm_state    : t_wb_fsm_states := WB_IDLE;
   signal rst1_n           : std_logic;
   signal wb1_cyc_d        : std_logic;
   signal wb1_cyc_f_edge   : std_logic;
