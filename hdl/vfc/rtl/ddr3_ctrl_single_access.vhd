@@ -580,6 +580,11 @@ begin
     end if;
   end process p_rst1_sync;
 
+  -- Clocking
+  p1_cmd_clk <= wb1_clk_i;
+  p1_wr_clk  <= wb1_clk_i;
+  p1_rd_clk  <= wb1_clk_i;
+
   p_p1_wb_interface : process (wb1_clk_i)
   begin
     if (rising_edge(wb1_clk_i)) then
