@@ -526,7 +526,7 @@ begin
               p0_cmd_en        <= '1';
               p0_cmd_instr     <= "000";
               p0_cmd_bl        <= "000001";
-              p0_cmd_byte_addr <= wb0_addr_i;
+              p0_cmd_byte_addr <= wb0_addr_i & "00";
               p0_wr_mask       <= "0000";
               p0_wr_data       <= wb0_data_i;
               p0_wr_en         <= '1';
@@ -612,7 +612,7 @@ begin
               p1_cmd_en        <= '1';
               p1_cmd_instr     <= "000";
               p1_cmd_bl        <= "000001";
-              p1_cmd_byte_addr <= wb1_addr_i;
+              p1_cmd_byte_addr <= wb1_addr_i & "00";
               p1_wr_mask       <= "0000";
               p1_wr_data       <= wb1_data_i;
               p1_wr_en         <= '1';
