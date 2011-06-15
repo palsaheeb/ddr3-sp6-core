@@ -537,7 +537,7 @@ begin
               p0_cmd_en        <= '1';
               p0_cmd_instr     <= "001";
               p0_cmd_bl        <= "000001";
-              p0_cmd_byte_addr <= wb0_addr_i;
+              p0_cmd_byte_addr <= wb0_addr_i & "00";
               wb0_fsm_state    <= WB_READ_WAIT;
             else
               wb0_ack_o <= '0';
@@ -623,7 +623,7 @@ begin
               p1_cmd_en        <= '1';
               p1_cmd_instr     <= "001";
               p1_cmd_bl        <= "000001";
-              p1_cmd_byte_addr <= wb1_addr_i;
+              p1_cmd_byte_addr <= wb1_addr_i & "00";
               wb1_fsm_state    <= WB_READ_WAIT;
             else
               wb1_ack_o <= '0';
