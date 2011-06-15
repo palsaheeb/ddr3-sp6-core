@@ -1,5 +1,5 @@
 files = [
-"rtl/ddr3_ctrl.vhd",
+"rtl/ddr3_ctrl_single_access.vhd",
 "ip_cores/ddr_controller_bank1/user_design/rtl/ddr_controller_bank1.vhd",
 "ip_cores/ddr_controller_bank1/user_design/rtl/iodrp_controller.vhd",
 "ip_cores/ddr_controller_bank1/user_design/rtl/iodrp_mcb_controller.vhd",
