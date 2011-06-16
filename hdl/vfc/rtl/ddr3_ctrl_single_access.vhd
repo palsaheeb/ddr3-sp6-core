@@ -296,7 +296,7 @@ architecture rtl of ddr3_ctrl is
   ------------------------------------------------------------------------------
   -- Types declaration
   ------------------------------------------------------------------------------
-  type t_wb_fsm_states is (WB_IDLE, WB_WRITE, WB_READ, WB_READ_WAIT, WB_READ_ACK);
+  type t_wb_fsm_states is (WB_IDLE, WB_WRITE, WB_READ, WB_READ_WAIT);
 
   ------------------------------------------------------------------------------
   -- Signals declaration
@@ -523,22 +523,23 @@ begin
               -- Write from wishbone
               p0_rd_en         <= '0';
               wb0_ack_o        <= '1';
-              p0_cmd_en        <= '1';
+              p0_cmd_en        <= '0';
               p0_cmd_instr     <= "000";
               p0_cmd_bl        <= "000000";
               p0_cmd_byte_addr <= wb0_addr_i & "00";
               p0_wr_mask       <= "0000";
               p0_wr_data       <= wb0_data_i;
               p0_wr_en         <= '1';
+              wb0_fsm_state    <= WB_WRITE;
             elsif (wb0_cyc_i = '1' and wb0_stb_i = '1' and wb0_we_i = '0') then
               -- Read from wishbone
               p0_wr_en         <= '0';
               wb0_ack_o        <= '0';
-              p0_cmd_en        <= '1';
+              p0_cmd_en        <= '0';
               p0_cmd_instr     <= "001";
               p0_cmd_bl        <= "000000";
               p0_cmd_byte_addr <= wb0_addr_i & "00";
-              wb0_fsm_state    <= WB_READ_WAIT;
+              wb0_fsm_state    <= WB_READ;
             else
               wb0_ack_o <= '0';
               p0_cmd_en <= '0';
@@ -548,6 +549,14 @@ begin
               p0_cmd_bl        <= "000000";
               p0_cmd_byte_addr <= (others => '0');
             end if;
+
+         when WB_WRITE =>
+            p0_cmd_en <= '1';
+            wb0_fsm_state    <= WB_IDLE;
+
+         when WB_READ =>
+            p0_cmd_en <= '1';
+            wb0_fsm_state    <= WB_READ_WAIT;
 
           when WB_READ_WAIT =>
             p0_cmd_en  <= '0';
