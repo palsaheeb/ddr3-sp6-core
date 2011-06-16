@@ -621,7 +621,7 @@ begin
               -- Write from wishbone
               p1_rd_en         <= '0';
               wb1_ack_o        <= '1';
-              p1_cmd_en        <= '1';
+              p1_cmd_en        <= '0';
               p1_cmd_instr     <= "000";
               p1_cmd_bl        <= "000000";
               p1_cmd_byte_addr <= wb1_addr_i & "00";
@@ -632,7 +632,7 @@ begin
               -- Read from wishbone
               p1_wr_en         <= '0';
               wb1_ack_o        <= '0';
-              p1_cmd_en        <= '1';
+              p1_cmd_en        <= '0';
               p1_cmd_instr     <= "001";
               p1_cmd_bl        <= "000000";
               p1_cmd_byte_addr <= wb1_addr_i & "00";
@@ -646,6 +646,14 @@ begin
               p1_cmd_bl        <= "000000";
               p1_cmd_byte_addr <= (others => '0');
             end if;
+
+         when WB_WRITE =>
+            p1_cmd_en <= '1';
+            wb1_fsm_state    <= WB_IDLE;
+
+         when WB_READ =>
+            p1_cmd_en <= '1';
+            wb1_fsm_state    <= WB_READ_WAIT;
 
           when WB_READ_WAIT =>
             p1_cmd_en  <= '0';
