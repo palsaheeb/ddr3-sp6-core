@@ -525,7 +525,7 @@ begin
               wb0_ack_o        <= '1';
               p0_cmd_en        <= '1';
               p0_cmd_instr     <= "000";
-              p0_cmd_bl        <= "000001";
+              p0_cmd_bl        <= "000000";
               p0_cmd_byte_addr <= wb0_addr_i & "00";
               p0_wr_mask       <= "0000";
               p0_wr_data       <= wb0_data_i;
@@ -536,7 +536,7 @@ begin
               wb0_ack_o        <= '0';
               p0_cmd_en        <= '1';
               p0_cmd_instr     <= "001";
-              p0_cmd_bl        <= "000001";
+              p0_cmd_bl        <= "000000";
               p0_cmd_byte_addr <= wb0_addr_i & "00";
               wb0_fsm_state    <= WB_READ_WAIT;
             else
@@ -611,7 +611,7 @@ begin
               wb1_ack_o        <= '1';
               p1_cmd_en        <= '1';
               p1_cmd_instr     <= "000";
-              p1_cmd_bl        <= "000001";
+              p1_cmd_bl        <= "000000";
               p1_cmd_byte_addr <= wb1_addr_i & "00";
               p1_wr_mask       <= "0000";
               p1_wr_data       <= wb1_data_i;
@@ -622,7 +622,7 @@ begin
               wb1_ack_o        <= '0';
               p1_cmd_en        <= '1';
               p1_cmd_instr     <= "001";
-              p1_cmd_bl        <= "000001";
+              p1_cmd_bl        <= "000000";
               p1_cmd_byte_addr <= wb1_addr_i & "00";
               wb1_fsm_state    <= WB_READ_WAIT;
             else
