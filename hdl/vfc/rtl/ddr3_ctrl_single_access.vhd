@@ -545,18 +545,15 @@ begin
               p0_cmd_en <= '0';
               p0_wr_en  <= '0';
               p0_rd_en  <= '0';
-              p0_cmd_instr     <= "000";
-              p0_cmd_bl        <= "000000";
-              p0_cmd_byte_addr <= (others => '0');
             end if;
 
-         when WB_WRITE =>
-            p0_cmd_en <= '1';
-            wb0_fsm_state    <= WB_IDLE;
+          when WB_WRITE =>
+            p0_cmd_en     <= '1';
+            wb0_fsm_state <= WB_IDLE;
 
-         when WB_READ =>
-            p0_cmd_en <= '1';
-            wb0_fsm_state    <= WB_READ_WAIT;
+          when WB_READ =>
+            p0_cmd_en     <= '1';
+            wb0_fsm_state <= WB_READ_WAIT;
 
           when WB_READ_WAIT =>
             p0_cmd_en  <= '0';
@@ -643,18 +640,15 @@ begin
               p1_cmd_en <= '0';
               p1_wr_en  <= '0';
               p1_rd_en  <= '0';
-              p1_cmd_instr     <= "000";
-              p1_cmd_bl        <= "000000";
-              p1_cmd_byte_addr <= (others => '0');
             end if;
 
-         when WB_WRITE =>
-            p1_cmd_en <= '1';
-            wb1_fsm_state    <= WB_IDLE;
+          when WB_WRITE =>
+            p1_cmd_en     <= '1';
+            wb1_fsm_state <= WB_IDLE;
 
-         when WB_READ =>
-            p1_cmd_en <= '1';
-            wb1_fsm_state    <= WB_READ_WAIT;
+          when WB_READ =>
+            p1_cmd_en     <= '1';
+            wb1_fsm_state <= WB_READ_WAIT;
 
           when WB_READ_WAIT =>
             p1_cmd_en  <= '0';
