@@ -544,6 +544,9 @@ begin
               p0_cmd_en <= '0';
               p0_wr_en  <= '0';
               p0_rd_en  <= '0';
+              p0_cmd_instr     <= "000";
+              p0_cmd_bl        <= "000000";
+              p0_cmd_byte_addr <= (others => '0');
             end if;
 
           when WB_READ_WAIT =>
@@ -630,6 +633,9 @@ begin
               p1_cmd_en <= '0';
               p1_wr_en  <= '0';
               p1_rd_en  <= '0';
+              p1_cmd_instr     <= "000";
+              p1_cmd_bl        <= "000000";
+              p1_cmd_byte_addr <= (others => '0');
             end if;
 
           when WB_READ_WAIT =>
