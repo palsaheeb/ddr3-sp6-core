@@ -628,6 +628,7 @@ begin
               p1_wr_mask       <= "0000";
               p1_wr_data       <= wb1_data_i;
               p1_wr_en         <= '1';
+              wb1_fsm_state    <= WB_WRITE;
             elsif (wb1_cyc_i = '1' and wb1_stb_i = '1' and wb1_we_i = '0') then
               -- Read from wishbone
               p1_wr_en         <= '0';
@@ -636,7 +637,7 @@ begin
               p1_cmd_instr     <= "001";
               p1_cmd_bl        <= "000000";
               p1_cmd_byte_addr <= wb1_addr_i & "00";
-              wb1_fsm_state    <= WB_READ_WAIT;
+              wb1_fsm_state    <= WB_READ;
             else
               wb1_ack_o <= '0';
               p1_cmd_en <= '0';
