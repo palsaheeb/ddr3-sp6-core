@@ -549,6 +549,7 @@ begin
 
           when WB_WRITE =>
             wb0_ack_o     <= '1';
+            p0_wr_en      <= '0';
             p0_cmd_en     <= '1';
             wb0_fsm_state <= WB_IDLE;
 
@@ -645,6 +646,7 @@ begin
 
           when WB_WRITE =>
             wb1_ack_o     <= '1';
+            p1_wr_en      <= '0';
             p1_cmd_en     <= '1';
             wb1_fsm_state <= WB_IDLE;
 
