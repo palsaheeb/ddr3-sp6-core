@@ -522,7 +522,7 @@ begin
             if (wb0_cyc_i = '1' and wb0_stb_i = '1' and wb0_we_i = '1') then
               -- Write from wishbone
               p0_rd_en         <= '0';
-              wb0_ack_o        <= '1';
+              wb0_ack_o        <= '0';
               p0_cmd_en        <= '0';
               p0_cmd_instr     <= "000";
               p0_cmd_bl        <= "000000";
@@ -548,6 +548,7 @@ begin
             end if;
 
           when WB_WRITE =>
+            wb0_ack_o     <= '1';
             p0_cmd_en     <= '1';
             wb0_fsm_state <= WB_IDLE;
 
