@@ -34,7 +34,7 @@ set_option -symbolic_fsm_compiler 1
 set_option -resource_sharing 0
 set_option -use_fsm_explorer 0
 set_option -top_module "example_top"
-set_option -frequency 333.333
+set_option -frequency 312.5
 set_option -fanout_limit 1000
 set_option -disable_io_insertion 0
 set_option -pipe 1

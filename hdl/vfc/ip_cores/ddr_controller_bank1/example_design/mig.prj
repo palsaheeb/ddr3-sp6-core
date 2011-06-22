@@ -5,7 +5,7 @@
     <Version>3.5</Version>
     <Controller number="1" >
         <MemoryDevice>DDR3_SDRAM/Components/MT41J128M16HA-15E</MemoryDevice>
-        <TimePeriod>3000</TimePeriod>
+        <TimePeriod>3200</TimePeriod>
         <EnableVoltageRange>1</EnableVoltageRange>
         <DataMask>1</DataMask>
         <CustomPart>FALSE</CustomPart>
@@ -31,7 +31,7 @@
         <Class>Class II</Class>
         <DataClass>Class II</DataClass>
         <InputPinTermination>UNCALIB_TERM</InputPinTermination>
-        <DataTermination>50 Ohms</DataTermination>
+        <DataTermination>25 Ohms</DataTermination>
         <CalibrationRowAddress></CalibrationRowAddress>
         <CalibrationColumnAddress></CalibrationColumnAddress>
         <CalibrationBankAddress></CalibrationBankAddress>

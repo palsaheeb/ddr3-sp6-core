@@ -17,7 +17,7 @@ MIG Output Options:
 /*******************************************************/
 Controller Options : 
    Memory                  : DDR3_SDRAM
-   Design Clock Frequency  : 3000 ps (333.33 MHz)
+   Design Clock Frequency  : 3200 ps (312.50 MHz)
    Memory Type             : Components
    Memory Part             : MT41J128M16HA-15E
    Equivalent Part(s)      : --
@@ -65,7 +65,7 @@ FPGA Options :
    Class for Address and Control       : II
    Class for Data                      : II
    Memory Interface Pin Termination    : UNCALIB_TERM
-   DQ/DQS                              : 50 Ohms
+   DQ/DQS                              : 25 Ohms
    Bypass Calibration                  : enabled
    Debug Signals for Memory Controller : Disable
    Input Clock Type                    : Single-Ended 
