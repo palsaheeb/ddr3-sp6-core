@@ -20,6 +20,9 @@ ddr_controller_bank1/example_design/mig.prj:
 ddr_controller_bank1/example_design/par/create_ise.sh:
    Please see the core data sheet.
 
+ddr_controller_bank1/example_design/par/example_top.cdc:
+   Please see the core data sheet.
+
 ddr_controller_bank1/example_design/par/example_top.ucf:
    Please see the core data sheet.
 
@@ -226,6 +229,9 @@ ddr_controller_bank1/user_design/mig.prj:
    Please see the core data sheet.
 
 ddr_controller_bank1/user_design/par/create_ise.sh:
+   Please see the core data sheet.
+
+ddr_controller_bank1/user_design/par/ddr_controller_bank1.cdc:
    Please see the core data sheet.
 
 ddr_controller_bank1/user_design/par/ddr_controller_bank1.ucf:

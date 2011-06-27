@@ -169,7 +169,7 @@ begin
       --    I  => sys_clk,
       --    O  => sys_clk_ibufg
       --    );
-      sys_clk_ibufg <= sys_clk;
+    sys_clk_ibufg <= sys_clk;
   end generate;   
 
   --***************************************************************************

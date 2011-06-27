@@ -76,7 +76,7 @@ component ddr_controller_bank1
     C1_INPUT_CLK_TYPE         : string := "SINGLE_ENDED";
     C1_CALIB_SOFT_IP          : string := "TRUE";
     C1_SIMULATION             : string := "FALSE";
-    DEBUG_EN                  : integer := 0;
+    DEBUG_EN                  : integer := 1;
     C1_MEM_ADDR_ORDER         : string := "ROW_BANK_COLUMN";
     C1_NUM_DQ_PINS            : integer := 16;
     C1_MEM_ADDR_WIDTH         : integer := 14;

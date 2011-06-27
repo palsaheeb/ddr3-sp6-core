@@ -78,7 +78,7 @@ generic
     C1_CALIB_SOFT_IP        : string := "TRUE"; 
     C1_SIMULATION           : string := "FALSE"; 
     C1_HW_TESTING           : string := "FALSE"; 
-    DEBUG_EN                : integer := 0; 
+    DEBUG_EN                : integer := 1; 
     C1_MEM_ADDR_ORDER       : string := "ROW_BANK_COLUMN"; 
     C1_NUM_DQ_PINS          : integer := 16; 
     C1_MEM_ADDR_WIDTH       : integer := 14; 
@@ -115,6 +115,40 @@ end example_top;
 architecture arc of example_top is
 
  
+
+component icon
+    port (
+      CONTROL0 : inout std_logic_vector(35 downto 0);
+      CONTROL1 : inout std_logic_vector(35 downto 0)
+      );
+  end component;
+
+  component ila
+    port (
+     CLK     : in    std_logic;
+     DATA    : in    std_logic_vector(255 downto 0);
+     TRIG0   : in    std_logic_vector(1 downto 0);
+     CONTROL : inout std_logic_vector(35 downto 0)
+     );
+  end component;
+
+  component vio
+    port (
+      CONTROL : inout std_logic_vector(35 downto 0);
+      ASYNC_OUT: out std_logic_vector(6 downto 0)
+      );
+  end component;
+
+  attribute syn_black_box          : boolean;
+  attribute syn_noprune            : boolean;
+  attribute syn_black_box of icon  : component is TRUE;
+  attribute syn_noprune of icon    : component is TRUE;
+  attribute syn_black_box of ila   : component is TRUE;
+  attribute syn_noprune of ila     : component is TRUE;
+  attribute syn_black_box of vio   : component is TRUE;
+  attribute syn_noprune of vio     : component is TRUE;
+
+	
 component memc1_infrastructure is
     generic (
       C_MEMCLK_PERIOD      : integer;
@@ -533,6 +567,17 @@ component memc1_tb_top is
   signal  c1_selfrefresh_mode                      : std_logic;
 
 
+	-- debug signals declarations
+   signal c1_dbg_data : std_logic_vector(255 downto 0);
+   signal c1_dbg_trig : std_logic_vector(1 downto 0);
+   signal c1_control0 : std_logic_vector(35 downto 0);
+   signal c1_control1 : std_logic_vector(35 downto 0);
+   signal c1_vio_out : std_logic_vector(6 downto 0);
+   signal c1_zeroes1 : std_logic_vector(87 downto 0 ):= (others => '0');
+   signal c1_zeroes2 : std_logic_vector(143 downto 0 ):= (others => '0');
+
+	
+
 
 
 begin
@@ -800,6 +845,74 @@ port map
   );
 
  
+   gen_dbg_enable:if (DEBUG_EN = 1) generate 
+     -- controller 1
+     c1_dbg_data(255 downto 0) <= ( c1_zeroes1 &
+			      c1_cmp_error &
+			      c1_cmp_data &
+                              c1_cmp_data_valid &  
+			      c1_p0_cmd_en &
+			      c1_p0_cmd_instr &
+			      c1_p0_cmd_bl &
+			      c1_p0_cmd_byte_addr &
+			      c1_p0_cmd_empty &
+			      c1_p0_cmd_full &
+
+			      c1_p0_rd_en &
+			      c1_p0_rd_data(31 downto 0) &
+			      c1_p0_rd_full &
+			      c1_p0_rd_empty &
+			      c1_p0_rd_count &
+			      c1_p0_rd_overflow &
+			      c1_p0_rd_error &
+
+			      c1_p0_wr_en &
+			      c1_p0_wr_mask(3 downto 0) &
+			      c1_p0_wr_data(31 downto 0) &
+			      c1_p0_wr_full &
+			      c1_p0_wr_empty &
+			      c1_p0_wr_count &
+			      c1_p0_wr_underrun &
+			      c1_p0_wr_error
+				); 
+
+  c1_dbg_trig(1 downto 0) <=  ( c1_calib_done & c1_error );
+
+
+
+  c1_vio_modify_enable   <= c1_vio_out(6); 
+  c1_vio_data_mode_value <= "010";  
+  c1_vio_addr_mode_value <= c1_vio_out(2 downto 0);   
+    -----------------------------------------------------------------------------
+   --  ICON core instance
+   -----------------------------------------------------------------------------
+    my_icon_c1 : icon port map
+     (
+      CONTROL0 =>  c1_control0,
+      CONTROL1 =>  c1_control1 
+      );
+   -----------------------------------------------------------------------------
+   --  ILA core instance
+   -----------------------------------------------------------------------------
+    my_ila_c1 : ila port map
+     (
+      CONTROL => c1_control0,
+      CLK     => c1_clk0,
+      DATA    => c1_dbg_data,
+      TRIG0   => c1_dbg_trig 
+      );
+	
+   -----------------------------------------------------------------------------
+   --  VIO core instance
+   -----------------------------------------------------------------------------
+   my_vio_c1 : vio port map
+   (
+      CONTROL    => c1_control1,
+      ASYNC_OUT  => c1_vio_out
+      );  
+	
+   end generate;
+	
   
 
  end  arc;

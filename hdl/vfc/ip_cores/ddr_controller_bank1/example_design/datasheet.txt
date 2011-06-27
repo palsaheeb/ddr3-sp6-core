@@ -67,6 +67,6 @@ FPGA Options :
    Memory Interface Pin Termination    : UNCALIB_TERM
    DQ/DQS                              : 25 Ohms
    Bypass Calibration                  : enabled
-   Debug Signals for Memory Controller : Disable
+   Debug Signals for Memory Controller : Enable
    Input Clock Type                    : Single-Ended 
     

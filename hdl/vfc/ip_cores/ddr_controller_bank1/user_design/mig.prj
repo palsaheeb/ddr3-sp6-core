@@ -36,7 +36,7 @@
         <CalibrationColumnAddress></CalibrationColumnAddress>
         <CalibrationBankAddress></CalibrationBankAddress>
         <BypassCalibration>1</BypassCalibration>
-        <DebugSignals>Disable</DebugSignals>
+        <DebugSignals>Enable</DebugSignals>
         <SystemClock>Single-Ended</SystemClock>
         <Configuration>Two 32-bit bi-directional and four 32-bit unidirectional ports</Configuration>
         <RzqPin>N17</RzqPin>

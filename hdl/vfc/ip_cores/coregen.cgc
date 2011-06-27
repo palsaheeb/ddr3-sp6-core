@@ -51,725 +51,739 @@
                      <xilinx:name>./ddr_controller_bank1/docs/ug388.pdf</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>pdf</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:21 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:58 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xC933D481</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/docs/ug416.pdf</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>pdf</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:21 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:58 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x5114023D</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/datasheet.txt</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>txt</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0x050BA933</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0x4DBCB68A</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/mig.prj</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0x1A28FD25</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0xE255CCE6</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/par/create_ise.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0x19554403</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0xAE56E9CE</xilinx:checkSum>
+                  </xilinx:file>
+                  <xilinx:file>
+                     <xilinx:name>./ddr_controller_bank1/example_design/par/example_top.cdc</xilinx:name>
+                     <xilinx:userFileType>ignore</xilinx:userFileType>
+                     <xilinx:userFileType>unknown</xilinx:userFileType>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0x8A7FF9F5</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/par/example_top.ucf</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>ucf</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0x3F5C5255</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0x7527F4BC</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/par/icon_coregen.xco</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>xco</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x74F9CF6E</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/par/ila_coregen.xco</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>xco</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xC9381055</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/par/ise_flow.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0x18A59541</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0xA9070EFD</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/par/ise_run.txt</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>txt</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x361B8D74</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/par/makeproj.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xCFE64DF9</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/par/mem_interface_top.ut</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xCDD0105F</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/par/readme.txt</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>txt</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xB6686196</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/par/rem_files.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xB28759AD</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/par/set_ise_prop.tcl</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>tcl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x2F9A64A7</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/par/vio_coregen.xco</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>xco</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xE3510A88</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/example_top.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0x445B4DB2</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0xEF9B8AA9</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/iodrp_controller.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x7204A25D</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/iodrp_mcb_controller.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x6E4DEF38</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/mcb_raw_wrapper.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x65892D85</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/mcb_soft_calibration.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x3B276B47</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/mcb_soft_calibration_top.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xCEDF78E2</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/memc1_infrastructure.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:21 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:58 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x14BC3ECB</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/memc1_tb_top.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:21 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x2A503346</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/memc1_wrapper.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:21 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0xDC561F6E</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0xABBF55D7</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/traffic_gen/afifo.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:21 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xEACBE930</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/traffic_gen/cmd_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:21 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xBA1435D9</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/traffic_gen/cmd_prbs_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:21 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xB02704E8</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/traffic_gen/data_prbs_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:21 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xF202AFA1</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/traffic_gen/init_mem_pattern_ctr.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:21 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x1C3E9EC2</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/traffic_gen/mcb_flow_control.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:21 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x078B038B</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/traffic_gen/mcb_traffic_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:21 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x3A9C4BCD</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/traffic_gen/rd_data_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:21 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x209A0C33</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/traffic_gen/read_data_path.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:21 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x40926DAD</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/traffic_gen/read_posted_fifo.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:21 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x1DB0C988</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/traffic_gen/sp6_data_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:21 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x7E8DC03C</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/traffic_gen/tg_status.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:21 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x29BAE76F</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/traffic_gen/v6_data_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x9DE955E0</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/traffic_gen/wr_data_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xD714201E</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/rtl/traffic_gen/write_data_path.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x5A5C2388</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/sim/functional/ddr3_model_c1.v</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>verilog</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x50BABA6E</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/sim/functional/ddr3_model_parameters_c1.vh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x43778897</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/sim/functional/ddr_controller_bank1.prj</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xA06559CE</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/sim/functional/isim.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xB6B25EF4</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/sim/functional/isim.tcl</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>tcl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xDC032966</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/sim/functional/readme.txt</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>txt</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x85043D0A</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/sim/functional/sim.do</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xCDD38044</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/sim/functional/sim_tb_top.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x60227EBC</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/sim/functional/timing_sim.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x737F59AF</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/synth/example_top.lso</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xEEDE3797</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/synth/example_top.prj</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x956CA5CC</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/synth/mem_interface_top_synp.sdc</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xA378D8BF</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/example_design/synth/script_synp.tcl</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>tcl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:22 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x4BF34BB2</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/datasheet.txt</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>txt</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0x791E766A</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0x848C5844</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/mig.prj</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0x1A28FD25</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0xE255CCE6</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/par/create_ise.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0x19554403</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0xAE56E9CE</xilinx:checkSum>
+                  </xilinx:file>
+                  <xilinx:file>
+                     <xilinx:name>./ddr_controller_bank1/user_design/par/ddr_controller_bank1.cdc</xilinx:name>
+                     <xilinx:userFileType>ignore</xilinx:userFileType>
+                     <xilinx:userFileType>unknown</xilinx:userFileType>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0x919D2438</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/par/ddr_controller_bank1.ucf</xilinx:name>
                      <xilinx:userFileType>ucf</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0x3A5638CA</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0x4F65096F</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/par/icon_coregen.xco</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>xco</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x74F9CF6E</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/par/ila_coregen.xco</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>xco</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xC9381055</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/par/ise_flow.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0xD6C54FB5</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0x40ED89B7</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/par/ise_run.txt</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>txt</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x989CBE34</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/par/makeproj.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xCFE64DF9</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/par/mem_interface_top.ut</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xCDD0105F</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/par/readme.txt</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>txt</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x2F8FB050</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/par/rem_files.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xB02131BE</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/par/set_ise_prop.tcl</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>tcl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xD5074E6B</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/par/vio_coregen.xco</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>xco</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xE3510A88</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/rtl/ddr_controller_bank1.vhd</xilinx:name>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0x318839C9</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0x66A63DE6</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/rtl/iodrp_controller.vhd</xilinx:name>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x7204A25D</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/rtl/iodrp_mcb_controller.vhd</xilinx:name>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x6E4DEF38</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/rtl/mcb_raw_wrapper.vhd</xilinx:name>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x65892D85</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/rtl/mcb_soft_calibration.vhd</xilinx:name>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x3B276B47</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/rtl/mcb_soft_calibration_top.vhd</xilinx:name>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xCEDF78E2</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/rtl/memc1_infrastructure.vhd</xilinx:name>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x14BC3ECB</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/rtl/memc1_wrapper.vhd</xilinx:name>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0xDC561F6E</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0xABBF55D7</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/afifo.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xEACBE930</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/cmd_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xBA1435D9</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/cmd_prbs_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xB02704E8</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/data_prbs_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xF202AFA1</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/ddr3_model_c1.v</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>verilog</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x50BABA6E</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/ddr3_model_parameters_c1.vh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x43778897</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/ddr_controller_bank1.prj</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x2E3A0A0C</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/init_mem_pattern_ctr.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x1C3E9EC2</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/isim.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xB6B25EF4</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/isim.tcl</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>tcl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xDC032966</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/mcb_flow_control.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x078B038B</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/mcb_traffic_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x3A9C4BCD</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/memc1_tb_top.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x2A503346</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/rd_data_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x209A0C33</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/read_data_path.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x40926DAD</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/read_posted_fifo.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x1DB0C988</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/readme.txt</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>txt</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x85043D0A</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/sim.do</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x36AC0E7B</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/sim_tb_top.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x4C47761C</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/sp6_data_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x7E8DC03C</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/tg_status.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x29BAE76F</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/v6_data_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x9DE955E0</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/wr_data_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xD714201E</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/sim/write_data_path.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:09:59 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x5A5C2388</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/synth/ddr_controller_bank1.lso</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xEEDE3797</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/synth/ddr_controller_bank1.prj</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x9A2909EB</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/synth/mem_interface_top_synp.sdc</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x15C8E045</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1/user_design/synth/script_synp.tcl</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>tcl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x7EB81D3E</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1.vho</xilinx:name>
                      <xilinx:userFileType>vho</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0x1F94809B</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0x00489ED0</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1_xmdf.tcl</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>tcl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:23 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:00 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x02A12207</xilinx:checkSum>
                   </xilinx:file>
                </xilinx:fileSet>
@@ -778,8 +792,8 @@
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1.xco</xilinx:name>
                      <xilinx:userFileType>xco</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:24 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0x11A7F68B</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:01 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0x57482CFF</xilinx:checkSum>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -793,8 +807,8 @@
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1.xco</xilinx:name>
                      <xilinx:userFileType>xco</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:25 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0xF9FBAB34</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:02 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0xB4DDCC7F</xilinx:checkSum>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -806,22 +820,22 @@
                      <xilinx:name>./_xmsgs/pn_parser.xmsgs</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:37 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:12 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0xDE1D52E2</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1.gise</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>gise</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:37 GMT 2011</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:13 GMT 2011</xilinx:timeStamp>
                      <xilinx:checkSum>0x96EE007E</xilinx:checkSum>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./ddr_controller_bank1.xise</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>xise</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:37 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0x1BF977C5</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:13 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0x2D8FF18A</xilinx:checkSum>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -831,8 +845,8 @@
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>txtReadme</xilinx:userFileType>
                      <xilinx:userFileType>txt</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:38 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0xC6EECD55</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:13 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0x995432FB</xilinx:checkSum>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -842,8 +856,8 @@
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>txtFlist</xilinx:userFileType>
                      <xilinx:userFileType>txt</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Jun 22 14:41:39 GMT 2011</xilinx:timeStamp>
-                     <xilinx:checkSum>0x0DFD3125</xilinx:checkSum>
+                     <xilinx:timeStamp>Mon Jun 27 15:10:13 GMT 2011</xilinx:timeStamp>
+                     <xilinx:checkSum>0xAE43764D</xilinx:checkSum>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>

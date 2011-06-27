@@ -5,6 +5,7 @@ ddr_controller_bank1/docs/ug416.pdf
 ddr_controller_bank1/example_design/datasheet.txt
 ddr_controller_bank1/example_design/mig.prj
 ddr_controller_bank1/example_design/par/create_ise.sh
+ddr_controller_bank1/example_design/par/example_top.cdc
 ddr_controller_bank1/example_design/par/example_top.ucf
 ddr_controller_bank1/example_design/par/icon_coregen.xco
 ddr_controller_bank1/example_design/par/ila_coregen.xco
@@ -56,6 +57,7 @@ ddr_controller_bank1/example_design/synth/script_synp.tcl
 ddr_controller_bank1/user_design/datasheet.txt
 ddr_controller_bank1/user_design/mig.prj
 ddr_controller_bank1/user_design/par/create_ise.sh
+ddr_controller_bank1/user_design/par/ddr_controller_bank1.cdc
 ddr_controller_bank1/user_design/par/ddr_controller_bank1.ucf
 ddr_controller_bank1/user_design/par/icon_coregen.xco
 ddr_controller_bank1/user_design/par/ila_coregen.xco
