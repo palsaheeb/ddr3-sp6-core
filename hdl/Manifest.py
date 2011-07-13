@@ -1,2 +1,2 @@
-modules = {"local" : ["/rtl",
-                      "/spec"]}
+modules = {"local" : ["rtl",
+                      "spec"]}
