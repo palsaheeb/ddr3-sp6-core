@@ -24,7 +24,7 @@ use IEEE.NUMERIC_STD.all;
 --! ports of 32-bit.
 --------------------------------------------------------------------------------
 --! @version
---! 0.1 | mc | 09.08.2010 | File creation and Doxygen comments
+--! 0.1 | mc | 13.07.2011 | File creation and Doxygen comments
 --!
 --! @author
 --! mc : Matthieu Cattin, CERN (BE-CO-HT)
@@ -59,10 +59,14 @@ entity ddr3_ctrl is
     g_P0_MASK_SIZE       : integer := 4;
     --! Wishbone port 0 data width
     g_P0_DATA_PORT_SIZE  : integer := 32;
+    --! Port 0 byte address width
+    g_P0_BYTE_ADDR_WIDTH : integer := 30;
     --! Wishbone port 1 data mask size (8-bit granularity)
     g_P1_MASK_SIZE       : integer := 4;
     --! Wishbone port 1 data width
-    g_P1_DATA_PORT_SIZE  : integer := 32
+    g_P1_DATA_PORT_SIZE  : integer := 32;
+    --! Port 1 byte address width
+    g_P1_BYTE_ADDR_WIDTH : integer := 30
     );
 
   port(
@@ -70,9 +74,9 @@ entity ddr3_ctrl is
     -- Clocks and reset
     ----------------------------------------------------------------------------
     --! Core's differential clock input (pos)
-    --clk_p_i : in std_logic;
+    clk_p_i : in std_logic;
     --! Core's differential clock input (neg)
-    --clk_n_i : in std_logic;
+    clk_n_i : in std_logic;
     --! Core's clock input
     clk_i   : in std_logic;
     --! Core's reset input (active low)
@@ -187,119 +191,154 @@ architecture rtl of ddr3_ctrl is
   ------------------------------------------------------------------------------
   -- Components declaration
   ------------------------------------------------------------------------------
+  component ddr3_ctrl_wb
+    generic(
+      g_BYTE_ADDR_WIDTH : integer := 30;
+      g_MASK_SIZE       : integer := 4;
+      g_DATA_PORT_SIZE  : integer := 32
+      );
+    port(
+      rst_n_i             : in  std_logic;
+      ddr_cmd_clk_o       : out std_logic;
+      ddr_cmd_en_o        : out std_logic;
+      ddr_cmd_instr_o     : out std_logic_vector(2 downto 0);
+      ddr_cmd_bl_o        : out std_logic_vector(5 downto 0);
+      ddr_cmd_byte_addr_o : out std_logic_vector(g_BYTE_ADDR_WIDTH - 1 downto 0);
+      ddr_cmd_empty_i     : in  std_logic;
+      ddr_cmd_full_i      : in  std_logic;
+      ddr_wr_clk_o        : out std_logic;
+      ddr_wr_en_o         : out std_logic;
+      ddr_wr_mask_o       : out std_logic_vector(g_MASK_SIZE - 1 downto 0);
+      ddr_wr_data_o       : out std_logic_vector(g_DATA_PORT_SIZE - 1 downto 0);
+      ddr_wr_full_i       : in  std_logic;
+      ddr_wr_empty_i      : in  std_logic;
+      ddr_wr_count_i      : in  std_logic_vector(6 downto 0);
+      ddr_wr_underrun_i   : in  std_logic;
+      ddr_wr_error_i      : in  std_logic;
+      ddr_rd_clk_o        : out std_logic;
+      ddr_rd_en_o         : out std_logic;
+      ddr_rd_data_i       : in  std_logic_vector(g_DATA_PORT_SIZE - 1 downto 0);
+      ddr_rd_full_i       : in  std_logic;
+      ddr_rd_empty_i      : in  std_logic;
+      ddr_rd_count_i      : in  std_logic_vector(6 downto 0);
+      ddr_rd_overflow_i   : in  std_logic;
+      ddr_rd_error_i      : in  std_logic;
+      wb_clk_i            : in  std_logic;
+      wb_sel_i            : in  std_logic_vector(g_MASK_SIZE - 1 downto 0);
+      wb_cyc_i            : in  std_logic;
+      wb_stb_i            : in  std_logic;
+      wb_we_i             : in  std_logic;
+      wb_addr_i           : in  std_logic_vector(g_BYTE_ADDR_WIDTH - 3 downto 0);
+      wb_data_i           : in  std_logic_vector(g_DATA_PORT_SIZE - 1 downto 0);
+      wb_data_o           : out std_logic_vector(g_DATA_PORT_SIZE - 1 downto 0);
+      wb_ack_o            : out std_logic;
+      wb_stall_o          : out std_logic
+      );
+  end component ddr3_ctrl_wb;
 
-  --! DDR controller component generated from Xilinx CoreGen
-  component ddr_controller_sp605
-    generic
-      (
-        C3_P0_MASK_SIZE       : integer := 4;
-        C3_P0_DATA_PORT_SIZE  : integer := 32;
-        C3_P1_MASK_SIZE       : integer := 4;
-        C3_P1_DATA_PORT_SIZE  : integer := 32;
-        C3_MEMCLK_PERIOD      : integer := 3000;
-        C3_RST_ACT_LOW        : integer := 0;
-        C3_INPUT_CLK_TYPE     : string  := "SINGLE_ENDED";
-        C3_CALIB_SOFT_IP      : string  := "TRUE";
-        C3_MEM_ADDR_ORDER     : string  := "ROW_BANK_COLUMN";
-        C3_NUM_DQ_PINS        : integer := 16;
-        C3_MEM_ADDR_WIDTH     : integer := 14;
-        C3_MEM_BANKADDR_WIDTH : integer := 3;
-        C3_MC_CALIB_BYPASS    : string  := "NO"
-        );
+  component ddr3_ctrl_wrapper
+    generic(
+      g_MEMCLK_PERIOD      : integer := 3000;
+      g_RST_ACT_LOW        : integer := 1;
+      g_INPUT_CLK_TYPE     : string  := "SINGLE_ENDED";
+      g_CALIB_SOFT_IP      : string  := "TRUE";
+      g_MEM_ADDR_ORDER     : string  := "ROW_BANK_COLUMN";
+      g_MC_CALIB_BYPASS    : string  := "NO";
+      g_NUM_DQ_PINS        : integer := 16;
+      g_MEM_ADDR_WIDTH     : integer := 14;
+      g_MEM_BANKADDR_WIDTH : integer := 3;
+      g_P0_MASK_SIZE       : integer := 4;
+      g_P0_DATA_PORT_SIZE  : integer := 32;
+      g_P0_BYTE_ADDR_WIDTH : integer := 30;
+      g_P1_MASK_SIZE       : integer := 4;
+      g_P1_DATA_PORT_SIZE  : integer := 32;
+      g_P1_BYTE_ADDR_WIDTH : integer := 30
+      );
+    port(
+      clk_p_i            : in    std_logic;
+      clk_n_i            : in    std_logic;
+      clk_i              : in    std_logic;
+      rst_n_i            : in    std_logic;
+      calib_done_o       : out   std_logic;
+      ddr3_dq_b          : inout std_logic_vector(g_NUM_DQ_PINS-1 downto 0);
+      ddr3_a_o           : out   std_logic_vector(g_MEM_ADDR_WIDTH-1 downto 0);
+      ddr3_ba_o          : out   std_logic_vector(g_MEM_BANKADDR_WIDTH-1 downto 0);
+      ddr3_ras_n_o       : out   std_logic;
+      ddr3_cas_n_o       : out   std_logic;
+      ddr3_we_n_o        : out   std_logic;
+      ddr3_odt_o         : out   std_logic;
+      ddr3_rst_n_o       : out   std_logic;
+      ddr3_cke_o         : out   std_logic;
+      ddr3_dm_o          : out   std_logic;
+      ddr3_udm_o         : out   std_logic;
+      ddr3_dqs_p_b       : inout std_logic;
+      ddr3_dqs_n_b       : inout std_logic;
+      ddr3_udqs_p_b      : inout std_logic;
+      ddr3_udqs_n_b      : inout std_logic;
+      ddr3_clk_p_o       : out   std_logic;
+      ddr3_clk_n_o       : out   std_logic;
+      ddr3_rzq_b         : inout std_logic;
+      ddr3_zio_b         : inout std_logic;
+      p0_cmd_clk_i       : in    std_logic;
+      p0_cmd_en_i        : in    std_logic;
+      p0_cmd_instr_i     : in    std_logic_vector(2 downto 0);
+      p0_cmd_bl_i        : in    std_logic_vector(5 downto 0);
+      p0_cmd_byte_addr_i : in    std_logic_vector(g_P0_BYTE_ADDR_WIDTH - 1 downto 0);
+      p0_cmd_empty_o     : out   std_logic;
+      p0_cmd_full_o      : out   std_logic;
+      p0_wr_clk_i        : in    std_logic;
+      p0_wr_en_i         : in    std_logic;
+      p0_wr_mask_i       : in    std_logic_vector(g_P0_MASK_SIZE - 1 downto 0);
+      p0_wr_data_i       : in    std_logic_vector(g_P0_DATA_PORT_SIZE - 1 downto 0);
+      p0_wr_full_o       : out   std_logic;
+      p0_wr_empty_o      : out   std_logic;
+      p0_wr_count_o      : out   std_logic_vector(6 downto 0);
+      p0_wr_underrun_o   : out   std_logic;
+      p0_wr_error_o      : out   std_logic;
+      p0_rd_clk_i        : in    std_logic;
+      p0_rd_en_i         : in    std_logic;
+      p0_rd_data_o       : out   std_logic_vector(g_P0_DATA_PORT_SIZE - 1 downto 0);
+      p0_rd_full_o       : out   std_logic;
+      p0_rd_empty_o      : out   std_logic;
+      p0_rd_count_o      : out   std_logic_vector(6 downto 0);
+      p0_rd_overflow_o   : out   std_logic;
+      p0_rd_error_o      : out   std_logic;
+      p1_cmd_clk_i       : in    std_logic;
+      p1_cmd_en_i        : in    std_logic;
+      p1_cmd_instr_i     : in    std_logic_vector(2 downto 0);
+      p1_cmd_bl_i        : in    std_logic_vector(5 downto 0);
+      p1_cmd_byte_addr_i : in    std_logic_vector(g_P1_BYTE_ADDR_WIDTH - 1 downto 0);
+      p1_cmd_empty_o     : out   std_logic;
+      p1_cmd_full_o      : out   std_logic;
+      p1_wr_clk_i        : in    std_logic;
+      p1_wr_en_i         : in    std_logic;
+      p1_wr_mask_i       : in    std_logic_vector(g_P1_MASK_SIZE - 1 downto 0);
+      p1_wr_data_i       : in    std_logic_vector(g_P1_DATA_PORT_SIZE - 1 downto 0);
+      p1_wr_full_o       : out   std_logic;
+      p1_wr_empty_o      : out   std_logic;
+      p1_wr_count_o      : out   std_logic_vector(6 downto 0);
+      p1_wr_underrun_o   : out   std_logic;
+      p1_wr_error_o      : out   std_logic;
+      p1_rd_clk_i        : in    std_logic;
+      p1_rd_en_i         : in    std_logic;
+      p1_rd_data_o       : out   std_logic_vector(g_P1_DATA_PORT_SIZE - 1 downto 0);
+      p1_rd_full_o       : out   std_logic;
+      p1_rd_empty_o      : out   std_logic;
+      p1_rd_count_o      : out   std_logic_vector(6 downto 0);
+      p1_rd_overflow_o   : out   std_logic;
+      p1_rd_error_o      : out   std_logic
+      );
+  end component ddr3_ctrl_wrapper;
 
-    port
-      (
-        mcb3_dram_dq        : inout std_logic_vector(C3_NUM_DQ_PINS-1 downto 0);
-        mcb3_dram_a         : out   std_logic_vector(C3_MEM_ADDR_WIDTH-1 downto 0);
-        mcb3_dram_ba        : out   std_logic_vector(C3_MEM_BANKADDR_WIDTH-1 downto 0);
-        mcb3_dram_ras_n     : out   std_logic;
-        mcb3_dram_cas_n     : out   std_logic;
-        mcb3_dram_we_n      : out   std_logic;
-        mcb3_dram_odt       : out   std_logic;
-        mcb3_dram_reset_n   : out   std_logic;
-        mcb3_dram_cke       : out   std_logic;
-        mcb3_dram_dm        : out   std_logic;
-        mcb3_dram_udqs      : inout std_logic;
-        mcb3_dram_udqs_n    : inout std_logic;
-        mcb3_rzq            : inout std_logic;
-        mcb3_zio            : inout std_logic;
-        mcb3_dram_udm       : out   std_logic;
-        --c3_sys_clk_p        : in    std_logic;
-        --c3_sys_clk_n        : in    std_logic;
-        c3_sys_clk          : in    std_logic;
-        c3_sys_rst_n        : in    std_logic;
-        c3_calib_done       : out   std_logic;
-        c3_clk0             : out   std_logic;
-        c3_rst0             : out   std_logic;
-        mcb3_dram_dqs       : inout std_logic;
-        mcb3_dram_dqs_n     : inout std_logic;
-        mcb3_dram_ck        : out   std_logic;
-        mcb3_dram_ck_n      : out   std_logic;
-        c3_p0_cmd_clk       : in    std_logic;
-        c3_p0_cmd_en        : in    std_logic;
-        c3_p0_cmd_instr     : in    std_logic_vector(2 downto 0);
-        c3_p0_cmd_bl        : in    std_logic_vector(5 downto 0);
-        c3_p0_cmd_byte_addr : in    std_logic_vector(29 downto 0);
-        c3_p0_cmd_empty     : out   std_logic;
-        c3_p0_cmd_full      : out   std_logic;
-        c3_p0_wr_clk        : in    std_logic;
-        c3_p0_wr_en         : in    std_logic;
-        c3_p0_wr_mask       : in    std_logic_vector(C3_P0_MASK_SIZE - 1 downto 0);
-        c3_p0_wr_data       : in    std_logic_vector(C3_P0_DATA_PORT_SIZE - 1 downto 0);
-        c3_p0_wr_full       : out   std_logic;
-        c3_p0_wr_empty      : out   std_logic;
-        c3_p0_wr_count      : out   std_logic_vector(6 downto 0);
-        c3_p0_wr_underrun   : out   std_logic;
-        c3_p0_wr_error      : out   std_logic;
-        c3_p0_rd_clk        : in    std_logic;
-        c3_p0_rd_en         : in    std_logic;
-        c3_p0_rd_data       : out   std_logic_vector(C3_P0_DATA_PORT_SIZE - 1 downto 0);
-        c3_p0_rd_full       : out   std_logic;
-        c3_p0_rd_empty      : out   std_logic;
-        c3_p0_rd_count      : out   std_logic_vector(6 downto 0);
-        c3_p0_rd_overflow   : out   std_logic;
-        c3_p0_rd_error      : out   std_logic;
-        c3_p1_cmd_clk       : in    std_logic;
-        c3_p1_cmd_en        : in    std_logic;
-        c3_p1_cmd_instr     : in    std_logic_vector(2 downto 0);
-        c3_p1_cmd_bl        : in    std_logic_vector(5 downto 0);
-        c3_p1_cmd_byte_addr : in    std_logic_vector(29 downto 0);
-        c3_p1_cmd_empty     : out   std_logic;
-        c3_p1_cmd_full      : out   std_logic;
-        c3_p1_wr_clk        : in    std_logic;
-        c3_p1_wr_en         : in    std_logic;
-        c3_p1_wr_mask       : in    std_logic_vector(C3_P1_MASK_SIZE - 1 downto 0);
-        c3_p1_wr_data       : in    std_logic_vector(C3_P1_DATA_PORT_SIZE - 1 downto 0);
-        c3_p1_wr_full       : out   std_logic;
-        c3_p1_wr_empty      : out   std_logic;
-        c3_p1_wr_count      : out   std_logic_vector(6 downto 0);
-        c3_p1_wr_underrun   : out   std_logic;
-        c3_p1_wr_error      : out   std_logic;
-        c3_p1_rd_clk        : in    std_logic;
-        c3_p1_rd_en         : in    std_logic;
-        c3_p1_rd_data       : out   std_logic_vector(C3_P1_DATA_PORT_SIZE - 1 downto 0);
-        c3_p1_rd_full       : out   std_logic;
-        c3_p1_rd_empty      : out   std_logic;
-        c3_p1_rd_count      : out   std_logic_vector(6 downto 0);
-        c3_p1_rd_overflow   : out   std_logic;
-        c3_p1_rd_error      : out   std_logic
-        );
-  end component ddr_controller_sp605;
-
-  ------------------------------------------------------------------------------
-  -- Types declaration
-  ------------------------------------------------------------------------------
-  type t_wb_fsm_states is (WB_IDLE, WB_WRITE, WB_READ, WB_READ_WAIT, WB_READ_ACK);
 
   ------------------------------------------------------------------------------
   -- Signals declaration
   ------------------------------------------------------------------------------
-  signal wb0_fsm_state    : t_wb_fsm_states := WB_IDLE;
   signal p0_cmd_clk       : std_logic;
   signal p0_cmd_en        : std_logic;
   signal p0_cmd_instr     : std_logic_vector(2 downto 0);
   signal p0_cmd_bl        : std_logic_vector(5 downto 0);
-  signal p0_cmd_byte_addr : std_logic_vector(29 downto 0);
+  signal p0_cmd_byte_addr : std_logic_vector(g_P0_BYTE_ADDR_WIDTH - 1 downto 0);
   signal p0_cmd_empty     : std_logic;
   signal p0_cmd_full      : std_logic;
   signal p0_wr_clk        : std_logic;
@@ -320,12 +359,11 @@ architecture rtl of ddr3_ctrl is
   signal p0_rd_overflow   : std_logic;
   signal p0_rd_error      : std_logic;
 
-  signal wb1_fsm_state    : t_wb_fsm_states := WB_IDLE;
   signal p1_cmd_clk       : std_logic;
   signal p1_cmd_en        : std_logic;
   signal p1_cmd_instr     : std_logic_vector(2 downto 0);
   signal p1_cmd_bl        : std_logic_vector(5 downto 0);
-  signal p1_cmd_byte_addr : std_logic_vector(29 downto 0);
+  signal p1_cmd_byte_addr : std_logic_vector(g_P1_BYTE_ADDR_WIDTH - 1 downto 0);
   signal p1_cmd_empty     : std_logic;
   signal p1_cmd_full      : std_logic;
   signal p1_wr_clk        : std_logic;
@@ -351,252 +389,199 @@ architecture rtl of ddr3_ctrl is
 --==============================================================================
 begin
 
-  cmp_ddr_controller : ddr_controller_sp605
-    generic map (
-      C3_P0_MASK_SIZE       => g_P0_MASK_SIZE,
-      C3_P0_DATA_PORT_SIZE  => g_P0_DATA_PORT_SIZE,
-      C3_P1_MASK_SIZE       => g_P1_MASK_SIZE,
-      C3_P1_DATA_PORT_SIZE  => g_P1_DATA_PORT_SIZE,
-      C3_MEMCLK_PERIOD      => g_MEMCLK_PERIOD,
-      C3_RST_ACT_LOW        => g_RST_ACT_LOW,
-      C3_INPUT_CLK_TYPE     => g_INPUT_CLK_TYPE,
-      C3_CALIB_SOFT_IP      => g_CALIB_SOFT_IP,
-      C3_MEM_ADDR_ORDER     => g_MEM_ADDR_ORDER,
-      C3_NUM_DQ_PINS        => g_NUM_DQ_PINS,
-      C3_MEM_ADDR_WIDTH     => g_MEM_ADDR_WIDTH,
-      C3_MEM_BANKADDR_WIDTH => g_MEM_BANKADDR_WIDTH,
-      C3_MC_CALIB_BYPASS    => g_MC_CALIB_BYPASS
+
+  ------------------------------------------------------------------------------
+  -- PORT 0
+  ------------------------------------------------------------------------------
+  cmp_ddr3_ctrl_wb_0 : ddr3_ctrl_wb
+    generic map(
+      g_BYTE_ADDR_WIDTH => g_P0_BYTE_ADDR_WIDTH,
+      g_MASK_SIZE       => g_P0_MASK_SIZE,
+      g_DATA_PORT_SIZE  => g_P0_DATA_PORT_SIZE
       )
-    port map (
-      --c3_sys_clk_p  => clk_p_i,
-      --c3_sys_clk_n  => clk_n_i,
-      c3_sys_clk    => clk_i,
-      c3_sys_rst_n  => rst_n_i,
-      c3_clk0       => open,
-      c3_rst0       => open,
-      c3_calib_done => calib_done,
-
-      mcb3_dram_dq      => ddr3_dq_b,
-      mcb3_dram_a       => ddr3_a_o,
-      mcb3_dram_ba      => ddr3_ba_o,
-      mcb3_dram_ras_n   => ddr3_ras_n_o,
-      mcb3_dram_cas_n   => ddr3_cas_n_o,
-      mcb3_dram_we_n    => ddr3_we_n_o,
-      mcb3_dram_odt     => ddr3_odt_o,
-      mcb3_dram_cke     => ddr3_cke_o,
-      mcb3_dram_ck      => ddr3_clk_p_o,
-      mcb3_dram_ck_n    => ddr3_clk_n_o,
-      mcb3_dram_dqs     => ddr3_dqs_p_b,
-      mcb3_dram_dqs_n   => ddr3_dqs_n_b,
-      mcb3_dram_reset_n => ddr3_rst_n_o,
-      mcb3_dram_udqs    => ddr3_udqs_p_b,  -- for X16 parts
-      mcb3_dram_udqs_n  => ddr3_udqs_n_b,  -- for X16 parts
-      mcb3_dram_udm     => ddr3_udm_o,     -- for X16 parts
-      mcb3_dram_dm      => ddr3_dm_o,
-      mcb3_rzq          => ddr3_rzq_b,
-      mcb3_zio          => ddr3_zio_b,
-
-      c3_p0_cmd_clk       => p0_cmd_clk,
-      c3_p0_cmd_en        => p0_cmd_en,
-      c3_p0_cmd_instr     => p0_cmd_instr,
-      c3_p0_cmd_bl        => p0_cmd_bl,
-      c3_p0_cmd_byte_addr => p0_cmd_byte_addr,
-      c3_p0_cmd_empty     => p0_cmd_empty,
-      c3_p0_cmd_full      => p0_cmd_full,
-      c3_p0_wr_clk        => p0_wr_clk,
-      c3_p0_wr_en         => p0_wr_en,
-      c3_p0_wr_mask       => p0_wr_mask,
-      c3_p0_wr_data       => p0_wr_data,
-      c3_p0_wr_full       => p0_wr_full,
-      c3_p0_wr_empty      => p0_wr_empty,
-      c3_p0_wr_count      => p0_wr_count,
-      c3_p0_wr_underrun   => p0_wr_underrun,
-      c3_p0_wr_error      => p0_wr_error,
-      c3_p0_rd_clk        => p0_rd_clk,
-      c3_p0_rd_en         => p0_rd_en,
-      c3_p0_rd_data       => p0_rd_data,
-      c3_p0_rd_full       => p0_rd_full,
-      c3_p0_rd_empty      => p0_rd_empty,
-      c3_p0_rd_count      => p0_rd_count,
-      c3_p0_rd_overflow   => p0_rd_overflow,
-      c3_p0_rd_error      => p0_rd_error,
-
-      c3_p1_cmd_clk       => p1_cmd_clk,
-      c3_p1_cmd_en        => p1_cmd_en,
-      c3_p1_cmd_instr     => p1_cmd_instr,
-      c3_p1_cmd_bl        => p1_cmd_bl,
-      c3_p1_cmd_byte_addr => p1_cmd_byte_addr,
-      c3_p1_cmd_empty     => p1_cmd_empty,
-      c3_p1_cmd_full      => p1_cmd_full,
-      c3_p1_wr_clk        => p1_wr_clk,
-      c3_p1_wr_en         => p1_wr_en,
-      c3_p1_wr_mask       => p1_wr_mask,
-      c3_p1_wr_data       => p1_wr_data,
-      c3_p1_wr_full       => p1_wr_full,
-      c3_p1_wr_empty      => p1_wr_empty,
-      c3_p1_wr_count      => p1_wr_count,
-      c3_p1_wr_underrun   => p1_wr_underrun,
-      c3_p1_wr_error      => p1_wr_error,
-      c3_p1_rd_clk        => p1_rd_clk,
-      c3_p1_rd_en         => p1_rd_en,
-      c3_p1_rd_data       => p1_rd_data,
-      c3_p1_rd_full       => p1_rd_full,
-      c3_p1_rd_empty      => p1_rd_empty,
-      c3_p1_rd_count      => p1_rd_count,
-      c3_p1_rd_overflow   => p1_rd_overflow,
-      c3_p1_rd_error      => p1_rd_error
+    port map(
+      rst_n_i             => rst_n_i,
+      ddr_cmd_clk_o       => p0_cmd_clk,
+      ddr_cmd_en_o        => p0_cmd_en,
+      ddr_cmd_instr_o     => p0_cmd_instr,
+      ddr_cmd_bl_o        => p0_cmd_bl,
+      ddr_cmd_byte_addr_o => p0_cmd_byte_addr,
+      ddr_cmd_empty_i     => p0_cmd_empty,
+      ddr_cmd_full_i      => p0_cmd_full,
+      ddr_wr_clk_o        => p0_wr_clk,
+      ddr_wr_en_o         => p0_wr_en,
+      ddr_wr_mask_o       => p0_wr_mask,
+      ddr_wr_data_o       => p0_wr_data,
+      ddr_wr_full_i       => p0_wr_full,
+      ddr_wr_empty_i      => p0_wr_empty,
+      ddr_wr_count_i      => p0_wr_count,
+      ddr_wr_underrun_i   => p0_wr_underrun,
+      ddr_wr_error_i      => p0_wr_error,
+      ddr_rd_clk_o        => p0_rd_clk,
+      ddr_rd_en_o         => p0_rd_en,
+      ddr_rd_data_i       => p0_rd_data,
+      ddr_rd_full_i       => p0_rd_full,
+      ddr_rd_empty_i      => p0_rd_empty,
+      ddr_rd_count_i      => p0_rd_count,
+      ddr_rd_overflow_i   => p0_rd_overflow,
+      ddr_rd_error_i      => p0_rd_error,
+      wb_clk_i            => wb0_clk_i,
+      wb_sel_i            => wb0_sel_i,
+      wb_cyc_i            => wb0_cyc_i,
+      wb_stb_i            => wb0_stb_i,
+      wb_we_i             => wb0_we_i,
+      wb_addr_i           => wb0_addr_i,
+      wb_data_i           => wb0_data_i,
+      wb_data_o           => wb0_data_o,
+      wb_ack_o            => wb0_ack_o,
+      wb_stall_o          => wb0_stall_o
       );
 
   ------------------------------------------------------------------------------
-  -- Port 0 to wishbone interface
+  -- PORT 1
   ------------------------------------------------------------------------------
-
-  -- Port 0 clocking
-  p0_cmd_clk <= wb0_clk_i;
-  p0_wr_clk  <= wb0_clk_i;
-  p0_rd_clk  <= wb0_clk_i;
-
-  p_p0_wb_interface : process (wb0_clk_i)
-  begin
-    if (rising_edge(wb0_clk_i)) then
-      if (rst_n_i = '0') then
-        wb0_fsm_state    <= WB_IDLE;
-        wb0_ack_o        <= '0';
-        wb0_data_o       <= (others => '0');
-        --wb0_stall_o      <= '0';
-        p0_cmd_en        <= '0';
-        p0_cmd_byte_addr <= (others => '0');
-        p0_cmd_bl        <= (others => '0');
-        p0_cmd_instr     <= (others => '0');
-        p0_wr_data       <= (others => '0');
-        p0_wr_mask       <= (others => '0');
-        p0_wr_en         <= '0';
-        p0_rd_en         <= '0';
-      else
-        case wb0_fsm_state is
-
-          when WB_IDLE =>
-            if (wb0_cyc_i = '1' and wb0_stb_i = '1' and wb0_we_i = '1') then
-              -- Write from wishbone
-              p0_rd_en         <= '0';
-              wb0_ack_o        <= '1';
-              p0_cmd_en        <= '1';
-              p0_cmd_instr     <= "000";
-              p0_cmd_bl        <= "000001";
-              p0_cmd_byte_addr <= wb0_addr_i;
-              p0_wr_mask       <= "0000";
-              p0_wr_data       <= wb0_data_i;
-              p0_wr_en         <= '1';
-            elsif (wb0_cyc_i = '1' and wb0_stb_i = '1' and wb0_we_i = '0') then
-              -- Read from wishbone
-              p0_wr_en         <= '0';
-              wb0_ack_o        <= '0';
-              p0_cmd_en        <= '1';
-              p0_cmd_instr     <= "001";
-              p0_cmd_bl        <= "000001";
-              p0_cmd_byte_addr <= wb0_addr_i;
-              wb0_fsm_state    <= WB_READ_WAIT;
-            else
-              wb0_ack_o <= '0';
-              p0_cmd_en <= '0';
-              p0_wr_en  <= '0';
-              p0_rd_en  <= '0';
-            end if;
-
-          when WB_READ_WAIT =>
-            p0_cmd_en  <= '0';
-            p0_rd_en   <= not(p0_rd_empty);
-            wb0_ack_o  <= p0_rd_en;
-            wb0_data_o <= p0_rd_data;
-            if (p0_rd_en = '1') then
-              wb0_fsm_state <= WB_IDLE;
-            end if;
-
-          when others => null;
-                         
-        end case;
-      end if;
-    end if;
-  end process p_p0_wb_interface;
-
-  -- Port 0 pipelined mode compatibility
-  wb0_stall_o <= p0_cmd_full or p0_wr_full or p0_rd_full;
-
+  cmp_ddr3_ctrl_wb_1 : ddr3_ctrl_wb
+    generic map(
+      g_BYTE_ADDR_WIDTH => g_P1_BYTE_ADDR_WIDTH,
+      g_MASK_SIZE       => g_P1_MASK_SIZE,
+      g_DATA_PORT_SIZE  => g_P1_DATA_PORT_SIZE
+      )
+    port map(
+      rst_n_i             => rst_n_i,
+      ddr_cmd_clk_o       => p1_cmd_clk,
+      ddr_cmd_en_o        => p1_cmd_en,
+      ddr_cmd_instr_o     => p1_cmd_instr,
+      ddr_cmd_bl_o        => p1_cmd_bl,
+      ddr_cmd_byte_addr_o => p1_cmd_byte_addr,
+      ddr_cmd_empty_i     => p1_cmd_empty,
+      ddr_cmd_full_i      => p1_cmd_full,
+      ddr_wr_clk_o        => p1_wr_clk,
+      ddr_wr_en_o         => p1_wr_en,
+      ddr_wr_mask_o       => p1_wr_mask,
+      ddr_wr_data_o       => p1_wr_data,
+      ddr_wr_full_i       => p1_wr_full,
+      ddr_wr_empty_i      => p1_wr_empty,
+      ddr_wr_count_i      => p1_wr_count,
+      ddr_wr_underrun_i   => p1_wr_underrun,
+      ddr_wr_error_i      => p1_wr_error,
+      ddr_rd_clk_o        => p1_rd_clk,
+      ddr_rd_en_o         => p1_rd_en,
+      ddr_rd_data_i       => p1_rd_data,
+      ddr_rd_full_i       => p1_rd_full,
+      ddr_rd_empty_i      => p1_rd_empty,
+      ddr_rd_count_i      => p1_rd_count,
+      ddr_rd_overflow_i   => p1_rd_overflow,
+      ddr_rd_error_i      => p1_rd_error,
+      wb_clk_i            => wb1_clk_i,
+      wb_sel_i            => wb1_sel_i,
+      wb_cyc_i            => wb1_cyc_i,
+      wb_stb_i            => wb1_stb_i,
+      wb_we_i             => wb1_we_i,
+      wb_addr_i           => wb1_addr_i,
+      wb_data_i           => wb1_data_i,
+      wb_data_o           => wb1_data_o,
+      wb_ack_o            => wb1_ack_o,
+      wb_stall_o          => wb1_stall_o
+      );
 
   ------------------------------------------------------------------------------
-  -- Port 1 to wishbone interface
+  -- DDR controller wrapper
   ------------------------------------------------------------------------------
+  cmp_ddr3_ctrl_wrapper : ddr3_ctrl_wrapper
+  generic map(
+    g_MEMCLK_PERIOD      => g_MEMCLK_PERIOD,
+    g_RST_ACT_LOW        => g_RST_ACT_LOW,
+    g_INPUT_CLK_TYPE     => g_INPUT_CLK_TYPE,
+    g_CALIB_SOFT_IP      => g_CALIB_SOFT_IP,
+    g_MEM_ADDR_ORDER     => g_MEM_ADDR_ORDER,
+    g_MC_CALIB_BYPASS    => g_MC_CALIB_BYPASS,
+    g_NUM_DQ_PINS        => g_NUM_DQ_PINS,
+    g_MEM_ADDR_WIDTH     => g_MEM_ADDR_WIDTH,
+    g_MEM_BANKADDR_WIDTH => g_MEM_BANKADDR_WIDTH,
+    g_P0_MASK_SIZE       => g_P0_MASK_SIZE,
+    g_P0_DATA_PORT_SIZE  => g_P0_DATA_PORT_SIZE,
+    g_P0_BYTE_ADDR_WIDTH => g_P0_BYTE_ADDR_WIDTH,
+    g_P1_MASK_SIZE       => g_P1_MASK_SIZE,
+    g_P1_DATA_PORT_SIZE  => g_P1_DATA_PORT_SIZE,
+    g_P1_BYTE_ADDR_WIDTH => g_P1_BYTE_ADDR_WIDTH
+    )
+  port map(
+    clk_p_i => clk_p_i,
+    clk_n_i => clk_n_i,
+    clk_i   => clk_i,
+    rst_n_i => rst_n_i,
 
-  -- Port 1 clocking
-  p1_cmd_clk <= wb1_clk_i;
-  p1_wr_clk  <= wb1_clk_i;
-  p1_rd_clk  <= wb1_clk_i;
+    calib_done_o => calib_done_o,
+    ddr3_dq_b     => ddr3_dq_b,
+    ddr3_a_o      => ddr3_a_o,
+    ddr3_ba_o     => ddr3_ba_o,
+    ddr3_ras_n_o  => ddr3_ras_n_o,
+    ddr3_cas_n_o  => ddr3_cas_n_o,
+    ddr3_we_n_o   => ddr3_we_n_o,
+    ddr3_odt_o    => ddr3_odt_o,
+    ddr3_rst_n_o  => ddr3_rst_n_o,
+    ddr3_cke_o    => ddr3_cke_o,
+    ddr3_dm_o     => ddr3_dm_o,
+    ddr3_udm_o    => ddr3_udm_o,
+    ddr3_dqs_p_b  => ddr3_dqs_p_b,
+    ddr3_dqs_n_b  => ddr3_dqs_n_b,
+    ddr3_udqs_p_b => ddr3_udqs_p_b,
+    ddr3_udqs_n_b => ddr3_udqs_n_b,
+    ddr3_clk_p_o  => ddr3_clk_p_o,
+    ddr3_clk_n_o  => ddr3_clk_n_o,
+    ddr3_rzq_b    => ddr3_rzq_b,
+    ddr3_zio_b    => ddr3_zio_b,
 
-  p_p1_wb_interface : process (wb1_clk_i)
-  begin
-    if (rising_edge(wb1_clk_i)) then
-      if (rst_n_i = '0') then
-        wb1_fsm_state    <= WB_IDLE;
-        wb1_ack_o        <= '0';
-        wb1_data_o       <= (others => '0');
-        --wb1_stall_o      <= '0';
-        p1_cmd_en        <= '0';
-        p1_cmd_byte_addr <= (others => '0');
-        p1_cmd_bl        <= (others => '0');
-        p1_cmd_instr     <= (others => '0');
-        p1_wr_data       <= (others => '0');
-        p1_wr_mask       <= (others => '0');
-        p1_wr_en         <= '0';
-        p1_rd_en         <= '0';
-      else
-        case wb1_fsm_state is
+    p0_cmd_clk_i       => p0_cmd_clk,
+    p0_cmd_en_i        => p0_cmd_en,
+    p0_cmd_instr_i     => p0_cmd_instr,
+    p0_cmd_bl_i        => p0_cmd_bl,
+    p0_cmd_byte_addr_i => p0_cmd_byte_addr,
+    p0_cmd_empty_o     => p0_cmd_empty,
+    p0_cmd_full_o      => p0_cmd_full,
+    p0_wr_clk_i        => p0_wr_clk,
+    p0_wr_en_i         => p0_wr_en,
+    p0_wr_mask_i       => p0_wr_mask,
+    p0_wr_data_i       => p0_wr_data,
+    p0_wr_full_o       => p0_wr_full,
+    p0_wr_empty_o      => p0_wr_empty,
+    p0_wr_count_o      => p0_wr_count,
+    p0_wr_underrun_o   => p0_wr_underrun,
+    p0_wr_error_o      => p0_wr_error,
+    p0_rd_clk_i        => p0_rd_clk,
+    p0_rd_en_i         => p0_rd_en,
+    p0_rd_data_o       => p0_rd_data,
+    p0_rd_full_o       => p0_rd_full,
+    p0_rd_empty_o      => p0_rd_empty,
+    p0_rd_count_o      => p0_rd_count,
+    p0_rd_overflow_o   => p0_rd_overflow,
+    p0_rd_error_o      => p0_rd_error,
 
-          when WB_IDLE =>
-            if (wb1_cyc_i = '1' and wb1_stb_i = '1' and wb1_we_i = '1') then
-              -- Write from wishbone
-              p1_rd_en         <= '0';
-              wb1_ack_o        <= '1';
-              p1_cmd_en        <= '1';
-              p1_cmd_instr     <= "000";
-              p1_cmd_bl        <= "000001";
-              p1_cmd_byte_addr <= wb1_addr_i;
-              p1_wr_mask       <= "0000";
-              p1_wr_data       <= wb1_data_i;
-              p1_wr_en         <= '1';
-            elsif (wb1_cyc_i = '1' and wb1_stb_i = '1' and wb1_we_i = '0') then
-              -- Read from wishbone
-              p1_wr_en         <= '0';
-              wb1_ack_o        <= '0';
-              p1_cmd_en        <= '1';
-              p1_cmd_instr     <= "001";
-              p1_cmd_bl        <= "000001";
-              p1_cmd_byte_addr <= wb1_addr_i;
-              wb1_fsm_state    <= WB_READ_WAIT;
-            else
-              wb1_ack_o <= '0';
-              p1_cmd_en <= '0';
-              p1_wr_en  <= '0';
-              p1_rd_en  <= '0';
-            end if;
-
-          when WB_READ_WAIT =>
-            p1_cmd_en  <= '0';
-            p1_rd_en   <= not(p1_rd_empty);
-            wb1_ack_o  <= p1_rd_en;
-            wb1_data_o <= p1_rd_data;
-            if (p1_rd_en = '1') then
-              wb1_fsm_state <= WB_IDLE;
-            end if;
-
-          when others => null;
-                         
-        end case;
-      end if;
-    end if;
-  end process p_p1_wb_interface;
-
-  -- Port 1 pipelined mode compatibility
-  wb1_stall_o <= p1_cmd_full or p1_wr_full or p1_rd_full;
+    p1_cmd_clk_i       => p1_cmd_clk,
+    p1_cmd_en_i        => p1_cmd_en,
+    p1_cmd_instr_i     => p1_cmd_instr,
+    p1_cmd_bl_i        => p1_cmd_bl,
+    p1_cmd_byte_addr_i => p1_cmd_byte_addr,
+    p1_cmd_empty_o     => p1_cmd_empty,
+    p1_cmd_full_o      => p1_cmd_full,
+    p1_wr_clk_i        => p1_wr_clk,
+    p1_wr_en_i         => p1_wr_en,
+    p1_wr_mask_i       => p1_wr_mask,
+    p1_wr_data_i       => p1_wr_data,
+    p1_wr_full_o       => p1_wr_full,
+    p1_wr_empty_o      => p1_wr_empty,
+    p1_wr_count_o      => p1_wr_count,
+    p1_wr_underrun_o   => p1_wr_underrun,
+    p1_wr_error_o      => p1_wr_error,
+    p1_rd_clk_i        => p1_rd_clk,
+    p1_rd_en_i         => p1_rd_en,
+    p1_rd_data_o       => p1_rd_data,
+    p1_rd_full_o       => p1_rd_full,
+    p1_rd_empty_o      => p1_rd_empty,
+    p1_rd_count_o      => p1_rd_count,
+    p1_rd_overflow_o   => p1_rd_overflow,
+    p1_rd_error_o      => p1_rd_error
+    );
 
 
 end architecture rtl;
