@@ -703,16 +703,16 @@ port map
 			      c1_cmp_error &
 			      c1_cmp_data &
                               c1_cmp_data_valid &
-			      c1_p0_cmd_en &
-			      c1_p0_cmd_instr &
-			      c1_p0_cmd_bl &
-			      c1_p0_cmd_byte_addr &
+			      c1_p1_cmd_en &
+			      c1_p1_cmd_instr &
+			      c1_p1_cmd_bl &
+			      c1_p1_cmd_byte_addr &
 
-			      c1_p0_rd_en &
+			      c1_p1_rd_en &
 
-			      c1_p0_wr_en &
-			      c1_p0_wr_mask(3 downto 0) &
-			      c1_p0_wr_data(31 downto 0) 
+			      c1_p1_wr_en &
+			      c1_p1_wr_mask(3 downto 0) &
+			      c1_p1_wr_data(31 downto 0) 
 				);
 
  c1_dbg_trig(1 downto 0) <=  ( '0' & '0' );
@@ -732,7 +732,7 @@ port map
     my_ila_c1 : ila port map
      (
       CONTROL => c1_control0,
-      CLK     => c1_p0_cmd_clk,
+      CLK     => c1_p1_cmd_clk,
       DATA    => c1_dbg_data,
       TRIG0   => c1_dbg_trig 
       );
