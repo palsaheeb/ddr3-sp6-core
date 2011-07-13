@@ -140,10 +140,10 @@ architecture rtl of ddr3_ctrl_wb is
   signal ddr_cmd_bl        : std_logic_vector(5 downto 0);
   signal ddr_cmd_byte_addr : std_logic_vector(29 downto 0);
   signal ddr_wr_en         : std_logic;
-  signal ddr_wr_mask       : std_logic_vector(g_DDR_MASK_SIZE - 1 downto 0);
-  signal ddr_wr_data       : std_logic_vector(g_DDR_DATA_PORT_SIZE - 1 downto 0);
+  signal ddr_wr_mask       : std_logic_vector(g_MASK_SIZE - 1 downto 0);
+  signal ddr_wr_data       : std_logic_vector(g_DATA_PORT_SIZE - 1 downto 0);
   signal ddr_rd_en         : std_logic;
-  signal ddr_rd_data       : std_logic_vector(g_DDR_DATA_PORT_SIZE - 1 downto 0);
+  signal ddr_rd_data       : std_logic_vector(g_DATA_PORT_SIZE - 1 downto 0);
 
 
 --==============================================================================
