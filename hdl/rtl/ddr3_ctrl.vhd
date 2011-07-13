@@ -511,7 +511,7 @@ begin
     clk_i   => clk_i,
     rst_n_i => rst_n_i,
 
-    calib_done_o => calib_done_o,
+    calib_done_o => calib_done,
     ddr3_dq_b     => ddr3_dq_b,
     ddr3_a_o      => ddr3_a_o,
     ddr3_ba_o     => ddr3_ba_o,
