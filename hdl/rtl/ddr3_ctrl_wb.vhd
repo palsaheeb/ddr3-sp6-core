@@ -172,7 +172,7 @@ begin
   ddr_rd_clk_o <= wb_clk_i;
 
   -- Constant input
-  ddr_wr_mask <= "00000000";
+  ddr_wr_mask <= "0000";
 
   -- Cycle, we and strobe rising and falling edge detection
   p_wb_cyc_f_edge : process (wb_clk_i)
