@@ -144,7 +144,7 @@ entity ddr3_ctrl is
     --! Wishbone bus write enable
     wb0_we_i    : in  std_logic;
     --! Wishbone bus address
-    wb0_addr_i  : in  std_logic_vector(29 downto 0);
+    wb0_addr_i  : in  std_logic_vector(g_P0_BYTE_ADDR_WIDTH - 3 downto 0);
     --! Wishbone bus data input
     wb0_data_i  : in  std_logic_vector(g_P0_DATA_PORT_SIZE - 1 downto 0);
     --! Wishbone bus data output
@@ -160,7 +160,7 @@ entity ddr3_ctrl is
     --! Wishbone bus clock
     wb1_clk_i   : in  std_logic;
     --! Wishbone bus byte select
-    wb1_sel_i   : in  std_logic_vector(g_P0_MASK_SIZE - 1 downto 0);
+    wb1_sel_i   : in  std_logic_vector(g_P1_MASK_SIZE - 1 downto 0);
     --! Wishbone bus cycle select
     wb1_cyc_i   : in  std_logic;
     --! Wishbone bus cycle strobe
@@ -168,11 +168,11 @@ entity ddr3_ctrl is
     --! Wishbone bus write enable
     wb1_we_i    : in  std_logic;
     --! Wishbone bus address
-    wb1_addr_i  : in  std_logic_vector(29 downto 0);
+    wb1_addr_i  : in  std_logic_vector(g_P1_BYTE_ADDR_WIDTH - 3 downto 0);
     --! Wishbone bus data input
-    wb1_data_i  : in  std_logic_vector(g_P0_DATA_PORT_SIZE - 1 downto 0);
+    wb1_data_i  : in  std_logic_vector(g_P1_DATA_PORT_SIZE - 1 downto 0);
     --! Wishbone bus data output
-    wb1_data_o  : out std_logic_vector(g_P0_DATA_PORT_SIZE - 1 downto 0);
+    wb1_data_o  : out std_logic_vector(g_P1_DATA_PORT_SIZE - 1 downto 0);
     --! Wishbone bus acknowledge
     wb1_ack_o   : out std_logic;
     --! Wishbone bus stall (for pipelined mode)
