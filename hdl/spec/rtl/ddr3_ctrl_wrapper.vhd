@@ -336,7 +336,6 @@ begin
       mcb3_dram_udm     => ddr3_udm_o,     -- for X16 parts
       mcb3_dram_dm      => ddr3_dm_o,
       mcb3_rzq          => ddr3_rzq_b,
-      mcb3_zio          => ddr3_zio_b,
 
       c3_p0_cmd_clk       => p0_cmd_clk_i,
       c3_p0_cmd_en        => p0_cmd_en_i,
@@ -388,6 +387,9 @@ begin
       c3_p1_rd_overflow   => p1_rd_overflow_o,
       c3_p1_rd_error      => p1_rd_error_o
       );
+
+  ddr3_zio_b <= 'Z';
+
 
 end architecture rtl;
 --==============================================================================
