@@ -1,5 +1,5 @@
 --==============================================================================
---! @file ddr3_ctrl_wb.vhd
+--! @file ddr3_ctrl_wb_single.vhd
 --==============================================================================
 
 --! Standard library
@@ -11,7 +11,7 @@ use IEEE.NUMERIC_STD.all;
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
--- DDR3 Controller Wishbone Interface
+-- DDR3 Controller Wishbone Interface (single access only)
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 --! @brief
@@ -21,7 +21,7 @@ use IEEE.NUMERIC_STD.all;
 --! Wishbone interface for DDR3 controller.
 --------------------------------------------------------------------------------
 --! @version
---! 0.1 | mc | 12.07.2011 | File creation and Doxygen comments
+--! 0.1 | mc | 14.07.2011 | File creation and Doxygen comments
 --!
 --! @author
 --! mc : Matthieu Cattin, CERN (BE-CO-HT)
@@ -31,7 +31,7 @@ use IEEE.NUMERIC_STD.all;
 --==============================================================================
 --! Entity declaration for ddr3_ctrl_wb
 --==============================================================================
-entity ddr3_ctrl_wb is
+entity ddr3_ctrl_wb_single is
 
   generic(
     --! DDR3 byte address width
@@ -47,10 +47,6 @@ entity ddr3_ctrl_wb is
     -- Reset input (active low)
     ----------------------------------------------------------------------------
     rst_n_i : in std_logic;
-
-    ----------------------------------------------------------------------------
-    -- Status
-    ----------------------------------------------------------------------------
 
     ----------------------------------------------------------------------------
     -- DDR controller port
@@ -95,14 +91,14 @@ entity ddr3_ctrl_wb is
     wb_stall_o : out std_logic
     );
 
-end entity ddr3_ctrl_wb;
+end entity ddr3_ctrl_wb_single;
 
 
 
 --==============================================================================
---! Architecure declaration for ddr3_ctrl_wb
+--! Architecure declaration for ddr3_ctrl_wb_single
 --==============================================================================
-architecture rtl of ddr3_ctrl_wb is
+architecture rtl of ddr3_ctrl_wb_single is
 
 
   ------------------------------------------------------------------------------
@@ -115,22 +111,14 @@ architecture rtl of ddr3_ctrl_wb is
   ------------------------------------------------------------------------------
   -- Types declaration
   ------------------------------------------------------------------------------
-  --type t_wb_fsm_states is (WB_IDLE, WB_WRITE, WB_READ_REQ, WB_READ_WAIT,
-  --                         WB_READ_ACK, WB_READ_REQ_ACK);
+  type t_wb_fsm_states is (WB_IDLE, WB_WRITE, WB_READ, WB_READ_WAIT);
 
   ------------------------------------------------------------------------------
   -- Signals declaration
   ------------------------------------------------------------------------------
   signal rst_n           : std_logic;
 
-  signal wb_cyc_d        : std_logic;
-  signal wb_cyc_f_edge   : std_logic;
-  signal wb_cyc_r_edge   : std_logic;
-  signal wb_stb_d        : std_logic;
-  signal wb_stb_f_edge   : std_logic;
-  signal wb_we_d         : std_logic;
-  signal wb_we_f_edge    : std_logic;
-  signal wb_addr_d       : std_logic_vector(g_BYTE_ADDR_WIDTH - 3 downto 0);
+  signal wb_fsm_state    : t_wb_fsm_states := WB_IDLE;
 
   signal ddr_burst_cnt     : unsigned(5 downto 0);
   signal ddr_cmd_en        : std_logic;
@@ -171,157 +159,82 @@ begin
   ddr_wr_clk_o <= wb_clk_i;
   ddr_rd_clk_o <= wb_clk_i;
 
-  -- Constant input
-  ddr_wr_mask <= "00000000";
-
-  -- Cycle, we and strobe rising and falling edge detection
-  p_wb_cyc_f_edge : process (wb_clk_i)
+  p_wb_interface : process (wb_clk_i)
   begin
-    if rising_edge(wb_clk_i) then
+    if (rising_edge(wb_clk_i)) then
       if (rst_n = '0') then
-        wb_cyc_d <= '0';
-        wb_stb_d <= '0';
-        wb_we_d  <= '0';
-      else
-        wb_cyc_d <= wb_cyc_i;
-        wb_stb_d <= wb_stb_i;
-        wb_we_d  <= wb_we_i;
-      end if;
-    end if;
-  end process p_wb_cyc_f_edge;
-
-  wb_cyc_f_edge <= not(wb_cyc_i) and wb_cyc_d;
-  wb_cyc_r_edge <= wb_cyc_i and not(wb_cyc_d);
-  wb_stb_f_edge <= not(wb_stb_i) and wb_stb_d;
-  wb_we_f_edge  <= not(wb_we_i) and wb_we_d;
-
-  -- Address and data inputs
-  p_ddr_inputs : process (wb_clk_i)
-  begin
-    if rising_edge(wb_clk_i) then
-      if (rst_n = '0') then
-        ddr_wr_data <= (others => '0');
-        ddr_wr_en   <= '0';
-      else
-        if (wb_stb_i = '1') and (wb_cyc_i = '1') and (wb_we_i = '1') then
-          ddr_wr_en <= '1';
-        else
-          ddr_wr_en <= '0';
-        end if;
-        ddr_wr_data <= wb_data_i;
-      end if;
-    end if;
-  end process p_ddr_inputs;
-
-  -- Command parameters (burst length and address) registration
-  p_ddr_cmd : process (wb_clk_i)
-  begin
-    if rising_edge(wb_clk_i) then
-      if (rst_n = '0') then
+        wb_fsm_state    <= WB_IDLE;
+        wb_ack_o        <= '0';
+        wb_data_o       <= (others => '0');
+        --wb_stall_o      <= '0';
+        ddr_cmd_en        <= '0';
         ddr_cmd_byte_addr <= (others => '0');
-        ddr_cmd_instr     <= "000";
         ddr_cmd_bl        <= (others => '0');
-        wb_addr_d       <= (others => '0');
+        ddr_cmd_instr     <= (others => '0');
+        ddr_wr_data       <= (others => '0');
+        ddr_wr_mask       <= (others => '0');
+        ddr_wr_en         <= '0';
+        ddr_rd_en         <= '0';
       else
-        wb_addr_d <= wb_addr_i;
-        if ((ddr_burst_cnt = 0 and wb_cyc_r_edge = '1' and wb_stb_i = '1') or
-            (ddr_burst_cnt = to_unsigned(1, ddr_burst_cnt'length))) then
-          ddr_cmd_byte_addr <= wb_addr_d & "000";  -- wb_addr_i is a 64-bit word address
-          ddr_cmd_instr     <= "00" & not(wb_we_i);
-        end if;
-        ddr_cmd_bl <= std_logic_vector(ddr_burst_cnt - 1);
+        case wb_fsm_state is
+
+          when WB_IDLE =>
+            if (wb_cyc_i = '1' and wb_stb_i = '1' and wb_we_i = '1') then
+              -- Write from wishbone
+              ddr_rd_en         <= '0';
+              wb_ack_o        <= '0';
+              ddr_cmd_en        <= '0';
+              ddr_cmd_instr     <= "000";
+              ddr_cmd_bl        <= "000000";
+              ddr_cmd_byte_addr <= wb_addr_i & "00";
+              ddr_wr_mask       <= "0000";
+              ddr_wr_data       <= wb_data_i;
+              ddr_wr_en         <= '1';
+              wb_fsm_state    <= WB_WRITE;
+            elsif (wb_cyc_i = '1' and wb_stb_i = '1' and wb_we_i = '0') then
+              -- Read from wishbone
+              ddr_wr_en         <= '0';
+              wb_ack_o        <= '0';
+              ddr_cmd_en        <= '0';
+              ddr_cmd_instr     <= "001";
+              ddr_cmd_bl        <= "000000";
+              ddr_cmd_byte_addr <= wb_addr_i & "00";
+              wb_fsm_state    <= WB_READ;
+            else
+              wb_ack_o <= '0';
+              ddr_cmd_en <= '0';
+              ddr_wr_en  <= '0';
+              ddr_rd_en  <= '0';
+            end if;
+
+          when WB_WRITE =>
+            wb_ack_o     <= '1';
+            ddr_wr_en      <= '0';
+            ddr_cmd_en     <= '1';
+            wb_fsm_state <= WB_IDLE;
+
+          when WB_READ =>
+            ddr_cmd_en     <= '1';
+            wb_fsm_state <= WB_READ_WAIT;
+
+          when WB_READ_WAIT =>
+            ddr_cmd_en  <= '0';
+            ddr_rd_en   <= not(ddr_rd_empty_i);
+            wb_ack_o  <= ddr_rd_en;
+            wb_data_o <= ddr_rd_data;
+            if (ddr_rd_en = '1') then
+              wb_fsm_state <= WB_IDLE;
+            end if;
+
+          when others => null;
+
+        end case;
       end if;
     end if;
-  end process p_ddr_cmd;
+  end process p_wb_interface;
 
-  -- Command enable signal generation
-  p_ddr_cmd_en : process (wb_clk_i)
-  begin
-    if rising_edge(wb_clk_i) then
-      if (rst_n = '0') then
-        ddr_cmd_en   <= '0';
-        ddr_cmd_en_d <= '0';
-      else
-        ddr_cmd_en_d <= ddr_cmd_en;
-        if (((ddr_burst_cnt = c_DDR_BURST_LENGTH) or
-             (wb_we_f_edge = '1') or
-             (wb_stb_f_edge = '1' and ddr_rd_en = '1')) and ddr_cmd_full_i = '0') and (ddr_cmd_en = '0')then
-          ddr_cmd_en <= '1';             -- might have problem if burst_cnt = BURST_LENGTH for more than 2 clk cycles
-        else
-          ddr_cmd_en <= '0';
-        end if;
-      end if;
-    end if;
-  end process p_ddr_cmd_en;
-
-  -- Command enable rising edge detection
-  ddr_cmd_en_r_edge <= ddr_cmd_en and not(ddr_cmd_en_d);
-
-  -- Burst counter
-  p_ddr_burst_cnt : process (wb_clk_i)
-  begin
-    if rising_edge(wb_clk_i) then
-      if (rst_n = '0') then
-        ddr_burst_cnt <= (others => '0');
-      else
-        if (wb_cyc_f_edge = '1') then
-          ddr_burst_cnt <= to_unsigned(0, ddr_burst_cnt'length);
-        elsif (wb_stb_i = '1' and wb_cyc_i = '1') then
-          if (ddr_burst_cnt = c_DDR_BURST_LENGTH) then
-            ddr_burst_cnt <= to_unsigned(1, ddr_burst_cnt'length);
-          else
-            ddr_burst_cnt <= ddr_burst_cnt + 1;
-          end if;
-        elsif (ddr_burst_cnt = c_DDR_BURST_LENGTH) then
-          ddr_burst_cnt <= to_unsigned(0, ddr_burst_cnt'length);
-        end if;
-      end if;
-    end if;
-  end process p_ddr_burst_cnt;
-
-  -- Read enable signal generation
-  ddr_rd_en <= not(ddr_rd_empty_i);
-
-  -- Data output and ack
-  p_ddr_outputs : process (wb_clk_i)
-  begin
-    if rising_edge(wb_clk_i) then
-      if (rst_n = '0') then
-        wb_ack_o  <= '0';
-        wb_data_o <= (others => '0');
-      else
-        -- Generates ack signal
-        if (ddr_rd_en = '1') or (ddr_wr_en = '1') then
-          wb_ack_o <= '1';
-        else
-          wb_ack_o <= '0';
-        end if;
-        -- Registered data output
-        wb_data_o <= ddr_rd_data;
-      end if;
-    end if;
-  end process p_ddr_outputs;
-
-  -- Stall signal output
-  p_ddr_stall : process (wb_clk_i)
-  begin
-    if rising_edge(wb_clk_i) then
-      if (rst_n = '0') then
-        wb_stall_o <= '0';
-      else
-        if ((ddr_wr_count_i > c_FIFO_ALMOST_FULL) or
-            (ddr_wr_full_i = '1') or
-            (ddr_rd_count_i > c_FIFO_ALMOST_FULL) or
-            (ddr_rd_full_i = '1')) then
-          wb_stall_o <= '1';
-        else
-          wb_stall_o <= '0';
-        end if;
-      end if;
-    end if;
-  end process p_ddr_stall;
-  --wb_stall_o <= ddr_cmd_full_i or ddr_wr_full_i or ddr_rd_full_i;
-
+  -- Port 1 pipelined mode compatibility
+  wb_stall_o <= ddr_cmd_full_i or ddr_wr_full_i or ddr_rd_full_i;
 
   -- Assign outputs
   ddr_cmd_en_o <= ddr_cmd_en;
