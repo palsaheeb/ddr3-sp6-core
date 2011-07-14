@@ -230,8 +230,6 @@ architecture rtl of ddr3_ctrl_wrapper is
         mcb3_rzq            : inout std_logic;
         mcb3_zio            : inout std_logic;
         mcb3_dram_udm       : out   std_logic;
-        c3_sys_clk_p        : in    std_logic;
-        c3_sys_clk_n        : in    std_logic;
         c3_sys_clk          : in    std_logic;
         c3_sys_rst_n        : in    std_logic;
         c3_calib_done       : out   std_logic;
