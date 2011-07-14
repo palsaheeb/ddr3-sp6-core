@@ -226,7 +226,7 @@ begin
         wb_addr_d <= wb_addr_i;
         if ((ddr_burst_cnt = 0 and wb_cyc_r_edge = '1' and wb_stb_i = '1') or
             (ddr_burst_cnt = to_unsigned(1, ddr_burst_cnt'length))) then
-          ddr_cmd_byte_addr <= wb_addr_d & "000";  -- wb_addr_i is a 64-bit word address
+          ddr_cmd_byte_addr <= wb_addr_d & "00";
           ddr_cmd_instr     <= "00" & not(wb_we_i);
         end if;
         ddr_cmd_bl <= std_logic_vector(ddr_burst_cnt - 1);
