@@ -1,2 +1,2 @@
 modules = {"local" : ["rtl",
-                      "spec"]}
+                      "spec/rtl"]}
