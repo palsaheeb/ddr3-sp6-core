@@ -31,7 +31,7 @@ use IEEE.NUMERIC_STD.all;
 --==============================================================================
 --! Entity declaration for ddr3_ctrl_wb
 --==============================================================================
-entity ddr3_ctrl_wb_single is
+entity ddr3_ctrl_wb is
 
   generic(
     --! DDR3 byte address width
@@ -91,14 +91,14 @@ entity ddr3_ctrl_wb_single is
     wb_stall_o : out std_logic
     );
 
-end entity ddr3_ctrl_wb_single;
+end entity ddr3_ctrl_wb;
 
 
 
 --==============================================================================
---! Architecure declaration for ddr3_ctrl_wb_single
+--! Architecure declaration for ddr3_ctrl_wb
 --==============================================================================
-architecture rtl of ddr3_ctrl_wb_single is
+architecture rtl of ddr3_ctrl_wb is
 
 
   ------------------------------------------------------------------------------
