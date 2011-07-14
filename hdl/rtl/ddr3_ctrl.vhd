@@ -71,12 +71,8 @@ entity ddr3_ctrl is
 
   port(
     ----------------------------------------------------------------------------
-    -- Clocks and reset
+    -- Clock and reset
     ----------------------------------------------------------------------------
-    --! Core's differential clock input (pos)
-    clk_p_i : in std_logic;
-    --! Core's differential clock input (neg)
-    clk_n_i : in std_logic;
     --! Core's clock input
     clk_i   : in std_logic;
     --! Core's reset input (active low)
@@ -255,8 +251,6 @@ architecture rtl of ddr3_ctrl is
       g_P1_BYTE_ADDR_WIDTH : integer := 30
       );
     port(
-      clk_p_i            : in    std_logic;
-      clk_n_i            : in    std_logic;
       clk_i              : in    std_logic;
       rst_n_i            : in    std_logic;
       calib_done_o       : out   std_logic;
@@ -506,8 +500,6 @@ begin
     g_P1_BYTE_ADDR_WIDTH => g_P1_BYTE_ADDR_WIDTH
     )
   port map(
-    clk_p_i => clk_p_i,
-    clk_n_i => clk_n_i,
     clk_i   => clk_i,
     rst_n_i => rst_n_i,
 
