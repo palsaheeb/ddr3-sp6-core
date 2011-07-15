@@ -308,7 +308,8 @@ begin
       C3_NUM_DQ_PINS        => g_NUM_DQ_PINS,
       C3_MEM_ADDR_WIDTH     => g_MEM_ADDR_WIDTH,
       C3_MEM_BANKADDR_WIDTH => g_MEM_BANKADDR_WIDTH,
-      C3_SIMULATION         => g_SIMULATION
+      C3_SIMULATION         => g_SIMULATION,
+      C3_INPUT_CLK_TYPE     => "SINGLE_ENDED"
       )
     port map (
       c3_sys_clk    => clk_i,

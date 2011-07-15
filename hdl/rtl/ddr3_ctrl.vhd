@@ -41,8 +41,6 @@ entity ddr3_ctrl is
     g_MEMCLK_PERIOD      : integer := 3000;
     --! Core's reset polarity (1=active low, 0=active high)
     g_RST_ACT_LOW        : integer := 1;
-    --! Core's clock type (SINGLE_ENDED or DIFFERENTIAL)
-    g_INPUT_CLK_TYPE     : string  := "SINGLE_ENDED";
     --! If TRUE, uses Xilinx calibration core (Input term, DQS centering)
     g_CALIB_SOFT_IP      : string  := "TRUE";
     --! User ports addresses maping (BANK_ROW_COLUMN or ROW_BANK_COLUMN)
@@ -236,7 +234,6 @@ architecture rtl of ddr3_ctrl is
     generic(
       g_MEMCLK_PERIOD      : integer := 3000;
       g_RST_ACT_LOW        : integer := 1;
-      g_INPUT_CLK_TYPE     : string  := "SINGLE_ENDED";
       g_CALIB_SOFT_IP      : string  := "TRUE";
       g_MEM_ADDR_ORDER     : string  := "ROW_BANK_COLUMN";
       g_SIMULATION         : string  := "FALSE";
@@ -485,7 +482,6 @@ begin
   generic map(
     g_MEMCLK_PERIOD      => g_MEMCLK_PERIOD,
     g_RST_ACT_LOW        => g_RST_ACT_LOW,
-    g_INPUT_CLK_TYPE     => g_INPUT_CLK_TYPE,
     g_CALIB_SOFT_IP      => g_CALIB_SOFT_IP,
     g_MEM_ADDR_ORDER     => g_MEM_ADDR_ORDER,
     g_SIMULATION         => g_SIMULATION,
