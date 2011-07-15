@@ -47,8 +47,8 @@ entity ddr3_ctrl is
     g_CALIB_SOFT_IP      : string  := "TRUE";
     --! User ports addresses maping (BANK_ROW_COLUMN or ROW_BANK_COLUMN)
     g_MEM_ADDR_ORDER     : string  := "ROW_BANK_COLUMN";
-    --! Skip calibration phase (for faster simulation)
-    g_MC_CALIB_BYPASS    : string  := "NO";
+    --! Simulation mode
+    g_SIMULATION         : string  := "FALSE";
     --! DDR3 data port width
     g_NUM_DQ_PINS        : integer := 16;
     --! DDR3 address port width
@@ -239,7 +239,7 @@ architecture rtl of ddr3_ctrl is
       g_INPUT_CLK_TYPE     : string  := "SINGLE_ENDED";
       g_CALIB_SOFT_IP      : string  := "TRUE";
       g_MEM_ADDR_ORDER     : string  := "ROW_BANK_COLUMN";
-      g_MC_CALIB_BYPASS    : string  := "NO";
+      g_SIMULATION         : string  := "FALSE";
       g_NUM_DQ_PINS        : integer := 16;
       g_MEM_ADDR_WIDTH     : integer := 14;
       g_MEM_BANKADDR_WIDTH : integer := 3;
@@ -488,7 +488,7 @@ begin
     g_INPUT_CLK_TYPE     => g_INPUT_CLK_TYPE,
     g_CALIB_SOFT_IP      => g_CALIB_SOFT_IP,
     g_MEM_ADDR_ORDER     => g_MEM_ADDR_ORDER,
-    g_MC_CALIB_BYPASS    => g_MC_CALIB_BYPASS,
+    g_SIMULATION         => g_SIMULATION,
     g_NUM_DQ_PINS        => g_NUM_DQ_PINS,
     g_MEM_ADDR_WIDTH     => g_MEM_ADDR_WIDTH,
     g_MEM_BANKADDR_WIDTH => g_MEM_BANKADDR_WIDTH,
