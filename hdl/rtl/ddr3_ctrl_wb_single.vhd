@@ -131,7 +131,6 @@ architecture rtl of ddr3_ctrl_wb is
   signal ddr_wr_mask       : std_logic_vector(g_MASK_SIZE - 1 downto 0);
   signal ddr_wr_data       : std_logic_vector(g_DATA_PORT_SIZE - 1 downto 0);
   signal ddr_rd_en         : std_logic;
-  signal ddr_rd_data       : std_logic_vector(g_DATA_PORT_SIZE - 1 downto 0);
 
 
 --==============================================================================
@@ -221,7 +220,7 @@ begin
             ddr_cmd_en  <= '0';
             ddr_rd_en   <= not(ddr_rd_empty_i);
             wb_ack_o  <= ddr_rd_en;
-            wb_data_o <= ddr_rd_data;
+            wb_data_o <= ddr_rd_data_i;
             if (ddr_rd_en = '1') then
               wb_fsm_state <= WB_IDLE;
             end if;
