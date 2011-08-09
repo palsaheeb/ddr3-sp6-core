@@ -88,7 +88,7 @@ entity ddr3_ctrl_wb is
     wb_cyc_i   : in  std_logic;
     wb_stb_i   : in  std_logic;
     wb_we_i    : in  std_logic;
-    wb_addr_i  : in  std_logic_vector(g_BYTE_ADDR_WIDTH - 3 downto 0);
+    wb_addr_i  : in  std_logic_vector(31 downto 0);
     wb_data_i  : in  std_logic_vector(g_DATA_PORT_SIZE - 1 downto 0);
     wb_data_o  : out std_logic_vector(g_DATA_PORT_SIZE - 1 downto 0);
     wb_ack_o   : out std_logic;
@@ -121,16 +121,16 @@ architecture rtl of ddr3_ctrl_wb is
   ------------------------------------------------------------------------------
   -- Signals declaration
   ------------------------------------------------------------------------------
-  signal rst_n           : std_logic;
+  signal rst_n : std_logic;
 
-  signal wb_cyc_d        : std_logic;
-  signal wb_cyc_f_edge   : std_logic;
-  signal wb_cyc_r_edge   : std_logic;
-  signal wb_stb_d        : std_logic;
-  signal wb_stb_f_edge   : std_logic;
-  signal wb_we_d         : std_logic;
-  signal wb_we_f_edge    : std_logic;
-  signal wb_addr_d       : std_logic_vector(g_BYTE_ADDR_WIDTH - 3 downto 0);
+  signal wb_cyc_d      : std_logic;
+  signal wb_cyc_f_edge : std_logic;
+  signal wb_cyc_r_edge : std_logic;
+  signal wb_stb_d      : std_logic;
+  signal wb_stb_f_edge : std_logic;
+  signal wb_we_d       : std_logic;
+  signal wb_we_f_edge  : std_logic;
+  signal wb_addr_d     : std_logic_vector(31 downto 0);
 
   signal ddr_burst_cnt     : unsigned(5 downto 0);
   signal ddr_cmd_en        : std_logic;
@@ -167,8 +167,8 @@ begin
 
   -- Clocking
   ddr_cmd_clk_o <= wb_clk_i;
-  ddr_wr_clk_o <= wb_clk_i;
-  ddr_rd_clk_o <= wb_clk_i;
+  ddr_wr_clk_o  <= wb_clk_i;
+  ddr_rd_clk_o  <= wb_clk_i;
 
   -- Constant input
   ddr_wr_mask <= "0000";
@@ -194,7 +194,7 @@ begin
   wb_stb_f_edge <= not(wb_stb_i) and wb_stb_d;
   wb_we_f_edge  <= not(wb_we_i) and wb_we_d;
 
-  -- Address and data inputs
+  -- Data inputs
   p_ddr_inputs : process (wb_clk_i)
   begin
     if rising_edge(wb_clk_i) then
@@ -220,12 +220,12 @@ begin
         ddr_cmd_byte_addr <= (others => '0');
         ddr_cmd_instr     <= "000";
         ddr_cmd_bl        <= (others => '0');
-        wb_addr_d       <= (others => '0');
+        wb_addr_d         <= (others => '0');
       else
         wb_addr_d <= wb_addr_i;
         if ((ddr_burst_cnt = 0 and wb_cyc_r_edge = '1' and wb_stb_i = '1') or
             (ddr_burst_cnt = to_unsigned(1, ddr_burst_cnt'length))) then
-          ddr_cmd_byte_addr <= wb_addr_d & "00";
+          ddr_cmd_byte_addr <= wb_addr_d(g_BYTE_ADDR_WIDTH-3 downto 0) & "00";
           ddr_cmd_instr     <= "00" & not(wb_we_i);
         end if;
         ddr_cmd_bl <= std_logic_vector(ddr_burst_cnt - 1);
@@ -245,7 +245,7 @@ begin
         if (((ddr_burst_cnt = c_DDR_BURST_LENGTH) or
              (wb_we_f_edge = '1') or
              (wb_stb_f_edge = '1' and ddr_rd_en = '1')) and ddr_cmd_full_i = '0') and (ddr_cmd_en = '0')then
-          ddr_cmd_en <= '1';             -- might have problem if burst_cnt = BURST_LENGTH for more than 2 clk cycles
+          ddr_cmd_en <= '1';            -- might have problem if burst_cnt = BURST_LENGTH for more than 2 clk cycles
         else
           ddr_cmd_en <= '0';
         end if;
@@ -323,12 +323,12 @@ begin
 
 
   -- Assign outputs
-  ddr_cmd_en_o <= ddr_cmd_en;
-  ddr_cmd_instr_o <= ddr_cmd_instr;
-  ddr_cmd_bl_o <= ddr_cmd_bl;
+  ddr_cmd_en_o        <= ddr_cmd_en;
+  ddr_cmd_instr_o     <= ddr_cmd_instr;
+  ddr_cmd_bl_o        <= ddr_cmd_bl;
   ddr_cmd_byte_addr_o <= ddr_cmd_byte_addr;
 
-  ddr_wr_en_o <= ddr_wr_en;
+  ddr_wr_en_o   <= ddr_wr_en;
   ddr_wr_mask_o <= ddr_wr_mask;
   ddr_wr_data_o <= ddr_wr_data;
 

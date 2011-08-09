@@ -38,8 +38,6 @@ entity ddr3_ctrl_wrapper is
   generic(
     --! Core's clock period in ps
     g_MEMCLK_PERIOD      : integer := 3000;
-    --! Core's reset polarity (1=active low, 0=active high)
-    g_RST_ACT_LOW        : integer := 1;
     --! If TRUE, uses Xilinx calibration core (Input term, DQS centering)
     g_CALIB_SOFT_IP      : string  := "TRUE";
     --! User ports addresses maping (BANK_ROW_COLUMN or ROW_BANK_COLUMN)
@@ -202,7 +200,7 @@ architecture rtl of ddr3_ctrl_wrapper is
         C3_P1_MASK_SIZE       : integer := 4;
         C3_P1_DATA_PORT_SIZE  : integer := 32;
         C3_MEMCLK_PERIOD      : integer := 3000;
-        C3_RST_ACT_LOW        : integer := 0;
+        C3_RST_ACT_LOW        : integer := 1;
         C3_INPUT_CLK_TYPE     : string  := "SINGLE_ENDED";
         C3_CALIB_SOFT_IP      : string  := "TRUE";
         C3_SIMULATION         : string  := "FALSE";
@@ -302,7 +300,7 @@ begin
       C3_P1_MASK_SIZE       => g_P1_MASK_SIZE,
       C3_P1_DATA_PORT_SIZE  => g_P1_DATA_PORT_SIZE,
       C3_MEMCLK_PERIOD      => g_MEMCLK_PERIOD,
-      C3_RST_ACT_LOW        => g_RST_ACT_LOW,
+      C3_RST_ACT_LOW        => 1,       -- Active low
       C3_CALIB_SOFT_IP      => g_CALIB_SOFT_IP,
       C3_MEM_ADDR_ORDER     => g_MEM_ADDR_ORDER,
       C3_NUM_DQ_PINS        => g_NUM_DQ_PINS,
