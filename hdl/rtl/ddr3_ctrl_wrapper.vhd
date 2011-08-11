@@ -52,8 +52,16 @@ entity ddr3_ctrl_wrapper is
     g_MEM_ADDR_WIDTH     : integer := 14;
     --! DDR3 bank address width
     g_MEM_BANKADDR_WIDTH : integer := 3;
+    --! Port 0 data mask size (8-bit granularity)
+    g_P0_MASK_SIZE       : integer := 4;
+    --! Port 0 data width
+    g_P0_DATA_PORT_SIZE  : integer := 32;
     --! Port 0 byte address width
     g_P0_BYTE_ADDR_WIDTH : integer := 30;
+    --! Port 1 data mask size (8-bit granularity)
+    g_P1_MASK_SIZE       : integer := 4;
+    --! Port 1 data width
+    g_P1_DATA_PORT_SIZE  : integer := 32;
     --! Port 1 byte address width
     g_P1_BYTE_ADDR_WIDTH : integer := 30
     );
