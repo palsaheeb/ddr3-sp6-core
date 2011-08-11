@@ -384,7 +384,7 @@ architecture rtl of ddr3_ctrl_wrapper is
 --==============================================================================
 begin
 
-  gen_test_bank_port_select : if(g_BANK_PORT_SELECT /= "BANK3_32B_32B" or
+  gen_test_bank_port_select : if(g_BANK_PORT_SELECT /= "BANK3_32B_32B" and
                                  g_BANK_PORT_SELECT /= "BANK3_64B_32B") generate
     assert false report "ddr3_ctrl_wrapper: Selected bank or port size is no supported. Currently supported values are: BANK3_64B_32B, BANK3_32B_32B" severity failure;
   end generate gen_test_bank_port_select;
