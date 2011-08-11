@@ -236,7 +236,11 @@ architecture rtl of ddr3_ctrl is
       g_NUM_DQ_PINS        : integer := 16;
       g_MEM_ADDR_WIDTH     : integer := 14;
       g_MEM_BANKADDR_WIDTH : integer := 3;
+      g_P0_MASK_SIZE       : integer := 4;
+      g_P0_DATA_PORT_SIZE  : integer := 32;
       g_P0_BYTE_ADDR_WIDTH : integer := 30;
+      g_P1_MASK_SIZE       : integer := 4;
+      g_P1_DATA_PORT_SIZE  : integer := 32;
       g_P1_BYTE_ADDR_WIDTH : integer := 30
       );
     port(
@@ -480,7 +484,11 @@ begin
       g_NUM_DQ_PINS        => g_NUM_DQ_PINS,
       g_MEM_ADDR_WIDTH     => g_MEM_ADDR_WIDTH,
       g_MEM_BANKADDR_WIDTH => g_MEM_BANKADDR_WIDTH,
+      g_P0_MASK_SIZE       => g_P0_MASK_SIZE,
+      g_P0_DATA_PORT_SIZE  => g_P0_DATA_PORT_SIZE,
       g_P0_BYTE_ADDR_WIDTH => g_P0_BYTE_ADDR_WIDTH,
+      g_P1_MASK_SIZE       => g_P1_MASK_SIZE,
+      g_P1_DATA_PORT_SIZE  => g_P1_DATA_PORT_SIZE,
       g_P1_BYTE_ADDR_WIDTH => g_P1_BYTE_ADDR_WIDTH
       )
     port map(
