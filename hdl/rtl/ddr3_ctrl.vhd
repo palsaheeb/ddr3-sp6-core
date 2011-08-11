@@ -307,6 +307,14 @@ architecture rtl of ddr3_ctrl is
 
 
   ------------------------------------------------------------------------------
+  -- Constants declaration
+  ------------------------------------------------------------------------------
+  constant c_P0_DATA_SIZE : integer := 32;
+  constant c_P1_DATA_SIZE : integer := 32;
+  constant c_P0_MASK_SIZE : integer := 4;
+  constant c_P1_MASK_SIZE : integer := 4;
+
+  ------------------------------------------------------------------------------
   -- Signals declaration
   ------------------------------------------------------------------------------
   signal p0_cmd_clk       : std_logic;
@@ -366,13 +374,31 @@ begin
 
 
   ------------------------------------------------------------------------------
+  -- PORT SIZE
+  ------------------------------------------------------------------------------
+  gen_port_size_32b_32b : if(g_BANK_PORT_SELECT = "BANK3_32B_32B") generate
+    c_P0_DATA_SIZE <= 32;
+    c_P1_DATA_SIZE <= 32;
+    c_P0_MASK_SIZE <= 4;
+    c_P1_MASK_SIZE <= 4;
+  end generate gen_port_size_32b_32b;
+
+  gen_port_size_64b_32b : if(g_BANK_PORT_SELECT = "BANK3_64B_32B") generate
+    c_P0_DATA_SIZE <= 64;
+    c_P1_DATA_SIZE <= 32;
+    c_P0_MASK_SIZE <= 8;
+    c_P1_MASK_SIZE <= 4;
+  end generate gen_port_size_64b_32b;
+
+
+  ------------------------------------------------------------------------------
   -- PORT 0
   ------------------------------------------------------------------------------
   cmp_ddr3_ctrl_wb_0 : ddr3_ctrl_wb
     generic map(
       g_BYTE_ADDR_WIDTH => g_P0_BYTE_ADDR_WIDTH,
-      g_MASK_SIZE       => g_P0_MASK_SIZE,
-      g_DATA_PORT_SIZE  => g_P0_DATA_PORT_SIZE
+      g_MASK_SIZE       => c_P0_MASK_SIZE,
+      g_DATA_PORT_SIZE  => c_P0_DATA_SIZE
       )
     port map(
       rst_n_i             => rst_n_i,
@@ -418,8 +444,8 @@ begin
   cmp_ddr3_ctrl_wb_1 : ddr3_ctrl_wb
     generic map(
       g_BYTE_ADDR_WIDTH => g_P1_BYTE_ADDR_WIDTH,
-      g_MASK_SIZE       => g_P1_MASK_SIZE,
-      g_DATA_PORT_SIZE  => g_P1_DATA_PORT_SIZE
+      g_MASK_SIZE       => c_P1_MASK_SIZE,
+      g_DATA_PORT_SIZE  => c_P1_DATA_SIZE
       )
     port map(
       rst_n_i             => rst_n_i,
