@@ -37,6 +37,8 @@ use IEEE.NUMERIC_STD.all;
 entity ddr3_ctrl is
 
   generic(
+    --! Bank and port size selection
+    g_BANK_PORT_SELECT   : string  := "BANK3_32B_32B";
     --! Core's clock period in ps
     g_MEMCLK_PERIOD      : integer := 3000;
     --! If TRUE, uses Xilinx calibration core (Input term, DQS centering)
@@ -51,16 +53,8 @@ entity ddr3_ctrl is
     g_MEM_ADDR_WIDTH     : integer := 14;
     --! DDR3 bank address width
     g_MEM_BANKADDR_WIDTH : integer := 3;
-    --! Wishbone port 0 data mask size (8-bit granularity)
-    g_P0_MASK_SIZE       : integer := 4;
-    --! Wishbone port 0 data width
-    g_P0_DATA_PORT_SIZE  : integer := 32;
     --! Wishbone port 0 byte address width
     g_P0_BYTE_ADDR_WIDTH : integer := 30;
-    --! Wishbone port 1 data mask size (8-bit granularity)
-    g_P1_MASK_SIZE       : integer := 4;
-    --! Wishbone port 1 data width
-    g_P1_DATA_PORT_SIZE  : integer := 32;
     --! Wishbone port 1 byte address width
     g_P1_BYTE_ADDR_WIDTH : integer := 30
     );
@@ -226,6 +220,7 @@ architecture rtl of ddr3_ctrl is
 
   component ddr3_ctrl_wrapper
     generic(
+      g_BANK_PORT_SELECT   : string  := "BANK3_32B_32B";
       g_MEMCLK_PERIOD      : integer := 3000;
       g_CALIB_SOFT_IP      : string  := "TRUE";
       g_MEM_ADDR_ORDER     : string  := "ROW_BANK_COLUMN";
@@ -233,11 +228,7 @@ architecture rtl of ddr3_ctrl is
       g_NUM_DQ_PINS        : integer := 16;
       g_MEM_ADDR_WIDTH     : integer := 14;
       g_MEM_BANKADDR_WIDTH : integer := 3;
-      g_P0_MASK_SIZE       : integer := 4;
-      g_P0_DATA_PORT_SIZE  : integer := 32;
       g_P0_BYTE_ADDR_WIDTH : integer := 30;
-      g_P1_MASK_SIZE       : integer := 4;
-      g_P1_DATA_PORT_SIZE  : integer := 32;
       g_P1_BYTE_ADDR_WIDTH : integer := 30
       );
     port(
@@ -473,6 +464,7 @@ begin
   ------------------------------------------------------------------------------
   cmp_ddr3_ctrl_wrapper : ddr3_ctrl_wrapper
     generic map(
+      g_BANK_PORT_SELECT   => g_BANK_PORT_SELECT,
       g_MEMCLK_PERIOD      => g_MEMCLK_PERIOD,
       g_CALIB_SOFT_IP      => g_CALIB_SOFT_IP,
       g_MEM_ADDR_ORDER     => g_MEM_ADDR_ORDER,
@@ -480,11 +472,7 @@ begin
       g_NUM_DQ_PINS        => g_NUM_DQ_PINS,
       g_MEM_ADDR_WIDTH     => g_MEM_ADDR_WIDTH,
       g_MEM_BANKADDR_WIDTH => g_MEM_BANKADDR_WIDTH,
-      g_P0_MASK_SIZE       => g_P0_MASK_SIZE,
-      g_P0_DATA_PORT_SIZE  => g_P0_DATA_PORT_SIZE,
       g_P0_BYTE_ADDR_WIDTH => g_P0_BYTE_ADDR_WIDTH,
-      g_P1_MASK_SIZE       => g_P1_MASK_SIZE,
-      g_P1_DATA_PORT_SIZE  => g_P1_DATA_PORT_SIZE,
       g_P1_BYTE_ADDR_WIDTH => g_P1_BYTE_ADDR_WIDTH
       )
     port map(
