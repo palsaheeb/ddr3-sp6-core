@@ -390,7 +390,7 @@ begin
   end generate gen_test_bank_port_select;
 
   gen_bank3_32b_32b : if(g_BANK_PORT_SELECT = "BANK3_32B_32B") generate
-    cmp_ddr3_ctrl : ddr_ctrl3_bank3_32b_32b
+    cmp_ddr3_ctrl : ddr3_ctrl_bank3_32b_32b
     generic map (
       C3_P0_MASK_SIZE       => 4,
       C3_P0_DATA_PORT_SIZE  => 32,
