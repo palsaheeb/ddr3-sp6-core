@@ -33,6 +33,14 @@ use IEEE.NUMERIC_STD.all;
 --==============================================================================
 package ddr3_ctrl_pkg is
 
+  --==============================================================================
+  --! Functions declaration
+  --==============================================================================
+  function log2_ceil(N : natural) return positive;
+
+  --==============================================================================
+  --! Components declaration
+  --==============================================================================
   component ddr3_ctrl
     generic(
       --! Bank and port size selection
@@ -165,5 +173,23 @@ package ddr3_ctrl_pkg is
       );
   end component ddr3_ctrl;
 
+
+end ddr3_ctrl_pkg;
+
+package body ddr3_ctrl_pkg is
+
+  -----------------------------------------------------------------------------
+  -- Returns log of 2 of a natural number
+  -----------------------------------------------------------------------------
+  function log2_ceil(N : natural) return positive is
+  begin
+    if N <= 2 then
+      return 1;
+    elsif N mod 2 = 0 then
+      return 1 + log2_ceil(N/2);
+    else
+      return 1 + log2_ceil((N+1)/2);
+    end if;
+  end;
 
 end ddr3_ctrl_pkg;

@@ -8,6 +8,8 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.NUMERIC_STD.all;
 --! Specific packages
+library work;
+use work.ddr3_ctrl_pkg.all;
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -112,6 +114,8 @@ architecture rtl of ddr3_ctrl_wb is
 
   constant c_FIFO_ALMOST_FULL : std_logic_vector(6 downto 0) := std_logic_vector(to_unsigned(57, 7));
 
+  constant c_ADDR_SHIFT : integer := log2_ceil(g_DATA_PORT_SIZE/8);
+
   ------------------------------------------------------------------------------
   -- Types declaration
   ------------------------------------------------------------------------------
@@ -139,6 +143,7 @@ architecture rtl of ddr3_ctrl_wb is
   signal ddr_cmd_instr     : std_logic_vector(2 downto 0);
   signal ddr_cmd_bl        : std_logic_vector(5 downto 0);
   signal ddr_cmd_byte_addr : std_logic_vector(g_BYTE_ADDR_WIDTH - 1 downto 0);
+  signal addr_shift        : std_logic_vector(c_ADDR_SHIFT-1 downto 0);
   signal ddr_wr_en         : std_logic;
   signal ddr_wr_mask       : std_logic_vector(g_MASK_SIZE - 1 downto 0);
   signal ddr_wr_data       : std_logic_vector(g_DATA_PORT_SIZE - 1 downto 0);
@@ -223,13 +228,15 @@ begin
         wb_addr_d <= wb_addr_i;
         if ((ddr_burst_cnt = 0 and wb_cyc_r_edge = '1' and wb_stb_i = '1') or
             (ddr_burst_cnt = to_unsigned(1, ddr_burst_cnt'length))) then
-          ddr_cmd_byte_addr <= wb_addr_d(g_BYTE_ADDR_WIDTH-3 downto 0) & "00";
+          ddr_cmd_byte_addr <= wb_addr_d(g_BYTE_ADDR_WIDTH-c_ADDR_SHIFT-1 downto 0) & addr_shift;
           ddr_cmd_instr     <= "00" & not(wb_we_i);
         end if;
         ddr_cmd_bl <= std_logic_vector(ddr_burst_cnt - 1);
       end if;
     end if;
   end process p_ddr_cmd;
+
+  addr_shift <= (others => '0');
 
   -- Command enable signal generation
   p_ddr_cmd_en : process (wb_clk_i)
