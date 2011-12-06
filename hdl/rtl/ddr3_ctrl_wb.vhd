@@ -229,7 +229,7 @@ begin
         if ((ddr_burst_cnt = 0 and wb_cyc_r_edge = '1' and wb_stb_i = '1') or
             (ddr_burst_cnt = to_unsigned(1, ddr_burst_cnt'length))) then
           ddr_cmd_byte_addr <= wb_addr_d(g_BYTE_ADDR_WIDTH-c_ADDR_SHIFT-1 downto 0) & addr_shift;
-          ddr_cmd_instr     <= "00" & not(wb_we_i);
+          ddr_cmd_instr     <= "00" & not(wb_we_d);
         end if;
         ddr_cmd_bl <= std_logic_vector(ddr_burst_cnt - 1);
       end if;
