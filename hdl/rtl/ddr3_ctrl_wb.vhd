@@ -249,7 +249,7 @@ begin
         ddr_cmd_en_d <= ddr_cmd_en;
         if (((ddr_burst_cnt = c_DDR_BURST_LENGTH) or
              (wb_we_f_edge = '1') or
-             (wb_stb_f_edge = '1' and wb_we_d = '1')) and ddr_cmd_full_i = '0') and (ddr_cmd_en = '0')then
+             (wb_stb_f_edge = '1' and wb_we_d = '0')) and ddr_cmd_full_i = '0') and (ddr_cmd_en = '0')then
           ddr_cmd_en <= '1';            -- might have problem if burst_cnt = BURST_LENGTH for more than 2 clk cycles
         else
           ddr_cmd_en <= '0';
