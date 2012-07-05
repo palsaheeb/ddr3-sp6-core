@@ -158,6 +158,34 @@ entity ddr3_ctrl is
     wb0_stall_o : out std_logic;
 
     ----------------------------------------------------------------------------
+    -- Status - Port 0
+    ----------------------------------------------------------------------------
+    --! Command FIFO empty
+    p0_cmd_empty_o   : out std_logic;
+    --! Command FIFO full
+    p0_cmd_full_o    : out std_logic;
+    --! Read FIFO full
+    p0_rd_full_o     : out std_logic;
+    --! Read FIFO empty
+    p0_rd_empty_o    : out std_logic;
+    --! Read FIFO count
+    p0_rd_count_o    : out std_logic_vector(6 downto 0);
+    --! Read FIFO overflow
+    p0_rd_overflow_o : out std_logic;
+    --! Read FIFO error (pointers unsynchronized, reset required)
+    p0_rd_error_o    : out std_logic;
+    --! Write FIFO full
+    p0_wr_full_o     : out std_logic;
+    --! Write FIFO empty
+    p0_wr_empty_o    : out std_logic;
+    --! Write FIFO count
+    p0_wr_count_o    : out std_logic_vector(6 downto 0);
+    --! Write FIFO underrun
+    p0_wr_underrun_o : out std_logic;
+    --! Write FIFO error (pointers unsynchronized, reset required)
+    p0_wr_error_o    : out std_logic;
+
+    ----------------------------------------------------------------------------
     -- Wishbone bus - Port 1
     ----------------------------------------------------------------------------
     --! Wishbone bus clock
@@ -179,7 +207,35 @@ entity ddr3_ctrl is
     --! Wishbone bus acknowledge
     wb1_ack_o   : out std_logic;
     --! Wishbone bus stall (for pipelined mode)
-    wb1_stall_o : out std_logic
+    wb1_stall_o : out std_logic;
+
+    ----------------------------------------------------------------------------
+    -- Status - Port 1
+    ----------------------------------------------------------------------------
+    --! Command FIFO empty
+    p1_cmd_empty_o   : out std_logic;
+    --! Command FIFO full
+    p1_cmd_full_o    : out std_logic;
+    --! Read FIFO full
+    p1_rd_full_o     : out std_logic;
+    --! Read FIFO empty
+    p1_rd_empty_o    : out std_logic;
+    --! Read FIFO count
+    p1_rd_count_o    : out std_logic_vector(6 downto 0);
+    --! Read FIFO overflow
+    p1_rd_overflow_o : out std_logic;
+    --! Read FIFO error (pointers unsynchronized, reset required)
+    p1_rd_error_o    : out std_logic;
+    --! Write FIFO full
+    p1_wr_full_o     : out std_logic;
+    --! Write FIFO empty
+    p1_wr_empty_o    : out std_logic;
+    --! Write FIFO count
+    p1_wr_count_o    : out std_logic_vector(6 downto 0);
+    --! Write FIFO underrun
+    p1_wr_underrun_o : out std_logic;
+    --! Write FIFO error (pointers unsynchronized, reset required)
+    p1_wr_error_o    : out std_logic
     );
 
 end entity ddr3_ctrl;

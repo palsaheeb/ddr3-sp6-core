@@ -91,98 +91,152 @@ package ddr3_ctrl_pkg is
       -- Clock, control and status
       ----------------------------------------------------------------------------
       --! Clock input
-      clk_i    : in  std_logic;
+      clk_i            : in    std_logic;
       --! Reset input (active low)
-      rst_n_i  : in  std_logic;
+      rst_n_i          : in    std_logic;
       --! Status output
-      status_o : out std_logic_vector(31 downto 0);
+      status_o         : out   std_logic_vector(31 downto 0);
       ----------------------------------------------------------------------------
       -- DDR3 interface
       ----------------------------------------------------------------------------
       --! DDR3 data bus
-      ddr3_dq_b     : inout std_logic_vector(g_NUM_DQ_PINS-1 downto 0);
+      ddr3_dq_b        : inout std_logic_vector(g_NUM_DQ_PINS-1 downto 0);
       --! DDR3 address bus
-      ddr3_a_o      : out   std_logic_vector(g_MEM_ADDR_WIDTH-1 downto 0);
+      ddr3_a_o         : out   std_logic_vector(g_MEM_ADDR_WIDTH-1 downto 0);
       --! DDR3 bank address
-      ddr3_ba_o     : out   std_logic_vector(g_MEM_BANKADDR_WIDTH-1 downto 0);
+      ddr3_ba_o        : out   std_logic_vector(g_MEM_BANKADDR_WIDTH-1 downto 0);
       --! DDR3 row address strobe
-      ddr3_ras_n_o  : out   std_logic;
+      ddr3_ras_n_o     : out   std_logic;
       --! DDR3 column address strobe
-      ddr3_cas_n_o  : out   std_logic;
+      ddr3_cas_n_o     : out   std_logic;
       --! DDR3 write enable
-      ddr3_we_n_o   : out   std_logic;
+      ddr3_we_n_o      : out   std_logic;
       --! DDR3 on-die termination
-      ddr3_odt_o    : out   std_logic;
+      ddr3_odt_o       : out   std_logic;
       --! DDR3 reset
-      ddr3_rst_n_o  : out   std_logic;
+      ddr3_rst_n_o     : out   std_logic;
       --! DDR3 clock enable
-      ddr3_cke_o    : out   std_logic;
+      ddr3_cke_o       : out   std_logic;
       --! DDR3 lower byte data mask
-      ddr3_dm_o     : out   std_logic;
+      ddr3_dm_o        : out   std_logic;
       --! DDR3 upper byte data mask
-      ddr3_udm_o    : out   std_logic;
+      ddr3_udm_o       : out   std_logic;
       --! DDR3 lower byte data strobe (pos)
-      ddr3_dqs_p_b  : inout std_logic;
+      ddr3_dqs_p_b     : inout std_logic;
       --! DDR3 lower byte data strobe (neg)
-      ddr3_dqs_n_b  : inout std_logic;
+      ddr3_dqs_n_b     : inout std_logic;
       --! DDR3 upper byte data strobe (pos)
-      ddr3_udqs_p_b : inout std_logic;
+      ddr3_udqs_p_b    : inout std_logic;
       --! DDR3 upper byte data strobe (pos)
-      ddr3_udqs_n_b : inout std_logic;
+      ddr3_udqs_n_b    : inout std_logic;
       --! DDR3 clock (pos)
-      ddr3_clk_p_o  : out   std_logic;
+      ddr3_clk_p_o     : out   std_logic;
       --! DDR3 clock (neg)
-      ddr3_clk_n_o  : out   std_logic;
+      ddr3_clk_n_o     : out   std_logic;
       --! MCB internal termination calibration resistor
-      ddr3_rzq_b    : inout std_logic;
+      ddr3_rzq_b       : inout std_logic;
       --! MCB internal termination calibration
-      ddr3_zio_b    : inout std_logic;
+      ddr3_zio_b       : inout std_logic;
       ----------------------------------------------------------------------------
       -- Wishbone bus - Port 0
       ----------------------------------------------------------------------------
       --! Wishbone bus clock
-      wb0_clk_i   : in  std_logic;
+      wb0_clk_i        : in    std_logic;
       --! Wishbone bus byte select
-      wb0_sel_i   : in  std_logic_vector(g_P0_MASK_SIZE - 1 downto 0);
+      wb0_sel_i        : in    std_logic_vector(g_P0_MASK_SIZE - 1 downto 0);
       --! Wishbone bus cycle select
-      wb0_cyc_i   : in  std_logic;
+      wb0_cyc_i        : in    std_logic;
       --! Wishbone bus cycle strobe
-      wb0_stb_i   : in  std_logic;
+      wb0_stb_i        : in    std_logic;
       --! Wishbone bus write enable
-      wb0_we_i    : in  std_logic;
+      wb0_we_i         : in    std_logic;
       --! Wishbone bus address
-      wb0_addr_i  : in  std_logic_vector(31 downto 0);
+      wb0_addr_i       : in    std_logic_vector(31 downto 0);
       --! Wishbone bus data input
-      wb0_data_i  : in  std_logic_vector(g_P0_DATA_PORT_SIZE - 1 downto 0);
+      wb0_data_i       : in    std_logic_vector(g_P0_DATA_PORT_SIZE - 1 downto 0);
       --! Wishbone bus data output
-      wb0_data_o  : out std_logic_vector(g_P0_DATA_PORT_SIZE - 1 downto 0);
+      wb0_data_o       : out   std_logic_vector(g_P0_DATA_PORT_SIZE - 1 downto 0);
       --! Wishbone bus acknowledge
-      wb0_ack_o   : out std_logic;
+      wb0_ack_o        : out   std_logic;
       --! Wishbone bus stall (for pipelined mode)
-      wb0_stall_o : out std_logic;
+      wb0_stall_o      : out   std_logic;
+      ----------------------------------------------------------------------------
+      -- Status - Port 0
+      ----------------------------------------------------------------------------
+      --! Command FIFO empty
+      p0_cmd_empty_o   : out   std_logic;
+      --! Command FIFO full
+      p0_cmd_full_o    : out   std_logic;
+      --! Read FIFO full
+      p0_rd_full_o     : out   std_logic;
+      --! Read FIFO empty
+      p0_rd_empty_o    : out   std_logic;
+      --! Read FIFO count
+      p0_rd_count_o    : out   std_logic_vector(6 downto 0);
+      --! Read FIFO overflow
+      p0_rd_overflow_o : out   std_logic;
+      --! Read FIFO error (pointers unsynchronized, reset required)
+      p0_rd_error_o    : out   std_logic;
+      --! Write FIFO full
+      p0_wr_full_o     : out   std_logic;
+      --! Write FIFO empty
+      p0_wr_empty_o    : out   std_logic;
+      --! Write FIFO count
+      p0_wr_count_o    : out   std_logic_vector(6 downto 0);
+      --! Write FIFO underrun
+      p0_wr_underrun_o : out   std_logic;
+      --! Write FIFO error (pointers unsynchronized, reset required)
+      p0_wr_error_o    : out   std_logic;
       ----------------------------------------------------------------------------
       -- Wishbone bus - Port 1
       ----------------------------------------------------------------------------
       --! Wishbone bus clock
-      wb1_clk_i   : in  std_logic;
+      wb1_clk_i        : in    std_logic;
       --! Wishbone bus byte select
-      wb1_sel_i   : in  std_logic_vector(g_P1_MASK_SIZE - 1 downto 0);
+      wb1_sel_i        : in    std_logic_vector(g_P1_MASK_SIZE - 1 downto 0);
       --! Wishbone bus cycle select
-      wb1_cyc_i   : in  std_logic;
+      wb1_cyc_i        : in    std_logic;
       --! Wishbone bus cycle strobe
-      wb1_stb_i   : in  std_logic;
+      wb1_stb_i        : in    std_logic;
       --! Wishbone bus write enable
-      wb1_we_i    : in  std_logic;
+      wb1_we_i         : in    std_logic;
       --! Wishbone bus address
-      wb1_addr_i  : in  std_logic_vector(31 downto 0);
+      wb1_addr_i       : in    std_logic_vector(31 downto 0);
       --! Wishbone bus data input
-      wb1_data_i  : in  std_logic_vector(g_P1_DATA_PORT_SIZE - 1 downto 0);
+      wb1_data_i       : in    std_logic_vector(g_P1_DATA_PORT_SIZE - 1 downto 0);
       --! Wishbone bus data output
-      wb1_data_o  : out std_logic_vector(g_P1_DATA_PORT_SIZE - 1 downto 0);
+      wb1_data_o       : out   std_logic_vector(g_P1_DATA_PORT_SIZE - 1 downto 0);
       --! Wishbone bus acknowledge
-      wb1_ack_o   : out std_logic;
+      wb1_ack_o        : out   std_logic;
       --! Wishbone bus stall (for pipelined mode)
-      wb1_stall_o : out std_logic
+      wb1_stall_o      : out   std_logic;
+      ----------------------------------------------------------------------------
+      -- Status - Port 1
+      ----------------------------------------------------------------------------
+      --! Command FIFO empty
+      p1_cmd_empty_o   : out   std_logic;
+      --! Command FIFO full
+      p1_cmd_full_o    : out   std_logic;
+      --! Read FIFO full
+      p1_rd_full_o     : out   std_logic;
+      --! Read FIFO empty
+      p1_rd_empty_o    : out   std_logic;
+      --! Read FIFO count
+      p1_rd_count_o    : out   std_logic_vector(6 downto 0);
+      --! Read FIFO overflow
+      p1_rd_overflow_o : out   std_logic;
+      --! Read FIFO error (pointers unsynchronized, reset required)
+      p1_rd_error_o    : out   std_logic;
+      --! Write FIFO full
+      p1_wr_full_o     : out   std_logic;
+      --! Write FIFO empty
+      p1_wr_empty_o    : out   std_logic;
+      --! Write FIFO count
+      p1_wr_count_o    : out   std_logic_vector(6 downto 0);
+      --! Write FIFO underrun
+      p1_wr_underrun_o : out   std_logic;
+      --! Write FIFO error (pointers unsynchronized, reset required)
+      p1_wr_error_o    : out   std_logic
       );
   end component ddr3_ctrl;
 
