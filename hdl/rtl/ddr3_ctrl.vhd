@@ -636,6 +636,33 @@ begin
       p1_rd_error_o      => p1_rd_error
       );
 
+  -- Status ports assignment
+  p0_cmd_full_o    <= p0_cmd_full;
+  p0_cmd_empty_o   <= p0_cmd_empty;
+  p0_rd_full_o     <= p0_rd_full;
+  p0_rd_empty_o    <= p0_rd_empty;
+  p0_rd_count_o    <= p0_rd_count;
+  p0_rd_overflow_o <= p0_rd_overflow;
+  p0_rd_error_o    <= p0_rd_error;
+  p0_wr_full_o     <= p0_wr_full;
+  p0_wr_empty_o    <= p0_wr_empty;
+  p0_wr_count_o    <= p0_wr_count;
+  p0_wr_underrun_o <= p0_wr_underrun;
+  p0_wr_error_o    <= p0_wr_error;
+
+  p1_cmd_full_o    <= p1_cmd_full;
+  p1_cmd_empty_o   <= p1_cmd_empty;
+  p1_rd_full_o     <= p1_rd_full;
+  p1_rd_empty_o    <= p1_rd_empty;
+  p1_rd_count_o    <= p1_rd_count;
+  p1_rd_overflow_o <= p1_rd_overflow;
+  p1_rd_error_o    <= p1_rd_error;
+  p1_wr_full_o     <= p1_wr_full;
+  p1_wr_empty_o    <= p1_wr_empty;
+  p1_wr_count_o    <= p1_wr_count;
+  p1_wr_underrun_o <= p1_wr_underrun;
+  p1_wr_error_o    <= p1_wr_error;
+
 
 end architecture rtl;
 --==============================================================================
