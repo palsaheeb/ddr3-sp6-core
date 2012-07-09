@@ -8,6 +8,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.NUMERIC_STD.all;
 --! Specific packages
+use work.ddr3_ctrl_wrapper_pkg.all;
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -24,6 +25,7 @@ use IEEE.NUMERIC_STD.all;
 --------------------------------------------------------------------------------
 --! @version
 --! 0.1 | mc | 12.07.2011 | File creation and Doxygen comments
+--! 0.2 | mc | 06.07.2012 | Add bank4_32b_32b and bank5_32b_32b support
 --!
 --! @author
 --! mc : Matthieu Cattin, CERN (BE-CO-HT)
@@ -50,7 +52,7 @@ entity ddr3_ctrl_wrapper is
 
   generic(
     --! Bank and port size selection
-    g_BANK_PORT_SELECT : string := "BANK3_32B_32B";
+    g_BANK_PORT_SELECT   : string  := "BANK3_32B_32B";
     --! Core's clock period in ps
     g_MEMCLK_PERIOD      : integer := 3000;
     --! If TRUE, uses Xilinx calibration core (Input term, DQS centering)
@@ -202,194 +204,7 @@ end entity ddr3_ctrl_wrapper;
 --==============================================================================
 architecture rtl of ddr3_ctrl_wrapper is
 
-  ------------------------------------------------------------------------------
-  -- Components declaration
-  ------------------------------------------------------------------------------
-
-  --! DDR controller components generated from Xilinx CoreGen
-  component ddr3_ctrl_bank3_32b_32b
-    generic
-      (C3_P0_MASK_SIZE       : integer := 4;
-       C3_P0_DATA_PORT_SIZE  : integer := 32;
-       C3_P1_MASK_SIZE       : integer := 4;
-       C3_P1_DATA_PORT_SIZE  : integer := 32;
-       C3_MEMCLK_PERIOD      : integer := 3000;
-       C3_RST_ACT_LOW        : integer := 1;
-       C3_INPUT_CLK_TYPE     : string  := "SINGLE_ENDED";
-       C3_CALIB_SOFT_IP      : string  := "TRUE";
-       C3_SIMULATION         : string  := "FALSE";
-       DEBUG_EN              : integer := 0;
-       C3_MEM_ADDR_ORDER     : string  := "ROW_BANK_COLUMN";
-       C3_NUM_DQ_PINS        : integer := 16;
-       C3_MEM_ADDR_WIDTH     : integer := 14;
-       C3_MEM_BANKADDR_WIDTH : integer := 3
-       );
-    port
-      (mcb3_dram_dq        : inout std_logic_vector(C3_NUM_DQ_PINS-1 downto 0);
-       mcb3_dram_a         : out   std_logic_vector(C3_MEM_ADDR_WIDTH-1 downto 0);
-       mcb3_dram_ba        : out   std_logic_vector(C3_MEM_BANKADDR_WIDTH-1 downto 0);
-       mcb3_dram_ras_n     : out   std_logic;
-       mcb3_dram_cas_n     : out   std_logic;
-       mcb3_dram_we_n      : out   std_logic;
-       mcb3_dram_odt       : out   std_logic;
-       mcb3_dram_reset_n   : out   std_logic;
-       mcb3_dram_cke       : out   std_logic;
-       mcb3_dram_dm        : out   std_logic;
-       mcb3_dram_udqs      : inout std_logic;
-       mcb3_dram_udqs_n    : inout std_logic;
-       mcb3_rzq            : inout std_logic;
-       mcb3_dram_udm       : out   std_logic;
-       c3_sys_clk          : in    std_logic;
-       c3_sys_rst_n        : in    std_logic;
-       c3_calib_done       : out   std_logic;
-       c3_clk0             : out   std_logic;
-       c3_rst0             : out   std_logic;
-       mcb3_dram_dqs       : inout std_logic;
-       mcb3_dram_dqs_n     : inout std_logic;
-       mcb3_dram_ck        : out   std_logic;
-       mcb3_dram_ck_n      : out   std_logic;
-       c3_p0_cmd_clk       : in    std_logic;
-       c3_p0_cmd_en        : in    std_logic;
-       c3_p0_cmd_instr     : in    std_logic_vector(2 downto 0);
-       c3_p0_cmd_bl        : in    std_logic_vector(5 downto 0);
-       c3_p0_cmd_byte_addr : in    std_logic_vector(29 downto 0);
-       c3_p0_cmd_empty     : out   std_logic;
-       c3_p0_cmd_full      : out   std_logic;
-       c3_p0_wr_clk        : in    std_logic;
-       c3_p0_wr_en         : in    std_logic;
-       c3_p0_wr_mask       : in    std_logic_vector(C3_P0_MASK_SIZE - 1 downto 0);
-       c3_p0_wr_data       : in    std_logic_vector(C3_P0_DATA_PORT_SIZE - 1 downto 0);
-       c3_p0_wr_full       : out   std_logic;
-       c3_p0_wr_empty      : out   std_logic;
-       c3_p0_wr_count      : out   std_logic_vector(6 downto 0);
-       c3_p0_wr_underrun   : out   std_logic;
-       c3_p0_wr_error      : out   std_logic;
-       c3_p0_rd_clk        : in    std_logic;
-       c3_p0_rd_en         : in    std_logic;
-       c3_p0_rd_data       : out   std_logic_vector(C3_P0_DATA_PORT_SIZE - 1 downto 0);
-       c3_p0_rd_full       : out   std_logic;
-       c3_p0_rd_empty      : out   std_logic;
-       c3_p0_rd_count      : out   std_logic_vector(6 downto 0);
-       c3_p0_rd_overflow   : out   std_logic;
-       c3_p0_rd_error      : out   std_logic;
-       c3_p1_cmd_clk       : in    std_logic;
-       c3_p1_cmd_en        : in    std_logic;
-       c3_p1_cmd_instr     : in    std_logic_vector(2 downto 0);
-       c3_p1_cmd_bl        : in    std_logic_vector(5 downto 0);
-       c3_p1_cmd_byte_addr : in    std_logic_vector(29 downto 0);
-       c3_p1_cmd_empty     : out   std_logic;
-       c3_p1_cmd_full      : out   std_logic;
-       c3_p1_wr_clk        : in    std_logic;
-       c3_p1_wr_en         : in    std_logic;
-       c3_p1_wr_mask       : in    std_logic_vector(C3_P1_MASK_SIZE - 1 downto 0);
-       c3_p1_wr_data       : in    std_logic_vector(C3_P1_DATA_PORT_SIZE - 1 downto 0);
-       c3_p1_wr_full       : out   std_logic;
-       c3_p1_wr_empty      : out   std_logic;
-       c3_p1_wr_count      : out   std_logic_vector(6 downto 0);
-       c3_p1_wr_underrun   : out   std_logic;
-       c3_p1_wr_error      : out   std_logic;
-       c3_p1_rd_clk        : in    std_logic;
-       c3_p1_rd_en         : in    std_logic;
-       c3_p1_rd_data       : out   std_logic_vector(C3_P1_DATA_PORT_SIZE - 1 downto 0);
-       c3_p1_rd_full       : out   std_logic;
-       c3_p1_rd_empty      : out   std_logic;
-       c3_p1_rd_count      : out   std_logic_vector(6 downto 0);
-       c3_p1_rd_overflow   : out   std_logic;
-       c3_p1_rd_error      : out   std_logic
-       );
-  end component ddr3_ctrl_bank3_32b_32b;
-
-  component ddr3_ctrl_bank3_64b_32b
-    generic
-      (C3_P0_MASK_SIZE       : integer := 8;
-       C3_P0_DATA_PORT_SIZE  : integer := 64;
-       C3_P1_MASK_SIZE       : integer := 4;
-       C3_P1_DATA_PORT_SIZE  : integer := 32;
-       C3_MEMCLK_PERIOD      : integer := 3000;
-       C3_RST_ACT_LOW        : integer := 0;
-       C3_INPUT_CLK_TYPE     : string  := "SINGLE_ENDED";
-       C3_CALIB_SOFT_IP      : string  := "TRUE";
-       C3_SIMULATION         : string  := "FALSE";
-       DEBUG_EN              : integer := 0;
-       C3_MEM_ADDR_ORDER     : string  := "ROW_BANK_COLUMN";
-       C3_NUM_DQ_PINS        : integer := 16;
-       C3_MEM_ADDR_WIDTH     : integer := 14;
-       C3_MEM_BANKADDR_WIDTH : integer := 3
-       );
-    port
-      (mcb3_dram_dq        : inout std_logic_vector(C3_NUM_DQ_PINS-1 downto 0);
-       mcb3_dram_a         : out   std_logic_vector(C3_MEM_ADDR_WIDTH-1 downto 0);
-       mcb3_dram_ba        : out   std_logic_vector(C3_MEM_BANKADDR_WIDTH-1 downto 0);
-       mcb3_dram_ras_n     : out   std_logic;
-       mcb3_dram_cas_n     : out   std_logic;
-       mcb3_dram_we_n      : out   std_logic;
-       mcb3_dram_odt       : out   std_logic;
-       mcb3_dram_reset_n   : out   std_logic;
-       mcb3_dram_cke       : out   std_logic;
-       mcb3_dram_dm        : out   std_logic;
-       mcb3_dram_udqs      : inout std_logic;
-       mcb3_dram_udqs_n    : inout std_logic;
-       mcb3_rzq            : inout std_logic;
-       mcb3_dram_udm       : out   std_logic;
-       c3_sys_clk          : in    std_logic;
-       c3_sys_rst_n        : in    std_logic;
-       c3_calib_done       : out   std_logic;
-       c3_clk0             : out   std_logic;
-       c3_rst0             : out   std_logic;
-       mcb3_dram_dqs       : inout std_logic;
-       mcb3_dram_dqs_n     : inout std_logic;
-       mcb3_dram_ck        : out   std_logic;
-       mcb3_dram_ck_n      : out   std_logic;
-       c3_p0_cmd_clk       : in    std_logic;
-       c3_p0_cmd_en        : in    std_logic;
-       c3_p0_cmd_instr     : in    std_logic_vector(2 downto 0);
-       c3_p0_cmd_bl        : in    std_logic_vector(5 downto 0);
-       c3_p0_cmd_byte_addr : in    std_logic_vector(29 downto 0);
-       c3_p0_cmd_empty     : out   std_logic;
-       c3_p0_cmd_full      : out   std_logic;
-       c3_p0_wr_clk        : in    std_logic;
-       c3_p0_wr_en         : in    std_logic;
-       c3_p0_wr_mask       : in    std_logic_vector(C3_P0_MASK_SIZE - 1 downto 0);
-       c3_p0_wr_data       : in    std_logic_vector(C3_P0_DATA_PORT_SIZE - 1 downto 0);
-       c3_p0_wr_full       : out   std_logic;
-       c3_p0_wr_empty      : out   std_logic;
-       c3_p0_wr_count      : out   std_logic_vector(6 downto 0);
-       c3_p0_wr_underrun   : out   std_logic;
-       c3_p0_wr_error      : out   std_logic;
-       c3_p0_rd_clk        : in    std_logic;
-       c3_p0_rd_en         : in    std_logic;
-       c3_p0_rd_data       : out   std_logic_vector(C3_P0_DATA_PORT_SIZE - 1 downto 0);
-       c3_p0_rd_full       : out   std_logic;
-       c3_p0_rd_empty      : out   std_logic;
-       c3_p0_rd_count      : out   std_logic_vector(6 downto 0);
-       c3_p0_rd_overflow   : out   std_logic;
-       c3_p0_rd_error      : out   std_logic;
-       c3_p1_cmd_clk       : in    std_logic;
-       c3_p1_cmd_en        : in    std_logic;
-       c3_p1_cmd_instr     : in    std_logic_vector(2 downto 0);
-       c3_p1_cmd_bl        : in    std_logic_vector(5 downto 0);
-       c3_p1_cmd_byte_addr : in    std_logic_vector(29 downto 0);
-       c3_p1_cmd_empty     : out   std_logic;
-       c3_p1_cmd_full      : out   std_logic;
-       c3_p1_wr_clk        : in    std_logic;
-       c3_p1_wr_en         : in    std_logic;
-       c3_p1_wr_mask       : in    std_logic_vector(C3_P1_MASK_SIZE - 1 downto 0);
-       c3_p1_wr_data       : in    std_logic_vector(C3_P1_DATA_PORT_SIZE - 1 downto 0);
-       c3_p1_wr_full       : out   std_logic;
-       c3_p1_wr_empty      : out   std_logic;
-       c3_p1_wr_count      : out   std_logic_vector(6 downto 0);
-       c3_p1_wr_underrun   : out   std_logic;
-       c3_p1_wr_error      : out   std_logic;
-       c3_p1_rd_clk        : in    std_logic;
-       c3_p1_rd_en         : in    std_logic;
-       c3_p1_rd_data       : out   std_logic_vector(C3_P1_DATA_PORT_SIZE - 1 downto 0);
-       c3_p1_rd_full       : out   std_logic;
-       c3_p1_rd_empty      : out   std_logic;
-       c3_p1_rd_count      : out   std_logic_vector(6 downto 0);
-       c3_p1_rd_overflow   : out   std_logic;
-       c3_p1_rd_error      : out   std_logic
-       );
-  end component ddr3_ctrl_bank3_64b_32b;
+  -- Components generated from Xilinx CoreGen are stored in ddr3_ctrl_wrapper_pkg
 
 
 --==============================================================================
@@ -398,199 +213,583 @@ architecture rtl of ddr3_ctrl_wrapper is
 begin
 
   gen_test_bank_port_select : if(g_BANK_PORT_SELECT /= "BANK3_32B_32B" and
-                                 g_BANK_PORT_SELECT /= "BANK3_64B_32B") generate
-    assert false report "ddr3_ctrl_wrapper: Selected bank or port size is no supported. Currently supported values are: BANK3_64B_32B, BANK3_32B_32B" severity failure;
+                                 g_BANK_PORT_SELECT /= "BANK3_64B_32B" and
+                                 g_BANK_PORT_SELECT /= "BANK4_32B_32B" and
+                                 g_BANK_PORT_SELECT /= "BANK4_64B_32B" and
+                                 g_BANK_PORT_SELECT /= "BANK5_32B_32B" and
+                                 g_BANK_PORT_SELECT /= "BANK5_64B_32B") generate
+    assert false report "ddr3_ctrl_wrapper: Selected bank or port size is no supported. Currently supported values are: BANK3_64B_32B, BANK3_32B_32B, BANK4_32B_32B, BANK4_64B_32B, BANK5_32B_32B, BANK5_64B_32B" severity failure;
   end generate gen_test_bank_port_select;
 
   gen_bank3_32b_32b : if(g_BANK_PORT_SELECT = "BANK3_32B_32B") generate
     cmp_ddr3_ctrl : ddr3_ctrl_bank3_32b_32b
-    generic map (
-      C3_P0_MASK_SIZE       => 4,
-      C3_P0_DATA_PORT_SIZE  => 32,
-      C3_P1_MASK_SIZE       => 4,
-      C3_P1_DATA_PORT_SIZE  => 32,
-      C3_MEMCLK_PERIOD      => g_MEMCLK_PERIOD,
-      C3_RST_ACT_LOW        => 1,       -- Active low
-      C3_CALIB_SOFT_IP      => g_CALIB_SOFT_IP,
-      C3_MEM_ADDR_ORDER     => g_MEM_ADDR_ORDER,
-      C3_NUM_DQ_PINS        => g_NUM_DQ_PINS,
-      C3_MEM_ADDR_WIDTH     => g_MEM_ADDR_WIDTH,
-      C3_MEM_BANKADDR_WIDTH => g_MEM_BANKADDR_WIDTH,
-      C3_SIMULATION         => g_SIMULATION,
-      C3_INPUT_CLK_TYPE     => "SINGLE_ENDED"
-      )
-    port map (
-      c3_sys_clk    => clk_i,
-      c3_sys_rst_n  => rst_n_i,
-      c3_clk0       => open,
-      c3_rst0       => open,
-      c3_calib_done => calib_done_o,
+      generic map (
+        C3_P0_MASK_SIZE       => 4,
+        C3_P0_DATA_PORT_SIZE  => 32,
+        C3_P1_MASK_SIZE       => 4,
+        C3_P1_DATA_PORT_SIZE  => 32,
+        C3_MEMCLK_PERIOD      => g_MEMCLK_PERIOD,
+        C3_RST_ACT_LOW        => 1,     -- Active low
+        C3_CALIB_SOFT_IP      => g_CALIB_SOFT_IP,
+        C3_MEM_ADDR_ORDER     => g_MEM_ADDR_ORDER,
+        C3_NUM_DQ_PINS        => g_NUM_DQ_PINS,
+        C3_MEM_ADDR_WIDTH     => g_MEM_ADDR_WIDTH,
+        C3_MEM_BANKADDR_WIDTH => g_MEM_BANKADDR_WIDTH,
+        C3_SIMULATION         => g_SIMULATION,
+        C3_INPUT_CLK_TYPE     => "SINGLE_ENDED"
+        )
+      port map (
+        c3_sys_clk    => clk_i,
+        c3_sys_rst_n  => rst_n_i,
+        c3_clk0       => open,
+        c3_rst0       => open,
+        c3_calib_done => calib_done_o,
 
-      mcb3_dram_dq      => ddr3_dq_b,
-      mcb3_dram_a       => ddr3_a_o,
-      mcb3_dram_ba      => ddr3_ba_o,
-      mcb3_dram_ras_n   => ddr3_ras_n_o,
-      mcb3_dram_cas_n   => ddr3_cas_n_o,
-      mcb3_dram_we_n    => ddr3_we_n_o,
-      mcb3_dram_odt     => ddr3_odt_o,
-      mcb3_dram_cke     => ddr3_cke_o,
-      mcb3_dram_ck      => ddr3_clk_p_o,
-      mcb3_dram_ck_n    => ddr3_clk_n_o,
-      mcb3_dram_dqs     => ddr3_dqs_p_b,
-      mcb3_dram_dqs_n   => ddr3_dqs_n_b,
-      mcb3_dram_reset_n => ddr3_rst_n_o,
-      mcb3_dram_udqs    => ddr3_udqs_p_b,  -- for X16 parts
-      mcb3_dram_udqs_n  => ddr3_udqs_n_b,  -- for X16 parts
-      mcb3_dram_udm     => ddr3_udm_o,     -- for X16 parts
-      mcb3_dram_dm      => ddr3_dm_o,
-      mcb3_rzq          => ddr3_rzq_b,
+        mcb3_dram_dq      => ddr3_dq_b,
+        mcb3_dram_a       => ddr3_a_o,
+        mcb3_dram_ba      => ddr3_ba_o,
+        mcb3_dram_ras_n   => ddr3_ras_n_o,
+        mcb3_dram_cas_n   => ddr3_cas_n_o,
+        mcb3_dram_we_n    => ddr3_we_n_o,
+        mcb3_dram_odt     => ddr3_odt_o,
+        mcb3_dram_cke     => ddr3_cke_o,
+        mcb3_dram_ck      => ddr3_clk_p_o,
+        mcb3_dram_ck_n    => ddr3_clk_n_o,
+        mcb3_dram_dqs     => ddr3_dqs_p_b,
+        mcb3_dram_dqs_n   => ddr3_dqs_n_b,
+        mcb3_dram_reset_n => ddr3_rst_n_o,
+        mcb3_dram_udqs    => ddr3_udqs_p_b,  -- for X16 parts
+        mcb3_dram_udqs_n  => ddr3_udqs_n_b,  -- for X16 parts
+        mcb3_dram_udm     => ddr3_udm_o,     -- for X16 parts
+        mcb3_dram_dm      => ddr3_dm_o,
+        mcb3_rzq          => ddr3_rzq_b,
 
-      c3_p0_cmd_clk       => p0_cmd_clk_i,
-      c3_p0_cmd_en        => p0_cmd_en_i,
-      c3_p0_cmd_instr     => p0_cmd_instr_i,
-      c3_p0_cmd_bl        => p0_cmd_bl_i,
-      c3_p0_cmd_byte_addr => p0_cmd_byte_addr_i,
-      c3_p0_cmd_empty     => p0_cmd_empty_o,
-      c3_p0_cmd_full      => p0_cmd_full_o,
-      c3_p0_wr_clk        => p0_wr_clk_i,
-      c3_p0_wr_en         => p0_wr_en_i,
-      c3_p0_wr_mask       => p0_wr_mask_i,
-      c3_p0_wr_data       => p0_wr_data_i,
-      c3_p0_wr_full       => p0_wr_full_o,
-      c3_p0_wr_empty      => p0_wr_empty_o,
-      c3_p0_wr_count      => p0_wr_count_o,
-      c3_p0_wr_underrun   => p0_wr_underrun_o,
-      c3_p0_wr_error      => p0_wr_error_o,
-      c3_p0_rd_clk        => p0_rd_clk_i,
-      c3_p0_rd_en         => p0_rd_en_i,
-      c3_p0_rd_data       => p0_rd_data_o,
-      c3_p0_rd_full       => p0_rd_full_o,
-      c3_p0_rd_empty      => p0_rd_empty_o,
-      c3_p0_rd_count      => p0_rd_count_o,
-      c3_p0_rd_overflow   => p0_rd_overflow_o,
-      c3_p0_rd_error      => p0_rd_error_o,
+        c3_p0_cmd_clk       => p0_cmd_clk_i,
+        c3_p0_cmd_en        => p0_cmd_en_i,
+        c3_p0_cmd_instr     => p0_cmd_instr_i,
+        c3_p0_cmd_bl        => p0_cmd_bl_i,
+        c3_p0_cmd_byte_addr => p0_cmd_byte_addr_i,
+        c3_p0_cmd_empty     => p0_cmd_empty_o,
+        c3_p0_cmd_full      => p0_cmd_full_o,
+        c3_p0_wr_clk        => p0_wr_clk_i,
+        c3_p0_wr_en         => p0_wr_en_i,
+        c3_p0_wr_mask       => p0_wr_mask_i,
+        c3_p0_wr_data       => p0_wr_data_i,
+        c3_p0_wr_full       => p0_wr_full_o,
+        c3_p0_wr_empty      => p0_wr_empty_o,
+        c3_p0_wr_count      => p0_wr_count_o,
+        c3_p0_wr_underrun   => p0_wr_underrun_o,
+        c3_p0_wr_error      => p0_wr_error_o,
+        c3_p0_rd_clk        => p0_rd_clk_i,
+        c3_p0_rd_en         => p0_rd_en_i,
+        c3_p0_rd_data       => p0_rd_data_o,
+        c3_p0_rd_full       => p0_rd_full_o,
+        c3_p0_rd_empty      => p0_rd_empty_o,
+        c3_p0_rd_count      => p0_rd_count_o,
+        c3_p0_rd_overflow   => p0_rd_overflow_o,
+        c3_p0_rd_error      => p0_rd_error_o,
 
-      c3_p1_cmd_clk       => p1_cmd_clk_i,
-      c3_p1_cmd_en        => p1_cmd_en_i,
-      c3_p1_cmd_instr     => p1_cmd_instr_i,
-      c3_p1_cmd_bl        => p1_cmd_bl_i,
-      c3_p1_cmd_byte_addr => p1_cmd_byte_addr_i,
-      c3_p1_cmd_empty     => p1_cmd_empty_o,
-      c3_p1_cmd_full      => p1_cmd_full_o,
-      c3_p1_wr_clk        => p1_wr_clk_i,
-      c3_p1_wr_en         => p1_wr_en_i,
-      c3_p1_wr_mask       => p1_wr_mask_i,
-      c3_p1_wr_data       => p1_wr_data_i,
-      c3_p1_wr_full       => p1_wr_full_o,
-      c3_p1_wr_empty      => p1_wr_empty_o,
-      c3_p1_wr_count      => p1_wr_count_o,
-      c3_p1_wr_underrun   => p1_wr_underrun_o,
-      c3_p1_wr_error      => p1_wr_error_o,
-      c3_p1_rd_clk        => p1_rd_clk_i,
-      c3_p1_rd_en         => p1_rd_en_i,
-      c3_p1_rd_data       => p1_rd_data_o,
-      c3_p1_rd_full       => p1_rd_full_o,
-      c3_p1_rd_empty      => p1_rd_empty_o,
-      c3_p1_rd_count      => p1_rd_count_o,
-      c3_p1_rd_overflow   => p1_rd_overflow_o,
-      c3_p1_rd_error      => p1_rd_error_o
-      );
+        c3_p1_cmd_clk       => p1_cmd_clk_i,
+        c3_p1_cmd_en        => p1_cmd_en_i,
+        c3_p1_cmd_instr     => p1_cmd_instr_i,
+        c3_p1_cmd_bl        => p1_cmd_bl_i,
+        c3_p1_cmd_byte_addr => p1_cmd_byte_addr_i,
+        c3_p1_cmd_empty     => p1_cmd_empty_o,
+        c3_p1_cmd_full      => p1_cmd_full_o,
+        c3_p1_wr_clk        => p1_wr_clk_i,
+        c3_p1_wr_en         => p1_wr_en_i,
+        c3_p1_wr_mask       => p1_wr_mask_i,
+        c3_p1_wr_data       => p1_wr_data_i,
+        c3_p1_wr_full       => p1_wr_full_o,
+        c3_p1_wr_empty      => p1_wr_empty_o,
+        c3_p1_wr_count      => p1_wr_count_o,
+        c3_p1_wr_underrun   => p1_wr_underrun_o,
+        c3_p1_wr_error      => p1_wr_error_o,
+        c3_p1_rd_clk        => p1_rd_clk_i,
+        c3_p1_rd_en         => p1_rd_en_i,
+        c3_p1_rd_data       => p1_rd_data_o,
+        c3_p1_rd_full       => p1_rd_full_o,
+        c3_p1_rd_empty      => p1_rd_empty_o,
+        c3_p1_rd_count      => p1_rd_count_o,
+        c3_p1_rd_overflow   => p1_rd_overflow_o,
+        c3_p1_rd_error      => p1_rd_error_o
+        );
   end generate gen_bank3_32b_32b;
 
   gen_bank3_64b_32b : if(g_BANK_PORT_SELECT = "BANK3_64B_32B") generate
     cmp_ddr3_ctrl : ddr3_ctrl_bank3_64b_32b
-    generic map (
-      C3_P0_MASK_SIZE       => 8,
-      C3_P0_DATA_PORT_SIZE  => 64,
-      C3_P1_MASK_SIZE       => 4,
-      C3_P1_DATA_PORT_SIZE  => 32,
-      C3_MEMCLK_PERIOD      => g_MEMCLK_PERIOD,
-      C3_RST_ACT_LOW        => 1,       -- Active low
-      C3_CALIB_SOFT_IP      => g_CALIB_SOFT_IP,
-      C3_MEM_ADDR_ORDER     => g_MEM_ADDR_ORDER,
-      C3_NUM_DQ_PINS        => g_NUM_DQ_PINS,
-      C3_MEM_ADDR_WIDTH     => g_MEM_ADDR_WIDTH,
-      C3_MEM_BANKADDR_WIDTH => g_MEM_BANKADDR_WIDTH,
-      C3_SIMULATION         => g_SIMULATION,
-      C3_INPUT_CLK_TYPE     => "SINGLE_ENDED"
-      )
-    port map (
-      c3_sys_clk    => clk_i,
-      c3_sys_rst_n  => rst_n_i,
-      c3_clk0       => open,
-      c3_rst0       => open,
-      c3_calib_done => calib_done_o,
+      generic map (
+        C3_P0_MASK_SIZE       => 8,
+        C3_P0_DATA_PORT_SIZE  => 64,
+        C3_P1_MASK_SIZE       => 4,
+        C3_P1_DATA_PORT_SIZE  => 32,
+        C3_MEMCLK_PERIOD      => g_MEMCLK_PERIOD,
+        C3_RST_ACT_LOW        => 1,     -- Active low
+        C3_CALIB_SOFT_IP      => g_CALIB_SOFT_IP,
+        C3_MEM_ADDR_ORDER     => g_MEM_ADDR_ORDER,
+        C3_NUM_DQ_PINS        => g_NUM_DQ_PINS,
+        C3_MEM_ADDR_WIDTH     => g_MEM_ADDR_WIDTH,
+        C3_MEM_BANKADDR_WIDTH => g_MEM_BANKADDR_WIDTH,
+        C3_SIMULATION         => g_SIMULATION,
+        C3_INPUT_CLK_TYPE     => "SINGLE_ENDED"
+        )
+      port map (
+        c3_sys_clk    => clk_i,
+        c3_sys_rst_n  => rst_n_i,
+        c3_clk0       => open,
+        c3_rst0       => open,
+        c3_calib_done => calib_done_o,
 
-      mcb3_dram_dq      => ddr3_dq_b,
-      mcb3_dram_a       => ddr3_a_o,
-      mcb3_dram_ba      => ddr3_ba_o,
-      mcb3_dram_ras_n   => ddr3_ras_n_o,
-      mcb3_dram_cas_n   => ddr3_cas_n_o,
-      mcb3_dram_we_n    => ddr3_we_n_o,
-      mcb3_dram_odt     => ddr3_odt_o,
-      mcb3_dram_cke     => ddr3_cke_o,
-      mcb3_dram_ck      => ddr3_clk_p_o,
-      mcb3_dram_ck_n    => ddr3_clk_n_o,
-      mcb3_dram_dqs     => ddr3_dqs_p_b,
-      mcb3_dram_dqs_n   => ddr3_dqs_n_b,
-      mcb3_dram_reset_n => ddr3_rst_n_o,
-      mcb3_dram_udqs    => ddr3_udqs_p_b,  -- for X16 parts
-      mcb3_dram_udqs_n  => ddr3_udqs_n_b,  -- for X16 parts
-      mcb3_dram_udm     => ddr3_udm_o,     -- for X16 parts
-      mcb3_dram_dm      => ddr3_dm_o,
-      mcb3_rzq          => ddr3_rzq_b,
+        mcb3_dram_dq      => ddr3_dq_b,
+        mcb3_dram_a       => ddr3_a_o,
+        mcb3_dram_ba      => ddr3_ba_o,
+        mcb3_dram_ras_n   => ddr3_ras_n_o,
+        mcb3_dram_cas_n   => ddr3_cas_n_o,
+        mcb3_dram_we_n    => ddr3_we_n_o,
+        mcb3_dram_odt     => ddr3_odt_o,
+        mcb3_dram_cke     => ddr3_cke_o,
+        mcb3_dram_ck      => ddr3_clk_p_o,
+        mcb3_dram_ck_n    => ddr3_clk_n_o,
+        mcb3_dram_dqs     => ddr3_dqs_p_b,
+        mcb3_dram_dqs_n   => ddr3_dqs_n_b,
+        mcb3_dram_reset_n => ddr3_rst_n_o,
+        mcb3_dram_udqs    => ddr3_udqs_p_b,  -- for X16 parts
+        mcb3_dram_udqs_n  => ddr3_udqs_n_b,  -- for X16 parts
+        mcb3_dram_udm     => ddr3_udm_o,     -- for X16 parts
+        mcb3_dram_dm      => ddr3_dm_o,
+        mcb3_rzq          => ddr3_rzq_b,
 
-      c3_p0_cmd_clk       => p0_cmd_clk_i,
-      c3_p0_cmd_en        => p0_cmd_en_i,
-      c3_p0_cmd_instr     => p0_cmd_instr_i,
-      c3_p0_cmd_bl        => p0_cmd_bl_i,
-      c3_p0_cmd_byte_addr => p0_cmd_byte_addr_i,
-      c3_p0_cmd_empty     => p0_cmd_empty_o,
-      c3_p0_cmd_full      => p0_cmd_full_o,
-      c3_p0_wr_clk        => p0_wr_clk_i,
-      c3_p0_wr_en         => p0_wr_en_i,
-      c3_p0_wr_mask       => p0_wr_mask_i,
-      c3_p0_wr_data       => p0_wr_data_i,
-      c3_p0_wr_full       => p0_wr_full_o,
-      c3_p0_wr_empty      => p0_wr_empty_o,
-      c3_p0_wr_count      => p0_wr_count_o,
-      c3_p0_wr_underrun   => p0_wr_underrun_o,
-      c3_p0_wr_error      => p0_wr_error_o,
-      c3_p0_rd_clk        => p0_rd_clk_i,
-      c3_p0_rd_en         => p0_rd_en_i,
-      c3_p0_rd_data       => p0_rd_data_o,
-      c3_p0_rd_full       => p0_rd_full_o,
-      c3_p0_rd_empty      => p0_rd_empty_o,
-      c3_p0_rd_count      => p0_rd_count_o,
-      c3_p0_rd_overflow   => p0_rd_overflow_o,
-      c3_p0_rd_error      => p0_rd_error_o,
+        c3_p0_cmd_clk       => p0_cmd_clk_i,
+        c3_p0_cmd_en        => p0_cmd_en_i,
+        c3_p0_cmd_instr     => p0_cmd_instr_i,
+        c3_p0_cmd_bl        => p0_cmd_bl_i,
+        c3_p0_cmd_byte_addr => p0_cmd_byte_addr_i,
+        c3_p0_cmd_empty     => p0_cmd_empty_o,
+        c3_p0_cmd_full      => p0_cmd_full_o,
+        c3_p0_wr_clk        => p0_wr_clk_i,
+        c3_p0_wr_en         => p0_wr_en_i,
+        c3_p0_wr_mask       => p0_wr_mask_i,
+        c3_p0_wr_data       => p0_wr_data_i,
+        c3_p0_wr_full       => p0_wr_full_o,
+        c3_p0_wr_empty      => p0_wr_empty_o,
+        c3_p0_wr_count      => p0_wr_count_o,
+        c3_p0_wr_underrun   => p0_wr_underrun_o,
+        c3_p0_wr_error      => p0_wr_error_o,
+        c3_p0_rd_clk        => p0_rd_clk_i,
+        c3_p0_rd_en         => p0_rd_en_i,
+        c3_p0_rd_data       => p0_rd_data_o,
+        c3_p0_rd_full       => p0_rd_full_o,
+        c3_p0_rd_empty      => p0_rd_empty_o,
+        c3_p0_rd_count      => p0_rd_count_o,
+        c3_p0_rd_overflow   => p0_rd_overflow_o,
+        c3_p0_rd_error      => p0_rd_error_o,
 
-      c3_p1_cmd_clk       => p1_cmd_clk_i,
-      c3_p1_cmd_en        => p1_cmd_en_i,
-      c3_p1_cmd_instr     => p1_cmd_instr_i,
-      c3_p1_cmd_bl        => p1_cmd_bl_i,
-      c3_p1_cmd_byte_addr => p1_cmd_byte_addr_i,
-      c3_p1_cmd_empty     => p1_cmd_empty_o,
-      c3_p1_cmd_full      => p1_cmd_full_o,
-      c3_p1_wr_clk        => p1_wr_clk_i,
-      c3_p1_wr_en         => p1_wr_en_i,
-      c3_p1_wr_mask       => p1_wr_mask_i,
-      c3_p1_wr_data       => p1_wr_data_i,
-      c3_p1_wr_full       => p1_wr_full_o,
-      c3_p1_wr_empty      => p1_wr_empty_o,
-      c3_p1_wr_count      => p1_wr_count_o,
-      c3_p1_wr_underrun   => p1_wr_underrun_o,
-      c3_p1_wr_error      => p1_wr_error_o,
-      c3_p1_rd_clk        => p1_rd_clk_i,
-      c3_p1_rd_en         => p1_rd_en_i,
-      c3_p1_rd_data       => p1_rd_data_o,
-      c3_p1_rd_full       => p1_rd_full_o,
-      c3_p1_rd_empty      => p1_rd_empty_o,
-      c3_p1_rd_count      => p1_rd_count_o,
-      c3_p1_rd_overflow   => p1_rd_overflow_o,
-      c3_p1_rd_error      => p1_rd_error_o
-      );
+        c3_p1_cmd_clk       => p1_cmd_clk_i,
+        c3_p1_cmd_en        => p1_cmd_en_i,
+        c3_p1_cmd_instr     => p1_cmd_instr_i,
+        c3_p1_cmd_bl        => p1_cmd_bl_i,
+        c3_p1_cmd_byte_addr => p1_cmd_byte_addr_i,
+        c3_p1_cmd_empty     => p1_cmd_empty_o,
+        c3_p1_cmd_full      => p1_cmd_full_o,
+        c3_p1_wr_clk        => p1_wr_clk_i,
+        c3_p1_wr_en         => p1_wr_en_i,
+        c3_p1_wr_mask       => p1_wr_mask_i,
+        c3_p1_wr_data       => p1_wr_data_i,
+        c3_p1_wr_full       => p1_wr_full_o,
+        c3_p1_wr_empty      => p1_wr_empty_o,
+        c3_p1_wr_count      => p1_wr_count_o,
+        c3_p1_wr_underrun   => p1_wr_underrun_o,
+        c3_p1_wr_error      => p1_wr_error_o,
+        c3_p1_rd_clk        => p1_rd_clk_i,
+        c3_p1_rd_en         => p1_rd_en_i,
+        c3_p1_rd_data       => p1_rd_data_o,
+        c3_p1_rd_full       => p1_rd_full_o,
+        c3_p1_rd_empty      => p1_rd_empty_o,
+        c3_p1_rd_count      => p1_rd_count_o,
+        c3_p1_rd_overflow   => p1_rd_overflow_o,
+        c3_p1_rd_error      => p1_rd_error_o
+        );
   end generate gen_bank3_64b_32b;
+
+  gen_bank4_32b_32b : if(g_BANK_PORT_SELECT = "BANK4_32B_32B") generate
+    cmp_ddr3_ctrl : ddr3_ctrl_bank4_32b_32b
+      generic map (
+        C4_P0_MASK_SIZE       => 4,
+        C4_P0_DATA_PORT_SIZE  => 32,
+        C4_P1_MASK_SIZE       => 4,
+        C4_P1_DATA_PORT_SIZE  => 32,
+        C4_MEMCLK_PERIOD      => g_MEMCLK_PERIOD,
+        C4_RST_ACT_LOW        => 1,     -- Active low
+        C4_CALIB_SOFT_IP      => g_CALIB_SOFT_IP,
+        C4_MEM_ADDR_ORDER     => g_MEM_ADDR_ORDER,
+        C4_NUM_DQ_PINS        => g_NUM_DQ_PINS,
+        C4_MEM_ADDR_WIDTH     => g_MEM_ADDR_WIDTH,
+        C4_MEM_BANKADDR_WIDTH => g_MEM_BANKADDR_WIDTH,
+        C4_SIMULATION         => g_SIMULATION,
+        C4_INPUT_CLK_TYPE     => "SINGLE_ENDED"
+        )
+      port map (
+        c4_sys_clk    => clk_i,
+        c4_sys_rst_i  => rst_n_i,
+        c4_clk0       => open,
+        c4_rst0       => open,
+        c4_calib_done => calib_done_o,
+
+        mcb4_dram_dq      => ddr3_dq_b,
+        mcb4_dram_a       => ddr3_a_o,
+        mcb4_dram_ba      => ddr3_ba_o,
+        mcb4_dram_ras_n   => ddr3_ras_n_o,
+        mcb4_dram_cas_n   => ddr3_cas_n_o,
+        mcb4_dram_we_n    => ddr3_we_n_o,
+        mcb4_dram_odt     => ddr3_odt_o,
+        mcb4_dram_cke     => ddr3_cke_o,
+        mcb4_dram_ck      => ddr3_clk_p_o,
+        mcb4_dram_ck_n    => ddr3_clk_n_o,
+        mcb4_dram_dqs     => ddr3_dqs_p_b,
+        mcb4_dram_dqs_n   => ddr3_dqs_n_b,
+        mcb4_dram_reset_n => ddr3_rst_n_o,
+        mcb4_dram_udqs    => ddr3_udqs_p_b,  -- for X16 parts
+        mcb4_dram_udqs_n  => ddr3_udqs_n_b,  -- for X16 parts
+        mcb4_dram_udm     => ddr3_udm_o,     -- for X16 parts
+        mcb4_dram_dm      => ddr3_dm_o,
+        mcb4_rzq          => ddr3_rzq_b,
+
+        c4_p0_cmd_clk       => p0_cmd_clk_i,
+        c4_p0_cmd_en        => p0_cmd_en_i,
+        c4_p0_cmd_instr     => p0_cmd_instr_i,
+        c4_p0_cmd_bl        => p0_cmd_bl_i,
+        c4_p0_cmd_byte_addr => p0_cmd_byte_addr_i,
+        c4_p0_cmd_empty     => p0_cmd_empty_o,
+        c4_p0_cmd_full      => p0_cmd_full_o,
+        c4_p0_wr_clk        => p0_wr_clk_i,
+        c4_p0_wr_en         => p0_wr_en_i,
+        c4_p0_wr_mask       => p0_wr_mask_i,
+        c4_p0_wr_data       => p0_wr_data_i,
+        c4_p0_wr_full       => p0_wr_full_o,
+        c4_p0_wr_empty      => p0_wr_empty_o,
+        c4_p0_wr_count      => p0_wr_count_o,
+        c4_p0_wr_underrun   => p0_wr_underrun_o,
+        c4_p0_wr_error      => p0_wr_error_o,
+        c4_p0_rd_clk        => p0_rd_clk_i,
+        c4_p0_rd_en         => p0_rd_en_i,
+        c4_p0_rd_data       => p0_rd_data_o,
+        c4_p0_rd_full       => p0_rd_full_o,
+        c4_p0_rd_empty      => p0_rd_empty_o,
+        c4_p0_rd_count      => p0_rd_count_o,
+        c4_p0_rd_overflow   => p0_rd_overflow_o,
+        c4_p0_rd_error      => p0_rd_error_o,
+
+        c4_p1_cmd_clk       => p1_cmd_clk_i,
+        c4_p1_cmd_en        => p1_cmd_en_i,
+        c4_p1_cmd_instr     => p1_cmd_instr_i,
+        c4_p1_cmd_bl        => p1_cmd_bl_i,
+        c4_p1_cmd_byte_addr => p1_cmd_byte_addr_i,
+        c4_p1_cmd_empty     => p1_cmd_empty_o,
+        c4_p1_cmd_full      => p1_cmd_full_o,
+        c4_p1_wr_clk        => p1_wr_clk_i,
+        c4_p1_wr_en         => p1_wr_en_i,
+        c4_p1_wr_mask       => p1_wr_mask_i,
+        c4_p1_wr_data       => p1_wr_data_i,
+        c4_p1_wr_full       => p1_wr_full_o,
+        c4_p1_wr_empty      => p1_wr_empty_o,
+        c4_p1_wr_count      => p1_wr_count_o,
+        c4_p1_wr_underrun   => p1_wr_underrun_o,
+        c4_p1_wr_error      => p1_wr_error_o,
+        c4_p1_rd_clk        => p1_rd_clk_i,
+        c4_p1_rd_en         => p1_rd_en_i,
+        c4_p1_rd_data       => p1_rd_data_o,
+        c4_p1_rd_full       => p1_rd_full_o,
+        c4_p1_rd_empty      => p1_rd_empty_o,
+        c4_p1_rd_count      => p1_rd_count_o,
+        c4_p1_rd_overflow   => p1_rd_overflow_o,
+        c4_p1_rd_error      => p1_rd_error_o
+        );
+  end generate gen_bank4_32b_32b;
+
+  gen_bank4_64b_32b : if(g_BANK_PORT_SELECT = "BANK4_64B_32B") generate
+    cmp_ddr3_ctrl : ddr3_ctrl_bank4_64b_32b
+      generic map (
+        C4_P0_MASK_SIZE       => 8,
+        C4_P0_DATA_PORT_SIZE  => 64,
+        C4_P1_MASK_SIZE       => 4,
+        C4_P1_DATA_PORT_SIZE  => 32,
+        C4_MEMCLK_PERIOD      => g_MEMCLK_PERIOD,
+        C4_RST_ACT_LOW        => 1,     -- Active low
+        C4_CALIB_SOFT_IP      => g_CALIB_SOFT_IP,
+        C4_MEM_ADDR_ORDER     => g_MEM_ADDR_ORDER,
+        C4_NUM_DQ_PINS        => g_NUM_DQ_PINS,
+        C4_MEM_ADDR_WIDTH     => g_MEM_ADDR_WIDTH,
+        C4_MEM_BANKADDR_WIDTH => g_MEM_BANKADDR_WIDTH,
+        C4_SIMULATION         => g_SIMULATION,
+        C4_INPUT_CLK_TYPE     => "SINGLE_ENDED"
+        )
+      port map (
+        c4_sys_clk    => clk_i,
+        c4_sys_rst_i  => rst_n_i,
+        c4_clk0       => open,
+        c4_rst0       => open,
+        c4_calib_done => calib_done_o,
+
+        mcb4_dram_dq      => ddr3_dq_b,
+        mcb4_dram_a       => ddr3_a_o,
+        mcb4_dram_ba      => ddr3_ba_o,
+        mcb4_dram_ras_n   => ddr3_ras_n_o,
+        mcb4_dram_cas_n   => ddr3_cas_n_o,
+        mcb4_dram_we_n    => ddr3_we_n_o,
+        mcb4_dram_odt     => ddr3_odt_o,
+        mcb4_dram_cke     => ddr3_cke_o,
+        mcb4_dram_ck      => ddr3_clk_p_o,
+        mcb4_dram_ck_n    => ddr3_clk_n_o,
+        mcb4_dram_dqs     => ddr3_dqs_p_b,
+        mcb4_dram_dqs_n   => ddr3_dqs_n_b,
+        mcb4_dram_reset_n => ddr3_rst_n_o,
+        mcb4_dram_udqs    => ddr3_udqs_p_b,  -- for X16 parts
+        mcb4_dram_udqs_n  => ddr3_udqs_n_b,  -- for X16 parts
+        mcb4_dram_udm     => ddr3_udm_o,     -- for X16 parts
+        mcb4_dram_dm      => ddr3_dm_o,
+        mcb4_rzq          => ddr3_rzq_b,
+
+        c4_p0_cmd_clk       => p0_cmd_clk_i,
+        c4_p0_cmd_en        => p0_cmd_en_i,
+        c4_p0_cmd_instr     => p0_cmd_instr_i,
+        c4_p0_cmd_bl        => p0_cmd_bl_i,
+        c4_p0_cmd_byte_addr => p0_cmd_byte_addr_i,
+        c4_p0_cmd_empty     => p0_cmd_empty_o,
+        c4_p0_cmd_full      => p0_cmd_full_o,
+        c4_p0_wr_clk        => p0_wr_clk_i,
+        c4_p0_wr_en         => p0_wr_en_i,
+        c4_p0_wr_mask       => p0_wr_mask_i,
+        c4_p0_wr_data       => p0_wr_data_i,
+        c4_p0_wr_full       => p0_wr_full_o,
+        c4_p0_wr_empty      => p0_wr_empty_o,
+        c4_p0_wr_count      => p0_wr_count_o,
+        c4_p0_wr_underrun   => p0_wr_underrun_o,
+        c4_p0_wr_error      => p0_wr_error_o,
+        c4_p0_rd_clk        => p0_rd_clk_i,
+        c4_p0_rd_en         => p0_rd_en_i,
+        c4_p0_rd_data       => p0_rd_data_o,
+        c4_p0_rd_full       => p0_rd_full_o,
+        c4_p0_rd_empty      => p0_rd_empty_o,
+        c4_p0_rd_count      => p0_rd_count_o,
+        c4_p0_rd_overflow   => p0_rd_overflow_o,
+        c4_p0_rd_error      => p0_rd_error_o,
+
+        c4_p1_cmd_clk       => p1_cmd_clk_i,
+        c4_p1_cmd_en        => p1_cmd_en_i,
+        c4_p1_cmd_instr     => p1_cmd_instr_i,
+        c4_p1_cmd_bl        => p1_cmd_bl_i,
+        c4_p1_cmd_byte_addr => p1_cmd_byte_addr_i,
+        c4_p1_cmd_empty     => p1_cmd_empty_o,
+        c4_p1_cmd_full      => p1_cmd_full_o,
+        c4_p1_wr_clk        => p1_wr_clk_i,
+        c4_p1_wr_en         => p1_wr_en_i,
+        c4_p1_wr_mask       => p1_wr_mask_i,
+        c4_p1_wr_data       => p1_wr_data_i,
+        c4_p1_wr_full       => p1_wr_full_o,
+        c4_p1_wr_empty      => p1_wr_empty_o,
+        c4_p1_wr_count      => p1_wr_count_o,
+        c4_p1_wr_underrun   => p1_wr_underrun_o,
+        c4_p1_wr_error      => p1_wr_error_o,
+        c4_p1_rd_clk        => p1_rd_clk_i,
+        c4_p1_rd_en         => p1_rd_en_i,
+        c4_p1_rd_data       => p1_rd_data_o,
+        c4_p1_rd_full       => p1_rd_full_o,
+        c4_p1_rd_empty      => p1_rd_empty_o,
+        c4_p1_rd_count      => p1_rd_count_o,
+        c4_p1_rd_overflow   => p1_rd_overflow_o,
+        c4_p1_rd_error      => p1_rd_error_o
+        );
+  end generate gen_bank4_64b_32b;
+
+  gen_bank5_32b_32b : if(g_BANK_PORT_SELECT = "BANK5_32B_32B") generate
+    cmp_ddr3_ctrl : ddr3_ctrl_bank5_32b_32b
+      generic map (
+        C5_P0_MASK_SIZE       => 4,
+        C5_P0_DATA_PORT_SIZE  => 32,
+        C5_P1_MASK_SIZE       => 4,
+        C5_P1_DATA_PORT_SIZE  => 32,
+        C5_MEMCLK_PERIOD      => g_MEMCLK_PERIOD,
+        C5_RST_ACT_LOW        => 1,     -- Active low
+        C5_CALIB_SOFT_IP      => g_CALIB_SOFT_IP,
+        C5_MEM_ADDR_ORDER     => g_MEM_ADDR_ORDER,
+        C5_NUM_DQ_PINS        => g_NUM_DQ_PINS,
+        C5_MEM_ADDR_WIDTH     => g_MEM_ADDR_WIDTH,
+        C5_MEM_BANKADDR_WIDTH => g_MEM_BANKADDR_WIDTH,
+        C5_SIMULATION         => g_SIMULATION,
+        C5_INPUT_CLK_TYPE     => "SINGLE_ENDED"
+        )
+      port map (
+        c5_sys_clk    => clk_i,
+        c5_sys_rst_i  => rst_n_i,
+        c5_clk0       => open,
+        c5_rst0       => open,
+        c5_calib_done => calib_done_o,
+
+        mcb5_dram_dq      => ddr3_dq_b,
+        mcb5_dram_a       => ddr3_a_o,
+        mcb5_dram_ba      => ddr3_ba_o,
+        mcb5_dram_ras_n   => ddr3_ras_n_o,
+        mcb5_dram_cas_n   => ddr3_cas_n_o,
+        mcb5_dram_we_n    => ddr3_we_n_o,
+        mcb5_dram_odt     => ddr3_odt_o,
+        mcb5_dram_cke     => ddr3_cke_o,
+        mcb5_dram_ck      => ddr3_clk_p_o,
+        mcb5_dram_ck_n    => ddr3_clk_n_o,
+        mcb5_dram_dqs     => ddr3_dqs_p_b,
+        mcb5_dram_dqs_n   => ddr3_dqs_n_b,
+        mcb5_dram_reset_n => ddr3_rst_n_o,
+        mcb5_dram_udqs    => ddr3_udqs_p_b,  -- for X16 parts
+        mcb5_dram_udqs_n  => ddr3_udqs_n_b,  -- for X16 parts
+        mcb5_dram_udm     => ddr3_udm_o,     -- for X16 parts
+        mcb5_dram_dm      => ddr3_dm_o,
+        mcb5_rzq          => ddr3_rzq_b,
+
+        c5_p0_cmd_clk       => p0_cmd_clk_i,
+        c5_p0_cmd_en        => p0_cmd_en_i,
+        c5_p0_cmd_instr     => p0_cmd_instr_i,
+        c5_p0_cmd_bl        => p0_cmd_bl_i,
+        c5_p0_cmd_byte_addr => p0_cmd_byte_addr_i,
+        c5_p0_cmd_empty     => p0_cmd_empty_o,
+        c5_p0_cmd_full      => p0_cmd_full_o,
+        c5_p0_wr_clk        => p0_wr_clk_i,
+        c5_p0_wr_en         => p0_wr_en_i,
+        c5_p0_wr_mask       => p0_wr_mask_i,
+        c5_p0_wr_data       => p0_wr_data_i,
+        c5_p0_wr_full       => p0_wr_full_o,
+        c5_p0_wr_empty      => p0_wr_empty_o,
+        c5_p0_wr_count      => p0_wr_count_o,
+        c5_p0_wr_underrun   => p0_wr_underrun_o,
+        c5_p0_wr_error      => p0_wr_error_o,
+        c5_p0_rd_clk        => p0_rd_clk_i,
+        c5_p0_rd_en         => p0_rd_en_i,
+        c5_p0_rd_data       => p0_rd_data_o,
+        c5_p0_rd_full       => p0_rd_full_o,
+        c5_p0_rd_empty      => p0_rd_empty_o,
+        c5_p0_rd_count      => p0_rd_count_o,
+        c5_p0_rd_overflow   => p0_rd_overflow_o,
+        c5_p0_rd_error      => p0_rd_error_o,
+
+        c5_p1_cmd_clk       => p1_cmd_clk_i,
+        c5_p1_cmd_en        => p1_cmd_en_i,
+        c5_p1_cmd_instr     => p1_cmd_instr_i,
+        c5_p1_cmd_bl        => p1_cmd_bl_i,
+        c5_p1_cmd_byte_addr => p1_cmd_byte_addr_i,
+        c5_p1_cmd_empty     => p1_cmd_empty_o,
+        c5_p1_cmd_full      => p1_cmd_full_o,
+        c5_p1_wr_clk        => p1_wr_clk_i,
+        c5_p1_wr_en         => p1_wr_en_i,
+        c5_p1_wr_mask       => p1_wr_mask_i,
+        c5_p1_wr_data       => p1_wr_data_i,
+        c5_p1_wr_full       => p1_wr_full_o,
+        c5_p1_wr_empty      => p1_wr_empty_o,
+        c5_p1_wr_count      => p1_wr_count_o,
+        c5_p1_wr_underrun   => p1_wr_underrun_o,
+        c5_p1_wr_error      => p1_wr_error_o,
+        c5_p1_rd_clk        => p1_rd_clk_i,
+        c5_p1_rd_en         => p1_rd_en_i,
+        c5_p1_rd_data       => p1_rd_data_o,
+        c5_p1_rd_full       => p1_rd_full_o,
+        c5_p1_rd_empty      => p1_rd_empty_o,
+        c5_p1_rd_count      => p1_rd_count_o,
+        c5_p1_rd_overflow   => p1_rd_overflow_o,
+        c5_p1_rd_error      => p1_rd_error_o
+        );
+  end generate gen_bank5_32b_32b;
+
+  gen_bank5_64b_32b : if(g_BANK_PORT_SELECT = "BANK5_64B_32B") generate
+    cmp_ddr3_ctrl : ddr3_ctrl_bank5_64b_32b
+      generic map (
+        C5_P0_MASK_SIZE       => 8,
+        C5_P0_DATA_PORT_SIZE  => 64,
+        C5_P1_MASK_SIZE       => 4,
+        C5_P1_DATA_PORT_SIZE  => 32,
+        C5_MEMCLK_PERIOD      => g_MEMCLK_PERIOD,
+        C5_RST_ACT_LOW        => 1,     -- Active low
+        C5_CALIB_SOFT_IP      => g_CALIB_SOFT_IP,
+        C5_MEM_ADDR_ORDER     => g_MEM_ADDR_ORDER,
+        C5_NUM_DQ_PINS        => g_NUM_DQ_PINS,
+        C5_MEM_ADDR_WIDTH     => g_MEM_ADDR_WIDTH,
+        C5_MEM_BANKADDR_WIDTH => g_MEM_BANKADDR_WIDTH,
+        C5_SIMULATION         => g_SIMULATION,
+        C5_INPUT_CLK_TYPE     => "SINGLE_ENDED"
+        )
+      port map (
+        c5_sys_clk    => clk_i,
+        c5_sys_rst_i  => rst_n_i,
+        c5_clk0       => open,
+        c5_rst0       => open,
+        c5_calib_done => calib_done_o,
+
+        mcb5_dram_dq      => ddr3_dq_b,
+        mcb5_dram_a       => ddr3_a_o,
+        mcb5_dram_ba      => ddr3_ba_o,
+        mcb5_dram_ras_n   => ddr3_ras_n_o,
+        mcb5_dram_cas_n   => ddr3_cas_n_o,
+        mcb5_dram_we_n    => ddr3_we_n_o,
+        mcb5_dram_odt     => ddr3_odt_o,
+        mcb5_dram_cke     => ddr3_cke_o,
+        mcb5_dram_ck      => ddr3_clk_p_o,
+        mcb5_dram_ck_n    => ddr3_clk_n_o,
+        mcb5_dram_dqs     => ddr3_dqs_p_b,
+        mcb5_dram_dqs_n   => ddr3_dqs_n_b,
+        mcb5_dram_reset_n => ddr3_rst_n_o,
+        mcb5_dram_udqs    => ddr3_udqs_p_b,  -- for X16 parts
+        mcb5_dram_udqs_n  => ddr3_udqs_n_b,  -- for X16 parts
+        mcb5_dram_udm     => ddr3_udm_o,     -- for X16 parts
+        mcb5_dram_dm      => ddr3_dm_o,
+        mcb5_rzq          => ddr3_rzq_b,
+
+        c5_p0_cmd_clk       => p0_cmd_clk_i,
+        c5_p0_cmd_en        => p0_cmd_en_i,
+        c5_p0_cmd_instr     => p0_cmd_instr_i,
+        c5_p0_cmd_bl        => p0_cmd_bl_i,
+        c5_p0_cmd_byte_addr => p0_cmd_byte_addr_i,
+        c5_p0_cmd_empty     => p0_cmd_empty_o,
+        c5_p0_cmd_full      => p0_cmd_full_o,
+        c5_p0_wr_clk        => p0_wr_clk_i,
+        c5_p0_wr_en         => p0_wr_en_i,
+        c5_p0_wr_mask       => p0_wr_mask_i,
+        c5_p0_wr_data       => p0_wr_data_i,
+        c5_p0_wr_full       => p0_wr_full_o,
+        c5_p0_wr_empty      => p0_wr_empty_o,
+        c5_p0_wr_count      => p0_wr_count_o,
+        c5_p0_wr_underrun   => p0_wr_underrun_o,
+        c5_p0_wr_error      => p0_wr_error_o,
+        c5_p0_rd_clk        => p0_rd_clk_i,
+        c5_p0_rd_en         => p0_rd_en_i,
+        c5_p0_rd_data       => p0_rd_data_o,
+        c5_p0_rd_full       => p0_rd_full_o,
+        c5_p0_rd_empty      => p0_rd_empty_o,
+        c5_p0_rd_count      => p0_rd_count_o,
+        c5_p0_rd_overflow   => p0_rd_overflow_o,
+        c5_p0_rd_error      => p0_rd_error_o,
+
+        c5_p1_cmd_clk       => p1_cmd_clk_i,
+        c5_p1_cmd_en        => p1_cmd_en_i,
+        c5_p1_cmd_instr     => p1_cmd_instr_i,
+        c5_p1_cmd_bl        => p1_cmd_bl_i,
+        c5_p1_cmd_byte_addr => p1_cmd_byte_addr_i,
+        c5_p1_cmd_empty     => p1_cmd_empty_o,
+        c5_p1_cmd_full      => p1_cmd_full_o,
+        c5_p1_wr_clk        => p1_wr_clk_i,
+        c5_p1_wr_en         => p1_wr_en_i,
+        c5_p1_wr_mask       => p1_wr_mask_i,
+        c5_p1_wr_data       => p1_wr_data_i,
+        c5_p1_wr_full       => p1_wr_full_o,
+        c5_p1_wr_empty      => p1_wr_empty_o,
+        c5_p1_wr_count      => p1_wr_count_o,
+        c5_p1_wr_underrun   => p1_wr_underrun_o,
+        c5_p1_wr_error      => p1_wr_error_o,
+        c5_p1_rd_clk        => p1_rd_clk_i,
+        c5_p1_rd_en         => p1_rd_en_i,
+        c5_p1_rd_data       => p1_rd_data_o,
+        c5_p1_rd_full       => p1_rd_full_o,
+        c5_p1_rd_empty      => p1_rd_empty_o,
+        c5_p1_rd_count      => p1_rd_count_o,
+        c5_p1_rd_overflow   => p1_rd_overflow_o,
+        c5_p1_rd_error      => p1_rd_error_o
+        );
+  end generate gen_bank5_64b_32b;
 
   ddr3_zio_b <= 'Z';
 
