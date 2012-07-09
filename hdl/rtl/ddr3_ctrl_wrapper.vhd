@@ -240,7 +240,7 @@ begin
         )
       port map (
         c3_sys_clk    => clk_i,
-        c3_sys_rst_n  => rst_n_i,
+        c3_sys_rst_i  => rst_n_i,
         c3_clk0       => open,
         c3_rst0       => open,
         c3_calib_done => calib_done_o,
@@ -335,7 +335,7 @@ begin
         )
       port map (
         c3_sys_clk    => clk_i,
-        c3_sys_rst_n  => rst_n_i,
+        c3_sys_rst_i  => rst_n_i,
         c3_clk0       => open,
         c3_rst0       => open,
         c3_calib_done => calib_done_o,

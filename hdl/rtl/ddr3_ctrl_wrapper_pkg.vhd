@@ -83,7 +83,7 @@ package ddr3_ctrl_wrapper_pkg is
        mcb3_rzq            : inout std_logic;
        mcb3_dram_udm       : out   std_logic;
        c3_sys_clk          : in    std_logic;
-       c3_sys_rst_n        : in    std_logic;
+       c3_sys_rst_i        : in    std_logic;
        c3_calib_done       : out   std_logic;
        c3_clk0             : out   std_logic;
        c3_rst0             : out   std_logic;
@@ -175,7 +175,7 @@ package ddr3_ctrl_wrapper_pkg is
        mcb3_rzq            : inout std_logic;
        mcb3_dram_udm       : out   std_logic;
        c3_sys_clk          : in    std_logic;
-       c3_sys_rst_n        : in    std_logic;
+       c3_sys_rst_i        : in    std_logic;
        c3_calib_done       : out   std_logic;
        c3_clk0             : out   std_logic;
        c3_rst0             : out   std_logic;
