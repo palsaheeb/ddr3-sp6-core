@@ -165,11 +165,12 @@ begin
       --***********************************************************************
       -- SINGLE_ENDED input clock input buffers
       --***********************************************************************
-      u_ibufg_sys_clk : IBUFG
-        port map (
-          I  => sys_clk,
-          O  => sys_clk_ibufg
-          );
+      --u_ibufg_sys_clk : IBUFG
+      --  port map (
+      --    I  => sys_clk,
+      --    O  => sys_clk_ibufg
+      --    );
+    sys_clk_ibufg <= sys_clk;
   end generate;   
 
   --***************************************************************************
