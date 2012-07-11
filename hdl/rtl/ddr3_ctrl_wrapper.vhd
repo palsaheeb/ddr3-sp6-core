@@ -52,7 +52,7 @@ entity ddr3_ctrl_wrapper is
 
   generic(
     --! Bank and port size selection
-    g_BANK_PORT_SELECT   : string  := "BANK3_32B_32B";
+    g_BANK_PORT_SELECT   : string  := "SPEC_BANK3_32B_32B";
     --! Core's clock period in ps
     g_MEMCLK_PERIOD      : integer := 3000;
     --! If TRUE, uses Xilinx calibration core (Input term, DQS centering)
@@ -212,17 +212,26 @@ architecture rtl of ddr3_ctrl_wrapper is
 --==============================================================================
 begin
 
-  gen_test_bank_port_select : if(g_BANK_PORT_SELECT /= "BANK3_32B_32B" and
-                                 g_BANK_PORT_SELECT /= "BANK3_64B_32B" and
-                                 g_BANK_PORT_SELECT /= "BANK4_32B_32B" and
-                                 g_BANK_PORT_SELECT /= "BANK4_64B_32B" and
-                                 g_BANK_PORT_SELECT /= "BANK5_32B_32B" and
-                                 g_BANK_PORT_SELECT /= "BANK5_64B_32B") generate
-    assert false report "ddr3_ctrl_wrapper: Selected bank or port size is no supported. Currently supported values are: BANK3_64B_32B, BANK3_32B_32B, BANK4_32B_32B, BANK4_64B_32B, BANK5_32B_32B, BANK5_64B_32B" severity failure;
+  ----------------------------------------------------------------------------
+  -- Selected board/bank check
+  ----------------------------------------------------------------------------
+  gen_test_bank_port_select : if(g_BANK_PORT_SELECT /= "SPEC_BANK3_32B_32B" and
+                                 g_BANK_PORT_SELECT /= "SPEC_BANK3_64B_32B" and
+                                 g_BANK_PORT_SELECT /= "SVEC_BANK4_32B_32B" and
+                                 g_BANK_PORT_SELECT /= "SVEC_BANK4_64B_32B" and
+                                 g_BANK_PORT_SELECT /= "SVEC_BANK5_32B_32B" and
+                                 g_BANK_PORT_SELECT /= "SVEC_BANK5_64B_32B" and
+                                 g_BANK_PORT_SELECT /= "VFC_BANK1_32B_32B"  and
+                                 g_BANK_PORT_SELECT /= "VFC_BANK1_64B_32B") generate
+    assert false report "ddr3_ctrl_wrapper: Selected bank or port size is no supported. Currently supported values are: SPEC_BANK3_64B_32B, SPEC_BANK3_32B_32B, SVEC_BANK4_32B_32B, SVEC_BANK4_64B_32B, SVEC_BANK5_32B_32B, SVEC_BANK5_64B_32B, VFC_BANK1_32B_32B, VFC_BANK1_64B_32B" severity failure;
   end generate gen_test_bank_port_select;
 
-  gen_bank3_32b_32b : if(g_BANK_PORT_SELECT = "BANK3_32B_32B") generate
-    cmp_ddr3_ctrl : ddr3_ctrl_bank3_32b_32b
+
+  ----------------------------------------------------------------------------
+  -- SPEC
+  ----------------------------------------------------------------------------
+  gen_spec_bank3_32b_32b : if(g_BANK_PORT_SELECT = "SPEC_BANK3_32B_32B") generate
+    cmp_ddr3_ctrl : ddr3_ctrl_spec_bank3_32b_32b
       generic map (
         C3_P0_MASK_SIZE       => 4,
         C3_P0_DATA_PORT_SIZE  => 32,
@@ -314,10 +323,10 @@ begin
         c3_p1_rd_overflow   => p1_rd_overflow_o,
         c3_p1_rd_error      => p1_rd_error_o
         );
-  end generate gen_bank3_32b_32b;
+  end generate gen_spec_bank3_32b_32b;
 
-  gen_bank3_64b_32b : if(g_BANK_PORT_SELECT = "BANK3_64B_32B") generate
-    cmp_ddr3_ctrl : ddr3_ctrl_bank3_64b_32b
+  gen_spec_bank3_64b_32b : if(g_BANK_PORT_SELECT = "SPEC_BANK3_64B_32B") generate
+    cmp_ddr3_ctrl : ddr3_ctrl_spec_bank3_64b_32b
       generic map (
         C3_P0_MASK_SIZE       => 8,
         C3_P0_DATA_PORT_SIZE  => 64,
@@ -409,10 +418,14 @@ begin
         c3_p1_rd_overflow   => p1_rd_overflow_o,
         c3_p1_rd_error      => p1_rd_error_o
         );
-  end generate gen_bank3_64b_32b;
+  end generate gen_spec_bank3_64b_32b;
 
-  gen_bank4_32b_32b : if(g_BANK_PORT_SELECT = "BANK4_32B_32B") generate
-    cmp_ddr3_ctrl : ddr3_ctrl_bank4_32b_32b
+
+  ----------------------------------------------------------------------------
+  -- SVEC
+  ----------------------------------------------------------------------------
+  gen_svec_bank4_32b_32b : if(g_BANK_PORT_SELECT = "SVEC_BANK4_32B_32B") generate
+    cmp_ddr3_ctrl : ddr3_ctrl_svec_bank4_32b_32b
       generic map (
         C4_P0_MASK_SIZE       => 4,
         C4_P0_DATA_PORT_SIZE  => 32,
@@ -504,10 +517,10 @@ begin
         c4_p1_rd_overflow   => p1_rd_overflow_o,
         c4_p1_rd_error      => p1_rd_error_o
         );
-  end generate gen_bank4_32b_32b;
+  end generate gen_svec_bank4_32b_32b;
 
-  gen_bank4_64b_32b : if(g_BANK_PORT_SELECT = "BANK4_64B_32B") generate
-    cmp_ddr3_ctrl : ddr3_ctrl_bank4_64b_32b
+  gen_svec_bank4_64b_32b : if(g_BANK_PORT_SELECT = "SVEC_BANK4_64B_32B") generate
+    cmp_ddr3_ctrl : ddr3_ctrl_svec_bank4_64b_32b
       generic map (
         C4_P0_MASK_SIZE       => 8,
         C4_P0_DATA_PORT_SIZE  => 64,
@@ -599,10 +612,10 @@ begin
         c4_p1_rd_overflow   => p1_rd_overflow_o,
         c4_p1_rd_error      => p1_rd_error_o
         );
-  end generate gen_bank4_64b_32b;
+  end generate gen_svec_bank4_64b_32b;
 
-  gen_bank5_32b_32b : if(g_BANK_PORT_SELECT = "BANK5_32B_32B") generate
-    cmp_ddr3_ctrl : ddr3_ctrl_bank5_32b_32b
+  gen_svec_bank5_32b_32b : if(g_BANK_PORT_SELECT = "SVEC_BANK5_32B_32B") generate
+    cmp_ddr3_ctrl : ddr3_ctrl_svec_bank5_32b_32b
       generic map (
         C5_P0_MASK_SIZE       => 4,
         C5_P0_DATA_PORT_SIZE  => 32,
@@ -694,10 +707,10 @@ begin
         c5_p1_rd_overflow   => p1_rd_overflow_o,
         c5_p1_rd_error      => p1_rd_error_o
         );
-  end generate gen_bank5_32b_32b;
+  end generate gen_svec_bank5_32b_32b;
 
-  gen_bank5_64b_32b : if(g_BANK_PORT_SELECT = "BANK5_64B_32B") generate
-    cmp_ddr3_ctrl : ddr3_ctrl_bank5_64b_32b
+  gen_svec_bank5_64b_32b : if(g_BANK_PORT_SELECT = "SVEC_BANK5_64B_32B") generate
+    cmp_ddr3_ctrl : ddr3_ctrl_svec_bank5_64b_32b
       generic map (
         C5_P0_MASK_SIZE       => 8,
         C5_P0_DATA_PORT_SIZE  => 64,
@@ -789,8 +802,206 @@ begin
         c5_p1_rd_overflow   => p1_rd_overflow_o,
         c5_p1_rd_error      => p1_rd_error_o
         );
-  end generate gen_bank5_64b_32b;
+  end generate gen_svec_bank5_64b_32b;
 
+
+  ----------------------------------------------------------------------------
+  -- VFC
+  ----------------------------------------------------------------------------
+  gen_vfc_bank1_32b_32b : if(g_BANK_PORT_SELECT = "VFC_BANK1_32B_32B") generate
+    cmp_ddr3_ctrl : ddr3_ctrl_vfc_bank1_32b_32b
+      generic map (
+        C1_P0_MASK_SIZE       => 4,
+        C1_P0_DATA_PORT_SIZE  => 32,
+        C1_P1_MASK_SIZE       => 4,
+        C1_P1_DATA_PORT_SIZE  => 32,
+        C1_MEMCLK_PERIOD      => g_MEMCLK_PERIOD,
+        C1_RST_ACT_LOW        => 1,     -- Active low
+        C1_CALIB_SOFT_IP      => g_CALIB_SOFT_IP,
+        C1_MEM_ADDR_ORDER     => g_MEM_ADDR_ORDER,
+        C1_NUM_DQ_PINS        => g_NUM_DQ_PINS,
+        C1_MEM_ADDR_WIDTH     => g_MEM_ADDR_WIDTH,
+        C1_MEM_BANKADDR_WIDTH => g_MEM_BANKADDR_WIDTH,
+        C1_SIMULATION         => g_SIMULATION,
+        C1_INPUT_CLK_TYPE     => "SINGLE_ENDED"
+        )
+      port map (
+        c1_sys_clk    => clk_i,
+        c1_sys_rst_i  => rst_n_i,
+        c1_clk0       => open,
+        c1_rst0       => open,
+        c1_calib_done => calib_done_o,
+
+        mcb1_dram_dq      => ddr3_dq_b,
+        mcb1_dram_a       => ddr3_a_o,
+        mcb1_dram_ba      => ddr3_ba_o,
+        mcb1_dram_ras_n   => ddr3_ras_n_o,
+        mcb1_dram_cas_n   => ddr3_cas_n_o,
+        mcb1_dram_we_n    => ddr3_we_n_o,
+        mcb1_dram_odt     => ddr3_odt_o,
+        mcb1_dram_cke     => ddr3_cke_o,
+        mcb1_dram_ck      => ddr3_clk_p_o,
+        mcb1_dram_ck_n    => ddr3_clk_n_o,
+        mcb1_dram_dqs     => ddr3_dqs_p_b,
+        mcb1_dram_dqs_n   => ddr3_dqs_n_b,
+        mcb1_dram_reset_n => ddr3_rst_n_o,
+        mcb1_dram_udqs    => ddr3_udqs_p_b,  -- for X16 parts
+        mcb1_dram_udqs_n  => ddr3_udqs_n_b,  -- for X16 parts
+        mcb1_dram_udm     => ddr3_udm_o,     -- for X16 parts
+        mcb1_dram_dm      => ddr3_dm_o,
+        mcb1_rzq          => ddr3_rzq_b,
+
+        c1_p0_cmd_clk       => p0_cmd_clk_i,
+        c1_p0_cmd_en        => p0_cmd_en_i,
+        c1_p0_cmd_instr     => p0_cmd_instr_i,
+        c1_p0_cmd_bl        => p0_cmd_bl_i,
+        c1_p0_cmd_byte_addr => p0_cmd_byte_addr_i,
+        c1_p0_cmd_empty     => p0_cmd_empty_o,
+        c1_p0_cmd_full      => p0_cmd_full_o,
+        c1_p0_wr_clk        => p0_wr_clk_i,
+        c1_p0_wr_en         => p0_wr_en_i,
+        c1_p0_wr_mask       => p0_wr_mask_i,
+        c1_p0_wr_data       => p0_wr_data_i,
+        c1_p0_wr_full       => p0_wr_full_o,
+        c1_p0_wr_empty      => p0_wr_empty_o,
+        c1_p0_wr_count      => p0_wr_count_o,
+        c1_p0_wr_underrun   => p0_wr_underrun_o,
+        c1_p0_wr_error      => p0_wr_error_o,
+        c1_p0_rd_clk        => p0_rd_clk_i,
+        c1_p0_rd_en         => p0_rd_en_i,
+        c1_p0_rd_data       => p0_rd_data_o,
+        c1_p0_rd_full       => p0_rd_full_o,
+        c1_p0_rd_empty      => p0_rd_empty_o,
+        c1_p0_rd_count      => p0_rd_count_o,
+        c1_p0_rd_overflow   => p0_rd_overflow_o,
+        c1_p0_rd_error      => p0_rd_error_o,
+
+        c1_p1_cmd_clk       => p1_cmd_clk_i,
+        c1_p1_cmd_en        => p1_cmd_en_i,
+        c1_p1_cmd_instr     => p1_cmd_instr_i,
+        c1_p1_cmd_bl        => p1_cmd_bl_i,
+        c1_p1_cmd_byte_addr => p1_cmd_byte_addr_i,
+        c1_p1_cmd_empty     => p1_cmd_empty_o,
+        c1_p1_cmd_full      => p1_cmd_full_o,
+        c1_p1_wr_clk        => p1_wr_clk_i,
+        c1_p1_wr_en         => p1_wr_en_i,
+        c1_p1_wr_mask       => p1_wr_mask_i,
+        c1_p1_wr_data       => p1_wr_data_i,
+        c1_p1_wr_full       => p1_wr_full_o,
+        c1_p1_wr_empty      => p1_wr_empty_o,
+        c1_p1_wr_count      => p1_wr_count_o,
+        c1_p1_wr_underrun   => p1_wr_underrun_o,
+        c1_p1_wr_error      => p1_wr_error_o,
+        c1_p1_rd_clk        => p1_rd_clk_i,
+        c1_p1_rd_en         => p1_rd_en_i,
+        c1_p1_rd_data       => p1_rd_data_o,
+        c1_p1_rd_full       => p1_rd_full_o,
+        c1_p1_rd_empty      => p1_rd_empty_o,
+        c1_p1_rd_count      => p1_rd_count_o,
+        c1_p1_rd_overflow   => p1_rd_overflow_o,
+        c1_p1_rd_error      => p1_rd_error_o
+        );
+  end generate gen_vfc_bank1_32b_32b;
+
+  gen_vfc_bank1_64b_32b : if(g_BANK_PORT_SELECT = "VFC_BANK1_64B_32B") generate
+    cmp_ddr3_ctrl : ddr3_ctrl_vfc_bank1_64b_32b
+      generic map (
+        C1_P0_MASK_SIZE       => 8,
+        C1_P0_DATA_PORT_SIZE  => 64,
+        C1_P1_MASK_SIZE       => 4,
+        C1_P1_DATA_PORT_SIZE  => 32,
+        C1_MEMCLK_PERIOD      => g_MEMCLK_PERIOD,
+        C1_RST_ACT_LOW        => 1,     -- Active low
+        C1_CALIB_SOFT_IP      => g_CALIB_SOFT_IP,
+        C1_MEM_ADDR_ORDER     => g_MEM_ADDR_ORDER,
+        C1_NUM_DQ_PINS        => g_NUM_DQ_PINS,
+        C1_MEM_ADDR_WIDTH     => g_MEM_ADDR_WIDTH,
+        C1_MEM_BANKADDR_WIDTH => g_MEM_BANKADDR_WIDTH,
+        C1_SIMULATION         => g_SIMULATION,
+        C1_INPUT_CLK_TYPE     => "SINGLE_ENDED"
+        )
+      port map (
+        c1_sys_clk    => clk_i,
+        c1_sys_rst_i  => rst_n_i,
+        c1_clk0       => open,
+        c1_rst0       => open,
+        c1_calib_done => calib_done_o,
+
+        mcb1_dram_dq      => ddr3_dq_b,
+        mcb1_dram_a       => ddr3_a_o,
+        mcb1_dram_ba      => ddr3_ba_o,
+        mcb1_dram_ras_n   => ddr3_ras_n_o,
+        mcb1_dram_cas_n   => ddr3_cas_n_o,
+        mcb1_dram_we_n    => ddr3_we_n_o,
+        mcb1_dram_odt     => ddr3_odt_o,
+        mcb1_dram_cke     => ddr3_cke_o,
+        mcb1_dram_ck      => ddr3_clk_p_o,
+        mcb1_dram_ck_n    => ddr3_clk_n_o,
+        mcb1_dram_dqs     => ddr3_dqs_p_b,
+        mcb1_dram_dqs_n   => ddr3_dqs_n_b,
+        mcb1_dram_reset_n => ddr3_rst_n_o,
+        mcb1_dram_udqs    => ddr3_udqs_p_b,  -- for X16 parts
+        mcb1_dram_udqs_n  => ddr3_udqs_n_b,  -- for X16 parts
+        mcb1_dram_udm     => ddr3_udm_o,     -- for X16 parts
+        mcb1_dram_dm      => ddr3_dm_o,
+        mcb1_rzq          => ddr3_rzq_b,
+
+        c1_p0_cmd_clk       => p0_cmd_clk_i,
+        c1_p0_cmd_en        => p0_cmd_en_i,
+        c1_p0_cmd_instr     => p0_cmd_instr_i,
+        c1_p0_cmd_bl        => p0_cmd_bl_i,
+        c1_p0_cmd_byte_addr => p0_cmd_byte_addr_i,
+        c1_p0_cmd_empty     => p0_cmd_empty_o,
+        c1_p0_cmd_full      => p0_cmd_full_o,
+        c1_p0_wr_clk        => p0_wr_clk_i,
+        c1_p0_wr_en         => p0_wr_en_i,
+        c1_p0_wr_mask       => p0_wr_mask_i,
+        c1_p0_wr_data       => p0_wr_data_i,
+        c1_p0_wr_full       => p0_wr_full_o,
+        c1_p0_wr_empty      => p0_wr_empty_o,
+        c1_p0_wr_count      => p0_wr_count_o,
+        c1_p0_wr_underrun   => p0_wr_underrun_o,
+        c1_p0_wr_error      => p0_wr_error_o,
+        c1_p0_rd_clk        => p0_rd_clk_i,
+        c1_p0_rd_en         => p0_rd_en_i,
+        c1_p0_rd_data       => p0_rd_data_o,
+        c1_p0_rd_full       => p0_rd_full_o,
+        c1_p0_rd_empty      => p0_rd_empty_o,
+        c1_p0_rd_count      => p0_rd_count_o,
+        c1_p0_rd_overflow   => p0_rd_overflow_o,
+        c1_p0_rd_error      => p0_rd_error_o,
+
+        c1_p1_cmd_clk       => p1_cmd_clk_i,
+        c1_p1_cmd_en        => p1_cmd_en_i,
+        c1_p1_cmd_instr     => p1_cmd_instr_i,
+        c1_p1_cmd_bl        => p1_cmd_bl_i,
+        c1_p1_cmd_byte_addr => p1_cmd_byte_addr_i,
+        c1_p1_cmd_empty     => p1_cmd_empty_o,
+        c1_p1_cmd_full      => p1_cmd_full_o,
+        c1_p1_wr_clk        => p1_wr_clk_i,
+        c1_p1_wr_en         => p1_wr_en_i,
+        c1_p1_wr_mask       => p1_wr_mask_i,
+        c1_p1_wr_data       => p1_wr_data_i,
+        c1_p1_wr_full       => p1_wr_full_o,
+        c1_p1_wr_empty      => p1_wr_empty_o,
+        c1_p1_wr_count      => p1_wr_count_o,
+        c1_p1_wr_underrun   => p1_wr_underrun_o,
+        c1_p1_wr_error      => p1_wr_error_o,
+        c1_p1_rd_clk        => p1_rd_clk_i,
+        c1_p1_rd_en         => p1_rd_en_i,
+        c1_p1_rd_data       => p1_rd_data_o,
+        c1_p1_rd_full       => p1_rd_full_o,
+        c1_p1_rd_empty      => p1_rd_empty_o,
+        c1_p1_rd_count      => p1_rd_count_o,
+        c1_p1_rd_overflow   => p1_rd_overflow_o,
+        c1_p1_rd_error      => p1_rd_error_o
+        );
+  end generate gen_vfc_bank1_64b_32b;
+
+
+  ----------------------------------------------------------------------------
+  -- Common port
+  ----------------------------------------------------------------------------
   ddr3_zio_b <= 'Z';
 
 

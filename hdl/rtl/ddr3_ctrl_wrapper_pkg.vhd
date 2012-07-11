@@ -50,7 +50,7 @@ package ddr3_ctrl_wrapper_pkg is
   --============================================================================
   --! Components declaration
   --============================================================================
-  component ddr3_ctrl_bank3_32b_32b
+  component ddr3_ctrl_spec_bank3_32b_32b
     generic
       (C3_P0_MASK_SIZE       : integer := 4;
        C3_P0_DATA_PORT_SIZE  : integer := 32;
@@ -140,9 +140,9 @@ package ddr3_ctrl_wrapper_pkg is
        c3_p1_rd_overflow   : out   std_logic;
        c3_p1_rd_error      : out   std_logic
        );
-  end component ddr3_ctrl_bank3_32b_32b;
+  end component ddr3_ctrl_spec_bank3_32b_32b;
 
-  component ddr3_ctrl_bank3_64b_32b
+  component ddr3_ctrl_spec_bank3_64b_32b
     generic
       (C3_P0_MASK_SIZE       : integer := 8;
        C3_P0_DATA_PORT_SIZE  : integer := 64;
@@ -232,9 +232,9 @@ package ddr3_ctrl_wrapper_pkg is
        c3_p1_rd_overflow   : out   std_logic;
        c3_p1_rd_error      : out   std_logic
        );
-  end component ddr3_ctrl_bank3_64b_32b;
+  end component ddr3_ctrl_spec_bank3_64b_32b;
 
-  component ddr3_ctrl_bank4_32b_32b
+  component ddr3_ctrl_svec_bank4_32b_32b
     generic
       (C4_P0_MASK_SIZE       : integer := 4;
        C4_P0_DATA_PORT_SIZE  : integer := 32;
@@ -324,9 +324,9 @@ package ddr3_ctrl_wrapper_pkg is
        c4_p1_rd_overflow   : out   std_logic;
        c4_p1_rd_error      : out   std_logic
        );
-  end component ddr3_ctrl_bank4_32b_32b;
+  end component ddr3_ctrl_svec_bank4_32b_32b;
 
-  component ddr3_ctrl_bank4_64b_32b
+  component ddr3_ctrl_svec_bank4_64b_32b
     generic
       (C4_P0_MASK_SIZE       : integer := 8;
        C4_P0_DATA_PORT_SIZE  : integer := 64;
@@ -416,9 +416,9 @@ package ddr3_ctrl_wrapper_pkg is
        c4_p1_rd_overflow   : out   std_logic;
        c4_p1_rd_error      : out   std_logic
        );
-  end component ddr3_ctrl_bank4_64b_32b;
+  end component ddr3_ctrl_svec_bank4_64b_32b;
 
-  component ddr3_ctrl_bank5_32b_32b
+  component ddr3_ctrl_svec_bank5_32b_32b
     generic
       (C5_P0_MASK_SIZE       : integer := 4;
        C5_P0_DATA_PORT_SIZE  : integer := 32;
@@ -508,9 +508,9 @@ package ddr3_ctrl_wrapper_pkg is
        c5_p1_rd_overflow   : out   std_logic;
        c5_p1_rd_error      : out   std_logic
        );
-  end component ddr3_ctrl_bank5_32b_32b;
+  end component ddr3_ctrl_svec_bank5_32b_32b;
 
-  component ddr3_ctrl_bank5_64b_32b
+  component ddr3_ctrl_svec_bank5_64b_32b
     generic
       (C5_P0_MASK_SIZE       : integer := 8;
        C5_P0_DATA_PORT_SIZE  : integer := 64;
@@ -600,7 +600,7 @@ package ddr3_ctrl_wrapper_pkg is
        c5_p1_rd_overflow   : out   std_logic;
        c5_p1_rd_error      : out   std_logic
        );
-  end component ddr3_ctrl_bank5_64b_32b;
+  end component ddr3_ctrl_svec_bank5_64b_32b;
 
 
 end ddr3_ctrl_wrapper_pkg;
