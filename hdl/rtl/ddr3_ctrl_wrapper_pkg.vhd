@@ -50,6 +50,10 @@ package ddr3_ctrl_wrapper_pkg is
   --============================================================================
   --! Components declaration
   --============================================================================
+
+  ----------------------------------------------------------------------------
+  -- SPEC
+  ----------------------------------------------------------------------------
   component ddr3_ctrl_spec_bank3_32b_32b
     generic
       (C3_P0_MASK_SIZE       : integer := 4;
@@ -234,6 +238,10 @@ package ddr3_ctrl_wrapper_pkg is
        );
   end component ddr3_ctrl_spec_bank3_64b_32b;
 
+
+  ----------------------------------------------------------------------------
+  -- SVEC
+  ----------------------------------------------------------------------------
   component ddr3_ctrl_svec_bank4_32b_32b
     generic
       (C4_P0_MASK_SIZE       : integer := 4;
@@ -601,6 +609,198 @@ package ddr3_ctrl_wrapper_pkg is
        c5_p1_rd_error      : out   std_logic
        );
   end component ddr3_ctrl_svec_bank5_64b_32b;
+
+
+  ----------------------------------------------------------------------------
+  -- VFC
+  ----------------------------------------------------------------------------
+  component ddr3_ctrl_vfc_bank1_32b_32b
+    generic
+      (
+        C1_P0_MASK_SIZE       : integer := 4;
+        C1_P0_DATA_PORT_SIZE  : integer := 32;
+        C1_P1_MASK_SIZE       : integer := 4;
+        C1_P1_DATA_PORT_SIZE  : integer := 32;
+        C1_MEMCLK_PERIOD      : integer := 3000;
+        C1_RST_ACT_LOW        : integer := 0;
+        C1_INPUT_CLK_TYPE     : string  := "SINGLE_ENDED";
+        C1_CALIB_SOFT_IP      : string  := "TRUE";
+        C1_SIMULATION         : string  := "FALSE";
+        DEBUG_EN              : integer := 0;
+        C1_MEM_ADDR_ORDER     : string  := "ROW_BANK_COLUMN";
+        C1_NUM_DQ_PINS        : integer := 16;
+        C1_MEM_ADDR_WIDTH     : integer := 14;
+        C1_MEM_BANKADDR_WIDTH : integer := 3
+        );
+    port
+      (
+        mcb1_dram_dq        : inout std_logic_vector(C1_NUM_DQ_PINS-1 downto 0);
+        mcb1_dram_a         : out   std_logic_vector(C1_MEM_ADDR_WIDTH-1 downto 0);
+        mcb1_dram_ba        : out   std_logic_vector(C1_MEM_BANKADDR_WIDTH-1 downto 0);
+        mcb1_dram_ras_n     : out   std_logic;
+        mcb1_dram_cas_n     : out   std_logic;
+        mcb1_dram_we_n      : out   std_logic;
+        mcb1_dram_odt       : out   std_logic;
+        mcb1_dram_reset_n   : out   std_logic;
+        mcb1_dram_cke       : out   std_logic;
+        mcb1_dram_dm        : out   std_logic;
+        mcb1_dram_udqs      : inout std_logic;
+        mcb1_dram_udqs_n    : inout std_logic;
+        mcb1_rzq            : inout std_logic;
+        mcb1_dram_udm       : out   std_logic;
+        c1_sys_clk          : in    std_logic;
+        c1_sys_rst_i        : in    std_logic;
+        c1_calib_done       : out   std_logic;
+        c1_clk0             : out   std_logic;
+        c1_rst0             : out   std_logic;
+        mcb1_dram_dqs       : inout std_logic;
+        mcb1_dram_dqs_n     : inout std_logic;
+        mcb1_dram_ck        : out   std_logic;
+        mcb1_dram_ck_n      : out   std_logic;
+        c1_p0_cmd_clk       : in    std_logic;
+        c1_p0_cmd_en        : in    std_logic;
+        c1_p0_cmd_instr     : in    std_logic_vector(2 downto 0);
+        c1_p0_cmd_bl        : in    std_logic_vector(5 downto 0);
+        c1_p0_cmd_byte_addr : in    std_logic_vector(29 downto 0);
+        c1_p0_cmd_empty     : out   std_logic;
+        c1_p0_cmd_full      : out   std_logic;
+        c1_p0_wr_clk        : in    std_logic;
+        c1_p0_wr_en         : in    std_logic;
+        c1_p0_wr_mask       : in    std_logic_vector(C1_P0_MASK_SIZE - 1 downto 0);
+        c1_p0_wr_data       : in    std_logic_vector(C1_P0_DATA_PORT_SIZE - 1 downto 0);
+        c1_p0_wr_full       : out   std_logic;
+        c1_p0_wr_empty      : out   std_logic;
+        c1_p0_wr_count      : out   std_logic_vector(6 downto 0);
+        c1_p0_wr_underrun   : out   std_logic;
+        c1_p0_wr_error      : out   std_logic;
+        c1_p0_rd_clk        : in    std_logic;
+        c1_p0_rd_en         : in    std_logic;
+        c1_p0_rd_data       : out   std_logic_vector(C1_P0_DATA_PORT_SIZE - 1 downto 0);
+        c1_p0_rd_full       : out   std_logic;
+        c1_p0_rd_empty      : out   std_logic;
+        c1_p0_rd_count      : out   std_logic_vector(6 downto 0);
+        c1_p0_rd_overflow   : out   std_logic;
+        c1_p0_rd_error      : out   std_logic;
+        c1_p1_cmd_clk       : in    std_logic;
+        c1_p1_cmd_en        : in    std_logic;
+        c1_p1_cmd_instr     : in    std_logic_vector(2 downto 0);
+        c1_p1_cmd_bl        : in    std_logic_vector(5 downto 0);
+        c1_p1_cmd_byte_addr : in    std_logic_vector(29 downto 0);
+        c1_p1_cmd_empty     : out   std_logic;
+        c1_p1_cmd_full      : out   std_logic;
+        c1_p1_wr_clk        : in    std_logic;
+        c1_p1_wr_en         : in    std_logic;
+        c1_p1_wr_mask       : in    std_logic_vector(C1_P1_MASK_SIZE - 1 downto 0);
+        c1_p1_wr_data       : in    std_logic_vector(C1_P1_DATA_PORT_SIZE - 1 downto 0);
+        c1_p1_wr_full       : out   std_logic;
+        c1_p1_wr_empty      : out   std_logic;
+        c1_p1_wr_count      : out   std_logic_vector(6 downto 0);
+        c1_p1_wr_underrun   : out   std_logic;
+        c1_p1_wr_error      : out   std_logic;
+        c1_p1_rd_clk        : in    std_logic;
+        c1_p1_rd_en         : in    std_logic;
+        c1_p1_rd_data       : out   std_logic_vector(C1_P1_DATA_PORT_SIZE - 1 downto 0);
+        c1_p1_rd_full       : out   std_logic;
+        c1_p1_rd_empty      : out   std_logic;
+        c1_p1_rd_count      : out   std_logic_vector(6 downto 0);
+        c1_p1_rd_overflow   : out   std_logic;
+        c1_p1_rd_error      : out   std_logic
+        );
+  end component ddr3_ctrl_vfc_bank1_32b_32b;
+
+  component ddr3_ctrl_vfc_bank1_64b_32b
+    generic
+      (
+        C1_P0_MASK_SIZE       : integer := 8;
+        C1_P0_DATA_PORT_SIZE  : integer := 64;
+        C1_P1_MASK_SIZE       : integer := 4;
+        C1_P1_DATA_PORT_SIZE  : integer := 32;
+        C1_MEMCLK_PERIOD      : integer := 3000;
+        C1_RST_ACT_LOW        : integer := 0;
+        C1_INPUT_CLK_TYPE     : string  := "SINGLE_ENDED";
+        C1_CALIB_SOFT_IP      : string  := "TRUE";
+        C1_SIMULATION         : string  := "FALSE";
+        DEBUG_EN              : integer := 0;
+        C1_MEM_ADDR_ORDER     : string  := "ROW_BANK_COLUMN";
+        C1_NUM_DQ_PINS        : integer := 16;
+        C1_MEM_ADDR_WIDTH     : integer := 14;
+        C1_MEM_BANKADDR_WIDTH : integer := 3
+        );
+    port
+      (
+        mcb1_dram_dq        : inout std_logic_vector(C1_NUM_DQ_PINS-1 downto 0);
+        mcb1_dram_a         : out   std_logic_vector(C1_MEM_ADDR_WIDTH-1 downto 0);
+        mcb1_dram_ba        : out   std_logic_vector(C1_MEM_BANKADDR_WIDTH-1 downto 0);
+        mcb1_dram_ras_n     : out   std_logic;
+        mcb1_dram_cas_n     : out   std_logic;
+        mcb1_dram_we_n      : out   std_logic;
+        mcb1_dram_odt       : out   std_logic;
+        mcb1_dram_reset_n   : out   std_logic;
+        mcb1_dram_cke       : out   std_logic;
+        mcb1_dram_dm        : out   std_logic;
+        mcb1_dram_udqs      : inout std_logic;
+        mcb1_dram_udqs_n    : inout std_logic;
+        mcb1_rzq            : inout std_logic;
+        mcb1_dram_udm       : out   std_logic;
+        c1_sys_clk          : in    std_logic;
+        c1_sys_rst_i        : in    std_logic;
+        c1_calib_done       : out   std_logic;
+        c1_clk0             : out   std_logic;
+        c1_rst0             : out   std_logic;
+        mcb1_dram_dqs       : inout std_logic;
+        mcb1_dram_dqs_n     : inout std_logic;
+        mcb1_dram_ck        : out   std_logic;
+        mcb1_dram_ck_n      : out   std_logic;
+        c1_p0_cmd_clk       : in    std_logic;
+        c1_p0_cmd_en        : in    std_logic;
+        c1_p0_cmd_instr     : in    std_logic_vector(2 downto 0);
+        c1_p0_cmd_bl        : in    std_logic_vector(5 downto 0);
+        c1_p0_cmd_byte_addr : in    std_logic_vector(29 downto 0);
+        c1_p0_cmd_empty     : out   std_logic;
+        c1_p0_cmd_full      : out   std_logic;
+        c1_p0_wr_clk        : in    std_logic;
+        c1_p0_wr_en         : in    std_logic;
+        c1_p0_wr_mask       : in    std_logic_vector(C1_P0_MASK_SIZE - 1 downto 0);
+        c1_p0_wr_data       : in    std_logic_vector(C1_P0_DATA_PORT_SIZE - 1 downto 0);
+        c1_p0_wr_full       : out   std_logic;
+        c1_p0_wr_empty      : out   std_logic;
+        c1_p0_wr_count      : out   std_logic_vector(6 downto 0);
+        c1_p0_wr_underrun   : out   std_logic;
+        c1_p0_wr_error      : out   std_logic;
+        c1_p0_rd_clk        : in    std_logic;
+        c1_p0_rd_en         : in    std_logic;
+        c1_p0_rd_data       : out   std_logic_vector(C1_P0_DATA_PORT_SIZE - 1 downto 0);
+        c1_p0_rd_full       : out   std_logic;
+        c1_p0_rd_empty      : out   std_logic;
+        c1_p0_rd_count      : out   std_logic_vector(6 downto 0);
+        c1_p0_rd_overflow   : out   std_logic;
+        c1_p0_rd_error      : out   std_logic;
+        c1_p1_cmd_clk       : in    std_logic;
+        c1_p1_cmd_en        : in    std_logic;
+        c1_p1_cmd_instr     : in    std_logic_vector(2 downto 0);
+        c1_p1_cmd_bl        : in    std_logic_vector(5 downto 0);
+        c1_p1_cmd_byte_addr : in    std_logic_vector(29 downto 0);
+        c1_p1_cmd_empty     : out   std_logic;
+        c1_p1_cmd_full      : out   std_logic;
+        c1_p1_wr_clk        : in    std_logic;
+        c1_p1_wr_en         : in    std_logic;
+        c1_p1_wr_mask       : in    std_logic_vector(C1_P1_MASK_SIZE - 1 downto 0);
+        c1_p1_wr_data       : in    std_logic_vector(C1_P1_DATA_PORT_SIZE - 1 downto 0);
+        c1_p1_wr_full       : out   std_logic;
+        c1_p1_wr_empty      : out   std_logic;
+        c1_p1_wr_count      : out   std_logic_vector(6 downto 0);
+        c1_p1_wr_underrun   : out   std_logic;
+        c1_p1_wr_error      : out   std_logic;
+        c1_p1_rd_clk        : in    std_logic;
+        c1_p1_rd_en         : in    std_logic;
+        c1_p1_rd_data       : out   std_logic_vector(C1_P1_DATA_PORT_SIZE - 1 downto 0);
+        c1_p1_rd_full       : out   std_logic;
+        c1_p1_rd_empty      : out   std_logic;
+        c1_p1_rd_count      : out   std_logic_vector(6 downto 0);
+        c1_p1_rd_overflow   : out   std_logic;
+        c1_p1_rd_error      : out   std_logic
+        );
+  end component ddr3_ctrl_vfc_bank1_64b_32b;
 
 
 end ddr3_ctrl_wrapper_pkg;
