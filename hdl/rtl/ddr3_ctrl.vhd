@@ -51,7 +51,7 @@ entity ddr3_ctrl is
 
   generic(
     --! Bank and port size selection
-    g_BANK_PORT_SELECT   : string  := "BANK3_32B_32B";
+    g_BANK_PORT_SELECT   : string  := "SPEC_BANK3_32B_32B";
     --! Core's clock period in ps
     g_MEMCLK_PERIOD      : integer := 3000;
     --! If TRUE, uses Xilinx calibration core (Input term, DQS centering)
@@ -297,7 +297,7 @@ architecture rtl of ddr3_ctrl is
 
   component ddr3_ctrl_wrapper
     generic(
-      g_BANK_PORT_SELECT   : string  := "BANK3_32B_32B";
+      g_BANK_PORT_SELECT   : string  := "SPEC_BANK3_32B_32B";
       g_MEMCLK_PERIOD      : integer := 3000;
       g_CALIB_SOFT_IP      : string  := "TRUE";
       g_MEM_ADDR_ORDER     : string  := "ROW_BANK_COLUMN";
