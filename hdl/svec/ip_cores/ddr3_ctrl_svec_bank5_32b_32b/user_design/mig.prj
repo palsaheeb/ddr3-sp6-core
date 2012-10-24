@@ -41,7 +41,7 @@
         <DebugSignals>Disable</DebugSignals>
         <SystemClock>Single-Ended</SystemClock>
         <Configuration>Two 32-bit bi-directional and four 32-bit unidirectional ports</Configuration>
-        <RzqPin>L25</RzqPin>
+        <RzqPin>G25</RzqPin>
         <ZioPin>N24</ZioPin>
         <PortsSelected>Port0,Port1</PortsSelected>
         <PortDirections>Bi-directional,Bi-directional,none,none,none,none</PortDirections>

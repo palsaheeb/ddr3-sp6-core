@@ -109,4 +109,3 @@ ddr3_ctrl_svec_bank5_64b_32b.xise
 ddr3_ctrl_svec_bank5_64b_32b_flist.txt
 ddr3_ctrl_svec_bank5_64b_32b_readme.txt
 ddr3_ctrl_svec_bank5_64b_32b_xmdf.tcl
-mig.prj
