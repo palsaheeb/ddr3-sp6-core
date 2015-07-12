@@ -123,10 +123,7 @@ architecture rtl of ddr3_ctrl_wb is
   ------------------------------------------------------------------------------
   -- Constants declaration
   ------------------------------------------------------------------------------
-  constant c_DDR_BURST_LENGTH : integer := 32;  -- must not exceed 63
-
-  constant c_FIFO_ALMOST_FULL : std_logic_vector(6 downto 0) := std_logic_vector(to_unsigned(57, 7));
-
+  constant c_DDR_BURST_LENGTH : integer := 16;  -- must not exceed 63
   constant c_ADDR_SHIFT : integer := log2_ceil(g_DATA_PORT_SIZE/8);
 
   ------------------------------------------------------------------------------
@@ -330,9 +327,7 @@ begin
       if (rst_n = '0') then
         wb_stall_o <= '0';
       else
-        if ((ddr_wr_count_i > c_FIFO_ALMOST_FULL) or
-            (ddr_wr_full_i = '1') or
-            (ddr_rd_count_i > c_FIFO_ALMOST_FULL) or
+        if ((ddr_wr_full_i = '1') or
             (ddr_rd_full_i = '1')) then
           wb_stall_o <= '1';
         else
@@ -341,7 +336,7 @@ begin
       end if;
     end if;
   end process p_ddr_stall;
-  --wb_stall_o <= ddr_cmd_full_i or ddr_wr_full_i or ddr_rd_full_i;
+  --wb_stall_o <= ddr_wr_full_i or ddr_rd_full_i;
 
 
   -- Assign outputs
