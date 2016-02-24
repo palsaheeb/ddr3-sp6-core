@@ -15,7 +15,7 @@ try:
         modules["local"].append("../spec/ip_cores/ddr3_ctrl_spec_bank3_32b_32b/user_design/rtl")
         ctrls.remove("bank3_32b_32b")
 
-        if "bank3_64b_32b" in ctrls:
+    if "bank3_64b_32b" in ctrls:
         modules["local"].append("../spec/ip_cores/ddr3_ctrl_spec_bank3_64b_32b/user_design/rtl")
         ctrls.remove("bank3_64b_32b")
 
