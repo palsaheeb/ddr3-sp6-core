@@ -136,6 +136,8 @@ entity ddr3_ctrl is
     ----------------------------------------------------------------------------
     -- Wishbone bus - Port 0
     ----------------------------------------------------------------------------
+    --! Wishbone bus reset
+    wb0_rst_n_i : in  std_logic;
     --! Wishbone bus clock
     wb0_clk_i   : in  std_logic;
     --! Wishbone bus byte select
@@ -188,6 +190,8 @@ entity ddr3_ctrl is
     ----------------------------------------------------------------------------
     -- Wishbone bus - Port 1
     ----------------------------------------------------------------------------
+    --! Wishbone bus reset
+    wb1_rst_n_i : in  std_logic;
     --! Wishbone bus clock
     wb1_clk_i   : in  std_logic;
     --! Wishbone bus byte select
@@ -456,7 +460,7 @@ begin
       g_DATA_PORT_SIZE  => g_P0_DATA_PORT_SIZE
       )
     port map(
-      rst_n_i             => rst_n_i,
+      rst_n_i             => wb0_rst_n_i,
       ddr_cmd_clk_o       => p0_cmd_clk,
       ddr_cmd_en_o        => p0_cmd_en,
       ddr_cmd_instr_o     => p0_cmd_instr,
@@ -503,7 +507,7 @@ begin
       g_DATA_PORT_SIZE  => g_P1_DATA_PORT_SIZE
       )
     port map(
-      rst_n_i             => rst_n_i,
+      rst_n_i             => wb1_rst_n_i,
       ddr_cmd_clk_o       => p1_cmd_clk,
       ddr_cmd_en_o        => p1_cmd_en,
       ddr_cmd_instr_o     => p1_cmd_instr,

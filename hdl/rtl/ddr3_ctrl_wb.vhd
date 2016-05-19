@@ -138,7 +138,6 @@ architecture rtl of ddr3_ctrl_wb is
   ------------------------------------------------------------------------------
   -- Signals declaration
   ------------------------------------------------------------------------------
-  signal rst_n : std_logic;
 
   signal wb_cyc_d      : std_logic;
   signal wb_cyc_f_edge : std_logic;
@@ -174,16 +173,6 @@ begin
   -- Wishbone interface
   ------------------------------------------------------------------------------
 
-  -- Reset sync to wishbone clock
-  p_rst_sync : process (rst_n_i, wb_clk_i)
-  begin
-    if (rst_n_i = '0') then
-      rst_n <= '0';
-    elsif rising_edge(wb_clk_i) then
-      rst_n <= '1';
-    end if;
-  end process p_rst_sync;
-
   -- Clocking
   ddr_cmd_clk_o <= wb_clk_i;
   ddr_wr_clk_o  <= wb_clk_i;
@@ -196,7 +185,7 @@ begin
   p_wb_cyc_f_edge : process (wb_clk_i)
   begin
     if rising_edge(wb_clk_i) then
-      if (rst_n = '0') then
+      if (rst_n_i = '0') then
         wb_cyc_d <= '0';
         wb_stb_d <= '0';
         wb_we_d  <= '0';
@@ -217,7 +206,7 @@ begin
   p_ddr_inputs : process (wb_clk_i)
   begin
     if rising_edge(wb_clk_i) then
-      if (rst_n = '0') then
+      if (rst_n_i = '0') then
         ddr_wr_data <= (others => '0');
         ddr_wr_en   <= '0';
       else
@@ -236,7 +225,7 @@ begin
   p_ddr_cmd : process (wb_clk_i)
   begin
     if rising_edge(wb_clk_i) then
-      if (rst_n = '0') then
+      if (rst_n_i = '0') then
         ddr_cmd_byte_addr <= (others => '0');
         ddr_cmd_instr     <= "000";
         ddr_cmd_bl        <= (others => '0');
@@ -259,7 +248,7 @@ begin
   p_ddr_cmd_en : process (wb_clk_i)
   begin
     if rising_edge(wb_clk_i) then
-      if (rst_n = '0') then
+      if (rst_n_i = '0') then
         ddr_cmd_en   <= '0';
         ddr_cmd_en_d <= '0';
       else
@@ -282,7 +271,7 @@ begin
   p_ddr_burst_cnt : process (wb_clk_i)
   begin
     if rising_edge(wb_clk_i) then
-      if (rst_n = '0') then
+      if (rst_n_i = '0') then
         ddr_burst_cnt <= (others => '0');
       else
         if (wb_cyc_f_edge = '1') then
@@ -307,7 +296,7 @@ begin
   p_ddr_outputs : process (wb_clk_i)
   begin
     if rising_edge(wb_clk_i) then
-      if (rst_n = '0') then
+      if (rst_n_i = '0') then
         wb_ack_o  <= '0';
         wb_data_o <= (others => '0');
       else
@@ -327,7 +316,7 @@ begin
   p_ddr_stall : process (wb_clk_i)
   begin
     if rising_edge(wb_clk_i) then
-      if (rst_n = '0') then
+      if (rst_n_i = '0') then
         wb_stall_o <= '0';
       else
         if ((ddr_wr_count_i > c_FIFO_ALMOST_FULL) or

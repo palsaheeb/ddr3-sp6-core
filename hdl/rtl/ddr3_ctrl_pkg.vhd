@@ -140,6 +140,8 @@ package ddr3_ctrl_pkg is
       ----------------------------------------------------------------------------
       -- Wishbone bus - Port 0
       ----------------------------------------------------------------------------
+      --! Wishbone bus reset
+      wb0_rst_n_i      : in  std_logic;
       --! Wishbone bus clock
       wb0_clk_i        : in    std_logic;
       --! Wishbone bus byte select
@@ -190,6 +192,8 @@ package ddr3_ctrl_pkg is
       ----------------------------------------------------------------------------
       -- Wishbone bus - Port 1
       ----------------------------------------------------------------------------
+      --! Wishbone bus reset
+      wb1_rst_n_i      : in  std_logic;
       --! Wishbone bus clock
       wb1_clk_i        : in    std_logic;
       --! Wishbone bus byte select
