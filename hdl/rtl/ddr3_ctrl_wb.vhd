@@ -1,5 +1,50 @@
+-------------------------------------------------------------------------------
+-- Title      : DDR3 Controller Wishbone Interface
+-- Project    : DDR3 Controller for Xilinx Spartan6
+-- URL        : http://www.ohwr.org/projects/ddr3-sp6-core
+-------------------------------------------------------------------------------
+-- File       : ddr3_ctrl.vhd
+-- Author(s)  : Matthieu Cattin      <matthieu.cattin@cern.ch>
+--              Dimitrios Lampridis  <dimitrios.lampridis@cern.ch>
+-- Company    : CERN (BE-CO-HT)
+-- Created    : 2011-07-13
+-- Last update: 2016-05-19
+-- Standard   : VHDL'93/02
+-------------------------------------------------------------------------------
+-- Description: Wishbone interface for DDR3 controller.
+-------------------------------------------------------------------------------
+-- Copyright (c) 2011-2016 CERN (BE-CO-HT)
+-------------------------------------------------------------------------------
+-- GNU LESSER GENERAL PUBLIC LICENSE
+-------------------------------------------------------------------------------
+-- This source file is free software; you can redistribute it and/or modify it
+-- under the terms of the GNU Lesser General Public License as published by the
+-- Free Software Foundation; either version 2.1 of the License, or (at your
+-- option) any later version. This source is distributed in the hope that it
+-- will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+-- of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+-- See the GNU Lesser General Public License for more details. You should have
+-- received a copy of the GNU Lesser General Public License along with this
+-- source; if not, download it from http://www.gnu.org/licenses/lgpl-2.1.html
+-------------------------------------------------------------------------------
+-- Revisions  :
+-- Date        Version  Author
+-- 2016-05-19  1.0      Dimitrios Lampridis
+-- 2011-07-12  0.1      Matthieu Cattin
+-------------------------------------------------------------------------------
+
 --==============================================================================
+-- doxygen info
+-- 
 --! @file ddr3_ctrl_wb.vhd
+--! @brief DDR3 Controller Wishbone Interface
+--! @details
+--! Wishbone interface for DDR3 controller.
+--! @version 2016-05-19  | 1.0 | Dimitrios Lampridis
+--! @version 2011-07-12  | 0.1 | Matthieu Cattin
+--! @author Matthieu Cattin, CERN (BE-CO-HT)
+--! @author Dimitrios Lampridis, CERN (BE-CO-HT)
+-- 
 --==============================================================================
 
 --! Standard library
@@ -10,38 +55,6 @@ use IEEE.NUMERIC_STD.all;
 --! Specific packages
 library work;
 use work.ddr3_ctrl_pkg.all;
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- DDR3 Controller Wishbone Interface
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
---! @brief
---! DDR3 Controller Wishbone Interface
---------------------------------------------------------------------------------
---! @details
---! Wishbone interface for DDR3 controller.
---------------------------------------------------------------------------------
---! @version
---! 0.1 | mc | 12.07.2011 | File creation and Doxygen comments
---!
---! @author
---! mc : Matthieu Cattin, CERN (BE-CO-HT)
---------------------------------------------------------------------------------
-
---------------------------------------------------------------------------------
--- GNU LESSER GENERAL PUBLIC LICENSE
---------------------------------------------------------------------------------
--- This source file is free software; you can redistribute it and/or modify it
--- under the terms of the GNU Lesser General Public License as published by the
--- Free Software Foundation; either version 2.1 of the License, or (at your
--- option) any later version. This source is distributed in the hope that it
--- will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
--- of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
--- See the GNU Lesser General Public License for more details. You should have
--- received a copy of the GNU Lesser General Public License along with this
--- source; if not, download it from http://www.gnu.org/licenses/lgpl-2.1.html
---------------------------------------------------------------------------------
 
 --==============================================================================
 --! Entity declaration for ddr3_ctrl_wb
@@ -123,7 +136,7 @@ architecture rtl of ddr3_ctrl_wb is
   ------------------------------------------------------------------------------
   -- Constants declaration
   ------------------------------------------------------------------------------
-  constant c_DDR_BURST_LENGTH : integer := 32;  -- must not exceed 63
+  constant c_DDR_BURST_LENGTH : integer := 32;    -- must not exceed 63
 
   constant c_FIFO_ALMOST_FULL : std_logic_vector(6 downto 0) := std_logic_vector(to_unsigned(57, 7));
 
@@ -256,7 +269,7 @@ begin
         if (((ddr_burst_cnt = c_DDR_BURST_LENGTH) or
              (wb_cyc_f_edge = '1' and wb_we_d = '1') or
              (wb_stb_f_edge = '1' and wb_we_d = '0')) and ddr_cmd_full_i = '0') then
-          ddr_cmd_en <= '1';            -- might have problem if burst_cnt = BURST_LENGTH for more than 2 clk cycles
+          ddr_cmd_en <= '1';  -- might have problem if burst_cnt = BURST_LENGTH for more than 2 clk cycles
         else
           ddr_cmd_en <= '0';
         end if;

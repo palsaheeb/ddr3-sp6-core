@@ -1,35 +1,22 @@
---==============================================================================
---! @file ddr3_ctrl_pkg.vhd
---==============================================================================
-
---! Standard library
-library IEEE;
---! Standard packages
-use IEEE.STD_LOGIC_1164.all;
-use IEEE.NUMERIC_STD.all;
---! Specific packages
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- DDR3 Controller Package
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
---! @brief
---! DDR3 controller package
---------------------------------------------------------------------------------
---! @details
---! Contains DDR3 controller core top level component declaration.
---------------------------------------------------------------------------------
---! @version
---! 0.1 | mc | 12.08.2011 | File creation and Doxygen comments
---!
---! @author
---! mc : Matthieu Cattin, CERN (BE-CO-HT)
---------------------------------------------------------------------------------
-
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Title      : DDR3 Controller Package
+-- Project    : DDR3 Controller for Xilinx Spartan6
+-- URL        : http://www.ohwr.org/projects/ddr3-sp6-core
+-------------------------------------------------------------------------------
+-- File       : ddr3_ctrl_pkg.vhd
+-- Author(s)  : Matthieu Cattin      <matthieu.cattin@cern.ch>
+--              Dimitrios Lampridis  <dimitrios.lampridis@cern.ch>
+-- Company    : CERN (BE-CO-HT)
+-- Created    : 2011-08-12
+-- Last update: 2016-05-19
+-- Standard   : VHDL'93/02
+-------------------------------------------------------------------------------
+-- Description: Contains DDR3 controller core top level component declaration.
+-------------------------------------------------------------------------------
+-- Copyright (c) 2011-2016 CERN (BE-CO-HT)
+-------------------------------------------------------------------------------
 -- GNU LESSER GENERAL PUBLIC LICENSE
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -- This source file is free software; you can redistribute it and/or modify it
 -- under the terms of the GNU Lesser General Public License as published by the
 -- Free Software Foundation; either version 2.1 of the License, or (at your
@@ -39,7 +26,34 @@ use IEEE.NUMERIC_STD.all;
 -- See the GNU Lesser General Public License for more details. You should have
 -- received a copy of the GNU Lesser General Public License along with this
 -- source; if not, download it from http://www.gnu.org/licenses/lgpl-2.1.html
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Revisions  :
+-- Date        Version  Author
+-- 2016-05-19  1.0      Dimitrios Lampridis
+-- 2011-08-12  0.1      Matthieu Cattin
+-------------------------------------------------------------------------------
+
+--==============================================================================
+-- doxygen info
+--
+--! @file ddr3_ctrl_pkg.vhd
+--
+--! @brief DDR3 controller package
+--! @details
+--! Contains DDR3 controller core top level component declaration.
+--! @version 2016-05-19  | 1.0 | Dimitrios Lampridis
+--! @version 2011-08-12  | 0.1 | Matthieu Cattin
+--! @author Matthieu Cattin, CERN (BE-CO-HT)
+--! @author Dimitrios Lampridis, CERN (BE-CO-HT)
+--
+--==============================================================================
+
+--! Standard library
+library IEEE;
+--! Standard packages
+use IEEE.STD_LOGIC_1164.all;
+use IEEE.NUMERIC_STD.all;
+--! Specific packages
 
 --==============================================================================
 --! Entity declaration for ddr3_ctrl_pkg
@@ -141,7 +155,7 @@ package ddr3_ctrl_pkg is
       -- Wishbone bus - Port 0
       ----------------------------------------------------------------------------
       --! Wishbone bus reset
-      wb0_rst_n_i      : in  std_logic;
+      wb0_rst_n_i      : in    std_logic;
       --! Wishbone bus clock
       wb0_clk_i        : in    std_logic;
       --! Wishbone bus byte select
@@ -193,7 +207,7 @@ package ddr3_ctrl_pkg is
       -- Wishbone bus - Port 1
       ----------------------------------------------------------------------------
       --! Wishbone bus reset
-      wb1_rst_n_i      : in  std_logic;
+      wb1_rst_n_i      : in    std_logic;
       --! Wishbone bus clock
       wb1_clk_i        : in    std_logic;
       --! Wishbone bus byte select
